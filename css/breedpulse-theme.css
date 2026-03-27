@@ -1,1120 +1,444 @@
 /*
- * ============================================================
- *  BREEDPULSE â€” Custom Theme for Super.so
- *  Version: 1.0.0
- *  Author: BreedPulse / Connemara Pony World
+ * ================================================================
+ *  BREEDPULSE — Super.so Theme v2.0.0
+ *  Built on: Super.so Official Template Starter Kit
+ *  Template base: Depo (Super's official free Directory template)
+ *  Adapted for: BreedPulse — Verified Connemara Stallion Directory
  *
- *  Visual identity: Irish equestrian elegance.
- *  Rooted in the landscape of Connemara â€” Atlantic light,
- *  bog and limestone, quiet competence, heritage breeding.
- *  Refined, not rustic. Professional, not corporate.
- *  Editorial, not generic.
+ *  METHOD: Super Template Starter Kit + official CSS variables
+ *  All selectors use Super's documented CSS class names.
+ *  Uses !important to safely override Super defaults per Super docs.
  *
- *  Typefaces:
- *    Display  â€” Cormorant Garamond (Google Fonts)
- *    Body     â€” DM Sans (Google Fonts)
+ *  FONTS — paste into Super → Code → Head:
+ *  <link rel="preconnect" href="https://fonts.googleapis.com">
+ *  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+ *  <link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,400;0,500;0,600;1,400;1,500&family=DM+Sans:opsz,wght@9..40,300;9..40,400;9..40,500&display=swap" rel="stylesheet">
  *
- *  Add this to your Super.so head via Custom Code â†’ <head>:
- *    <link rel="preconnect" href="https://fonts.googleapis.com">
- *    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
- *    <link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,400;0,500;0,600;1,400;1,500&family=DM+Sans:ital,opsz,wght@0,9..40,300;0,9..40,400;0,9..40,500;1,9..40,300&display=swap" rel="stylesheet">
+ *  LOAD — paste into Super → Code → Head:
+ *  <link rel="stylesheet" href="https://cdn.jsdelivr.net/gh/lucindakelly-beep/breedpulse@main/css/breedpulse-theme.css">
  *
- *  Structure:
- *    1. Design Tokens (CSS variables)
- *    2. â•â• SAFE GLOBAL CSS â•â•
- *       â€” Base reset & body
- *       â€” Typography
- *       â€” Links
- *       â€” Buttons & CTAs
- *       â€” Forms
- *       â€” Cards
- *       â€” Utility classes
- *       â€” Footer
- *       â€” Animations & transitions
- *    3. â•â• SUPER-SPECIFIC SELECTORS â•â•
- *       â€” Navigation / Navbar
- *       â€” Page layout & content width
- *       â€” Database / Directory view
- *       â€” Notion content blocks
- *       â€” Mobile responsive
- *
- *  GitHub file: /css/breedpulse-theme.css
- * ============================================================
+ *  GitHub: github.com/lucindakelly-beep/breedpulse
+ * ================================================================
  */
 
 
-/* ============================================================
-   1. DESIGN TOKENS
-   ============================================================ */
+/* ================================================================
+   1. BRAND TOKENS
+   BreedPulse palette mapped to Super's official CSS variable names.
+   Overriding these changes colours site-wide — the safest approach.
+   Reference: docs.super.so/template-starter-kit
+   ================================================================ */
 
 :root {
 
-  /* â”€â”€ Brand Palette â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€ */
+  /* ── BreedPulse Raw Palette ──────────────────────────────── */
+  --bp-green:        #2D6A4F;
+  --bp-green-dark:   #1E4D38;
+  --bp-green-deep:   #142F22;
+  --bp-green-mid:    #3D8A67;
+  --bp-green-pale:   #D4EAE0;
+  --bp-green-ghost:  #EEF7F2;
+  --bp-stone:        #F5F2ED;
+  --bp-linen:        #EDE8E0;
+  --bp-peat:         #3A3530;
+  --bp-earth:        #6B5F54;
+  --bp-fog:          #A89E95;
+  --bp-mist:         #C8C0B8;
+  --bp-ash:          #E8E3DD;
+  --bp-copper:       #A0522D;
+  --bp-copper-pale:  #F5E8DF;
+  --bp-white:        #FFFFFF;
 
-  /* Primary: Connemara Fern â€” deep Irish green */
-  --bp-green:          #2D6A4F;
-  --bp-green-dark:     #1E4D38;
-  --bp-green-deeper:   #142F22;
-  --bp-green-mid:      #3D8A67;
-  --bp-green-light:    #52A878;
-  --bp-green-pale:     #D4EAE0;
-  --bp-green-ghost:    #EEF7F2;
+  /* ── Super Official Variable Overrides ───────────────────── */
+  --color-primary:            var(--bp-green) !important;
+  --color-primary-dark:       var(--bp-green-dark) !important;
+  --color-bg-default:         var(--bp-stone) !important;
+  --color-bg-gray-light:      var(--bp-green-ghost) !important;
+  --color-bg-gray:            var(--bp-linen) !important;
+  --color-text-default:       var(--bp-peat) !important;
+  --color-text-default-light: var(--bp-earth) !important;
+  --color-text-gray:          var(--bp-fog) !important;
+  --color-border-default:     var(--bp-ash) !important;
+  --color-border-dark:        var(--bp-mist) !important;
+  --color-card-bg:            var(--bp-white) !important;
+  --color-link:               var(--bp-green) !important;
+  --collection-card-title-size: clamp(1rem, 0.5vw + 0.9rem, 1.25rem) !important;
 
-  /* Neutral: Limestone & Bog */
-  --bp-stone:          #F5F2ED;   /* warm off-white â€” limestone page bg */
-  --bp-linen:          #EDE8E0;   /* section dividers, subtle fills */
-  --bp-peat:           #3A3530;   /* near-black â€” primary text */
-  --bp-earth:          #6B5F54;   /* secondary text, captions */
-  --bp-fog:            #A89E95;   /* placeholder, muted text */
-  --bp-mist:           #C8C0B8;   /* borders, lines */
-  --bp-ash:            #E8E3DD;   /* light borders */
+  /* ── Super Template Starter Kit Layout Variables ─────────── */
+  --max-width:                1120px !important;
+  --column-spacing:           40px !important;
+  --top-spacing:              0px !important;
+  --notion-header-display:    block !important;
+  --collection-header-display: flex !important;
+  --collection-header-border: 1px solid var(--bp-ash) !important;
+  --cta-padding:              10px 20px !important;
+  --cta-border-radius:        4px !important;
+  --cta-border:               none !important;
+  --cta-shadow:               none !important;
+  --cta-bg-color:             var(--bp-green) !important;
+  --cta-text-color:           var(--bp-white) !important;
+  --callout-padding:          16px 16px 16px 14px !important;
+  --callout-border-radius:    6px !important;
+  --callout-border:           1px solid var(--bp-green-pale) !important;
 
-  /* Accent: Atlantic Copper â€” warm, Irish, grounding */
-  --bp-copper:         #A0522D;   /* premium CTA accent */
-  --bp-copper-light:   #C8783A;
-  --bp-copper-pale:    #F5E8DF;
-
-  /* Pure */
-  --bp-white:          #FFFFFF;
-  --bp-black:          #111111;
-
-  /* â”€â”€ Typography â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€ */
-  --font-display:      'Cormorant Garamond', Georgia, serif;
-  --font-body:         'DM Sans', system-ui, sans-serif;
-
-  --text-xs:           0.75rem;    /* 12px */
-  --text-sm:           0.875rem;   /* 14px */
-  --text-base:         1rem;       /* 16px */
-  --text-md:           1.125rem;   /* 18px */
-  --text-lg:           1.25rem;    /* 20px */
-  --text-xl:           1.5rem;     /* 24px */
-  --text-2xl:          2rem;       /* 32px */
-  --text-3xl:          2.5rem;     /* 40px */
-  --text-4xl:          3.25rem;    /* 52px */
-  --text-5xl:          4rem;       /* 64px */
-
-  --leading-tight:     1.2;
-  --leading-snug:      1.35;
-  --leading-normal:    1.6;
-  --leading-relaxed:   1.75;
-
-  --tracking-tight:    -0.03em;
-  --tracking-normal:   -0.01em;
-  --tracking-wide:     0.04em;
-  --tracking-widest:   0.12em;
-
-  /* â”€â”€ Spacing â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€ */
-  --space-1:    0.25rem;
-  --space-2:    0.5rem;
-  --space-3:    0.75rem;
-  --space-4:    1rem;
-  --space-5:    1.25rem;
-  --space-6:    1.5rem;
-  --space-8:    2rem;
-  --space-10:   2.5rem;
-  --space-12:   3rem;
-  --space-16:   4rem;
-  --space-20:   5rem;
-  --space-24:   6rem;
-  --space-32:   8rem;
-
-  /* â”€â”€ Layout â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€ */
-  --max-width:        1120px;
-  --max-width-narrow:  720px;
-  --max-width-wide:   1280px;
-  --content-padding:  clamp(1.25rem, 5vw, 3rem);
-
-  /* â”€â”€ Radius â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€ */
-  --radius-sm:   4px;
-  --radius-md:   8px;
-  --radius-lg:   12px;
-  --radius-xl:   20px;
-  --radius-pill: 999px;
-
-  /* â”€â”€ Shadows â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€ */
-  --shadow-xs:   0 1px 3px rgba(42, 36, 28, 0.06);
-  --shadow-sm:   0 2px 8px rgba(42, 36, 28, 0.08),
-                 0 1px 2px rgba(42, 36, 28, 0.04);
-  --shadow-md:   0 4px 16px rgba(42, 36, 28, 0.10),
-                 0 2px 6px  rgba(42, 36, 28, 0.06);
-  --shadow-lg:   0 8px 32px rgba(42, 36, 28, 0.12),
-                 0 3px 10px rgba(42, 36, 28, 0.07);
-  --shadow-card: 0 2px 12px rgba(45, 106, 79, 0.08),
-                 0 1px 4px  rgba(45, 106, 79, 0.05);
-  --shadow-card-hover: 0 8px 28px rgba(45, 106, 79, 0.15),
-                       0 3px 10px rgba(45, 106, 79, 0.08);
-
-  /* â”€â”€ Transitions â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€ */
-  --ease-out:     cubic-bezier(0.22, 0.68, 0, 1.2);
-  --ease-smooth:  cubic-bezier(0.4, 0, 0.2, 1);
-  --duration-fast:   150ms;
-  --duration-base:   250ms;
-  --duration-slow:   400ms;
-
-  /* â”€â”€ Borders â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€ */
-  --border-light:  1px solid var(--bp-ash);
-  --border-mid:    1px solid var(--bp-mist);
-  --border-green:  1px solid var(--bp-green-pale);
+  /* ── Typography ──────────────────────────────────────────── */
+  --font-display: 'Cormorant Garamond', Georgia, serif;
+  --font-body:    'DM Sans', system-ui, sans-serif;
 }
 
 
-/* ============================================================
+/* ================================================================
    2. SAFE GLOBAL CSS
-   These selectors are broadly applicable and unlikely
-   to conflict with Super.so internals.
-   ============================================================ */
-
-/* â”€â”€ Base Reset & Body â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€ */
-
-*,
-*::before,
-*::after {
-  box-sizing: border-box;
-  margin: 0;
-  padding: 0;
-}
-
-html {
-  font-size: 16px;
-  -webkit-font-smoothing: antialiased;
-  -moz-osx-font-smoothing: grayscale;
-  text-rendering: optimizeLegibility;
-  scroll-behavior: smooth;
-}
+   Uses Super's documented class names only.
+   Reference: docs.super.so/super-css-classes
+   ================================================================ */
 
 body {
-  font-family: var(--font-body);
-  font-size: var(--text-base);
-  font-weight: 300;
-  line-height: var(--leading-normal);
-  letter-spacing: var(--tracking-normal);
-  color: var(--bp-peat);
-  background-color: var(--bp-stone);
-  /* Subtle grain texture using SVG â€” adds warmth without kitsch */
-  background-image:
-    url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='300' height='300'%3E%3Cfilter id='noise'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.65' numOctaves='3' stitchTiles='stitch'/%3E%3CfeColorMatrix type='saturate' values='0'/%3E%3C/filter%3E%3Crect width='300' height='300' filter='url(%23noise)' opacity='0.025'/%3E%3C/svg%3E");
+  font-family: var(--font-body) !important;
+  font-weight: 300 !important;
+  background-color: var(--bp-stone) !important;
+  color: var(--bp-peat) !important;
+  -webkit-font-smoothing: antialiased !important;
 }
 
-img, video {
-  max-width: 100%;
-  height: auto;
-  display: block;
+/* Headings — Super uses .notion-heading on h1/h2/h3 elements */
+h1.notion-heading {
+  font-family: var(--font-display) !important;
+  font-size: clamp(2.25rem, 4.5vw, 3.75rem) !important;
+  font-weight: 400 !important;
+  font-style: italic !important;
+  color: var(--bp-green-deep) !important;
+  letter-spacing: -0.04em !important;
+  line-height: 1.1 !important;
 }
 
-/* â”€â”€ Typography â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€ */
-
-/*
- * Display headings use Cormorant Garamond â€” a typeface with
- * genuine Irish typographic heritage, used in quality print
- * publishing. It brings gravitas without nostalgia.
- */
-
-h1, h2, h3 {
-  font-family: var(--font-display);
-  font-weight: 500;
-  letter-spacing: var(--tracking-tight);
-  line-height: var(--leading-tight);
-  color: var(--bp-green-deeper);
+h2.notion-heading {
+  font-family: var(--font-display) !important;
+  font-size: clamp(1.75rem, 3vw, 2.75rem) !important;
+  font-weight: 500 !important;
+  color: var(--bp-green-deep) !important;
+  letter-spacing: -0.03em !important;
+  line-height: 1.2 !important;
 }
 
-h1 {
-  font-size: clamp(var(--text-3xl), 5vw, var(--text-5xl));
-  font-weight: 400;
-  font-style: italic;
-  /* Optical character pair for the display heading */
-  letter-spacing: -0.04em;
+h3.notion-heading {
+  font-family: var(--font-display) !important;
+  font-size: clamp(1.25rem, 2vw, 1.75rem) !important;
+  font-weight: 500 !important;
+  color: var(--bp-green-dark) !important;
+  letter-spacing: -0.02em !important;
 }
 
-h2 {
-  font-size: clamp(var(--text-2xl), 3.5vw, var(--text-4xl));
-  font-weight: 500;
+/* Page title */
+.notion-page__title,
+.notion-page-title {
+  font-family: var(--font-display) !important;
+  font-weight: 400 !important;
+  font-style: italic !important;
+  color: var(--bp-green-deep) !important;
+  letter-spacing: -0.04em !important;
 }
 
-h3 {
-  font-size: clamp(var(--text-lg), 2vw, var(--text-2xl));
-  font-weight: 500;
+/* Body text */
+.notion-text {
+  font-family: var(--font-body) !important;
+  font-size: 1rem !important;
+  font-weight: 300 !important;
+  line-height: 1.75 !important;
+  color: var(--bp-peat) !important;
 }
 
-h4 {
-  font-family: var(--font-body);
-  font-size: var(--text-base);
-  font-weight: 500;
-  letter-spacing: var(--tracking-widest);
-  text-transform: uppercase;
-  color: var(--bp-green);
+/* Links */
+.notion-link {
+  color: var(--bp-green) !important;
+  text-decoration: none !important;
+  border-bottom: 1px solid var(--bp-green-pale) !important;
+  transition: color 0.2s, border-color 0.2s !important;
+}
+.notion-link:hover {
+  color: var(--bp-green-dark) !important;
+  border-color: var(--bp-green) !important;
 }
 
-h5, h6 {
-  font-family: var(--font-body);
-  font-size: var(--text-sm);
-  font-weight: 500;
-  letter-spacing: var(--tracking-wide);
-  text-transform: uppercase;
-  color: var(--bp-earth);
+/* Callout */
+.notion-callout {
+  background-color: var(--bp-green-ghost) !important;
+  border: 1px solid var(--bp-green-pale) !important;
+  border-left: 3px solid var(--bp-green) !important;
+  border-radius: 6px !important;
 }
 
-p {
-  font-size: var(--text-base);
-  line-height: var(--leading-relaxed);
-  color: var(--bp-peat);
-  max-width: 68ch; /* Optimal reading measure */
+/* Quote */
+.notion-quote {
+  border-left: 3px solid var(--bp-green) !important;
+  font-family: var(--font-display) !important;
+  font-style: italic !important;
+  font-size: 1.2rem !important;
+  color: var(--bp-green-dark) !important;
+  background: var(--bp-green-ghost) !important;
 }
 
-/* Eyebrow / label text â€” used for section markers */
-.eyebrow,
-[class*="label"],
-[class*="eyebrow"] {
-  font-family: var(--font-body);
-  font-size: var(--text-xs);
-  font-weight: 500;
-  letter-spacing: var(--tracking-widest);
-  text-transform: uppercase;
-  color: var(--bp-green);
+/* Divider */
+.notion-hr {
+  border-color: var(--bp-ash) !important;
+  opacity: 0.8 !important;
 }
 
-strong, b {
-  font-weight: 500;
+/* List markers */
+.notion-bulleted-list > li::marker {
+  color: var(--bp-green) !important;
 }
-
-em, i {
-  font-style: italic;
-}
-
-blockquote {
-  border-left: 3px solid var(--bp-green);
-  padding: var(--space-4) var(--space-6);
-  margin: var(--space-8) 0;
-  font-family: var(--font-display);
-  font-size: var(--text-xl);
-  font-style: italic;
-  color: var(--bp-green-dark);
-  background: var(--bp-green-ghost);
-  border-radius: 0 var(--radius-md) var(--radius-md) 0;
-}
-
-hr {
-  border: none;
-  border-top: var(--border-mid);
-  margin: var(--space-12) 0;
-  opacity: 0.6;
-}
-
-/* â”€â”€ Links â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€ */
-
-a {
-  color: var(--bp-green);
-  text-decoration: none;
-  transition: color var(--duration-fast) var(--ease-smooth);
-  position: relative;
-}
-
-a:hover {
-  color: var(--bp-green-dark);
-}
-
-/* Underline animation for inline body links */
-p a,
-li a {
-  border-bottom: 1px solid var(--bp-green-pale);
-  transition:
-    color var(--duration-fast) var(--ease-smooth),
-    border-color var(--duration-fast) var(--ease-smooth);
-}
-
-p a:hover,
-li a:hover {
-  color: var(--bp-green-dark);
-  border-color: var(--bp-green);
-}
-
-/* â”€â”€ Buttons & CTAs â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€ */
-
-/*
- * Three button tiers:
- *   .btn-primary  â€” filled green (main CTA)
- *   .btn-ghost    â€” outline green (secondary action)
- *   .btn-copper   â€” copper accent (premium / paywall action)
- */
-
-.btn-primary,
-button[class*="primary"],
-a[class*="cta"],
-[class*="button--primary"] {
-  display: inline-flex;
-  align-items: center;
-  gap: var(--space-2);
-  padding: var(--space-4) var(--space-8);
-  background: var(--bp-green);
-  color: var(--bp-white);
-  font-family: var(--font-body);
-  font-size: var(--text-sm);
-  font-weight: 500;
-  letter-spacing: var(--tracking-wide);
-  text-transform: uppercase;
-  border: 1px solid var(--bp-green);
-  border-radius: var(--radius-sm);
-  cursor: pointer;
-  text-decoration: none;
-  transition:
-    background var(--duration-base) var(--ease-smooth),
-    border-color var(--duration-base) var(--ease-smooth),
-    transform var(--duration-fast) var(--ease-smooth),
-    box-shadow var(--duration-base) var(--ease-smooth);
-}
-
-.btn-primary:hover,
-button[class*="primary"]:hover,
-a[class*="cta"]:hover {
-  background: var(--bp-green-dark);
-  border-color: var(--bp-green-dark);
-  transform: translateY(-1px);
-  box-shadow: var(--shadow-md);
-  color: var(--bp-white);
-  border-bottom: 1px solid var(--bp-green-dark);
-}
-
-.btn-ghost {
-  display: inline-flex;
-  align-items: center;
-  gap: var(--space-2);
-  padding: var(--space-3) var(--space-7);
-  background: transparent;
-  color: var(--bp-green);
-  font-family: var(--font-body);
-  font-size: var(--text-sm);
-  font-weight: 500;
-  letter-spacing: var(--tracking-wide);
-  text-transform: uppercase;
-  border: 1px solid var(--bp-green);
-  border-radius: var(--radius-sm);
-  cursor: pointer;
-  text-decoration: none;
-  transition:
-    background var(--duration-base) var(--ease-smooth),
-    color var(--duration-base) var(--ease-smooth),
-    transform var(--duration-fast) var(--ease-smooth);
-}
-
-.btn-ghost:hover {
-  background: var(--bp-green);
-  color: var(--bp-white);
-  transform: translateY(-1px);
-  border-bottom: 1px solid var(--bp-green);
-}
-
-/* Copper/premium CTA â€” used on Pricing page paywall button */
-.btn-copper {
-  display: inline-flex;
-  align-items: center;
-  gap: var(--space-2);
-  padding: var(--space-4) var(--space-10);
-  background: var(--bp-copper);
-  color: var(--bp-white);
-  font-family: var(--font-body);
-  font-size: var(--text-sm);
-  font-weight: 500;
-  letter-spacing: var(--tracking-wide);
-  text-transform: uppercase;
-  border: 1px solid var(--bp-copper);
-  border-radius: var(--radius-sm);
-  cursor: pointer;
-  text-decoration: none;
-  box-shadow: 0 2px 10px rgba(160, 82, 45, 0.20);
-  transition:
-    background var(--duration-base) var(--ease-smooth),
-    transform var(--duration-fast) var(--ease-smooth),
-    box-shadow var(--duration-base) var(--ease-smooth);
-}
-
-.btn-copper:hover {
-  background: var(--bp-copper-light);
-  border-color: var(--bp-copper-light);
-  transform: translateY(-2px);
-  box-shadow: 0 6px 20px rgba(160, 82, 45, 0.28);
-  color: var(--bp-white);
-  border-bottom: 1px solid var(--bp-copper-light);
-}
-
-/* â”€â”€ Forms â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€ */
-
-input[type="text"],
-input[type="email"],
-input[type="number"],
-input[type="url"],
-input[type="tel"],
-textarea,
-select {
-  width: 100%;
-  font-family: var(--font-body);
-  font-size: var(--text-base);
-  font-weight: 300;
-  color: var(--bp-peat);
-  background: var(--bp-white);
-  border: 1px solid var(--bp-mist);
-  border-radius: var(--radius-sm);
-  padding: var(--space-3) var(--space-4);
-  line-height: var(--leading-normal);
-  transition:
-    border-color var(--duration-fast) var(--ease-smooth),
-    box-shadow var(--duration-fast) var(--ease-smooth);
-  outline: none;
-  appearance: none;
-}
-
-input:focus,
-textarea:focus,
-select:focus {
-  border-color: var(--bp-green);
-  box-shadow: 0 0 0 3px rgba(45, 106, 79, 0.12);
-}
-
-input::placeholder,
-textarea::placeholder {
-  color: var(--bp-fog);
-  font-weight: 300;
-}
-
-label {
-  font-family: var(--font-body);
-  font-size: var(--text-sm);
-  font-weight: 500;
-  color: var(--bp-earth);
-  letter-spacing: var(--tracking-wide);
-  display: block;
-  margin-bottom: var(--space-2);
-}
-
-/* â”€â”€ Cards â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€ */
-
-/*
- * Stallion profile cards â€” clean, gallery-ready.
- * Hover reveals a green tonal lift.
- */
-
-.card,
-[class*="notion-collection-card"],
-[class*="collection-card"] {
-  background: var(--bp-white);
-  border: var(--border-light);
-  border-radius: var(--radius-md);
-  overflow: hidden;
-  box-shadow: var(--shadow-card);
-  transition:
-    transform var(--duration-base) var(--ease-out),
-    box-shadow var(--duration-base) var(--ease-smooth),
-    border-color var(--duration-base) var(--ease-smooth);
-  cursor: pointer;
-}
-
-.card:hover,
-[class*="notion-collection-card"]:hover,
-[class*="collection-card"]:hover {
-  transform: translateY(-4px);
-  box-shadow: var(--shadow-card-hover);
-  border-color: var(--bp-green-pale);
-}
-
-/* Card image area */
-.card img,
-[class*="collection-card"] img {
-  width: 100%;
-  aspect-ratio: 4 / 3;
-  object-fit: cover;
-  object-position: center top;
-  /* Subtle green tint on hover via parent */
-  transition: transform var(--duration-slow) var(--ease-smooth);
-}
-
-.card:hover img,
-[class*="collection-card"]:hover img {
-  transform: scale(1.02);
-}
-
-/* Card body */
-.card-body,
-[class*="collection-card-body"],
-[class*="card-content"] {
-  padding: var(--space-5) var(--space-6);
-}
-
-/* Card title (stallion registered name) */
-.card-title,
-[class*="collection-card-title"],
-[class*="card-title"] {
-  font-family: var(--font-display);
-  font-size: var(--text-xl);
-  font-weight: 500;
-  color: var(--bp-green-deeper);
-  margin-bottom: var(--space-2);
-  letter-spacing: -0.02em;
-  line-height: var(--leading-snug);
-}
-
-/* Card property tags (HWSD, Country, etc.) */
-.card-property,
-[class*="collection-property"] {
-  font-size: var(--text-xs);
-  font-weight: 500;
-  letter-spacing: var(--tracking-wide);
-  text-transform: uppercase;
-  color: var(--bp-earth);
-  display: inline-flex;
-  align-items: center;
-  gap: var(--space-1);
-}
-
-/* HWSD status badge â€” visually prominent */
-[class*="hwsd"],
-[class*="HWSD"] {
-  display: inline-block;
-  padding: 2px var(--space-3);
-  border-radius: var(--radius-pill);
-  font-size: var(--text-xs);
-  font-weight: 500;
-  letter-spacing: var(--tracking-wide);
-}
-
-/* â”€â”€ Utility Classes â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€ */
-
-/* Divider line with central text â€” used on section breaks */
-.section-rule {
-  display: flex;
-  align-items: center;
-  gap: var(--space-4);
-  color: var(--bp-fog);
-  font-size: var(--text-xs);
-  letter-spacing: var(--tracking-widest);
-  text-transform: uppercase;
-  margin: var(--space-12) 0;
-}
-
-.section-rule::before,
-.section-rule::after {
-  content: '';
-  flex: 1;
-  height: 1px;
-  background: var(--bp-ash);
-}
-
-/* Premium badge */
-.badge-verified {
-  display: inline-flex;
-  align-items: center;
-  gap: 5px;
-  padding: 3px var(--space-3);
-  background: var(--bp-green-ghost);
-  border: 1px solid var(--bp-green-pale);
-  color: var(--bp-green-dark);
-  font-size: var(--text-xs);
-  font-weight: 500;
-  letter-spacing: var(--tracking-wide);
-  text-transform: uppercase;
-  border-radius: var(--radius-pill);
-}
-
-.badge-verified::before {
-  content: 'âœ“';
-  font-size: 10px;
-}
-
-/* Members-only lock indicator */
-.badge-members {
-  display: inline-flex;
-  align-items: center;
-  gap: 5px;
-  padding: 3px var(--space-3);
-  background: var(--bp-copper-pale);
-  border: 1px solid rgba(160, 82, 45, 0.2);
-  color: var(--bp-copper);
-  font-size: var(--text-xs);
-  font-weight: 500;
-  letter-spacing: var(--tracking-wide);
-  text-transform: uppercase;
-  border-radius: var(--radius-pill);
-}
-
-/* â”€â”€ Footer â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€ */
-
-footer,
-[class*="footer"],
-[class*="site-footer"] {
-  background: var(--bp-green-deeper);
-  color: rgba(255, 255, 255, 0.75);
-  padding: var(--space-16) var(--content-padding) var(--space-8);
-  margin-top: var(--space-20);
-}
-
-footer a,
-[class*="footer"] a {
-  color: rgba(255, 255, 255, 0.65);
-  transition: color var(--duration-fast) var(--ease-smooth);
-  border-bottom: none;
-}
-
-footer a:hover,
-[class*="footer"] a:hover {
-  color: var(--bp-white);
-  border-bottom: none;
-}
-
-footer p,
-[class*="footer"] p {
-  color: rgba(255, 255, 255, 0.65);
-  font-size: var(--text-sm);
-  line-height: var(--leading-relaxed);
-}
-
-/* Footer logo / wordmark */
-[class*="footer-logo"],
-[class*="footer-brand"] {
-  font-family: var(--font-display);
-  font-size: var(--text-2xl);
-  font-weight: 400;
-  font-style: italic;
-  color: var(--bp-white);
-  letter-spacing: -0.02em;
-}
-
-/* Footer tagline */
-[class*="footer-tagline"] {
-  font-size: var(--text-xs);
-  letter-spacing: var(--tracking-widest);
-  text-transform: uppercase;
-  color: var(--bp-green-light);
-  opacity: 0.8;
-}
-
-/* â”€â”€ Animations & Transitions â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€ */
-
-/*
- * Fade-up reveal â€” applied to sections as they enter viewport.
- * Super.so doesn't support scroll triggers natively, so this
- * applies to initial page load via animation-delay staggering.
- */
-
-@keyframes fadeUp {
-  from {
-    opacity: 0;
-    transform: translateY(20px);
-  }
-  to {
-    opacity: 1;
-    transform: translateY(0);
-  }
-}
-
-@keyframes fadeIn {
-  from { opacity: 0; }
-  to   { opacity: 1; }
-}
-
-@keyframes shimmer {
-  from { background-position: -200% center; }
-  to   { background-position:  200% center; }
-}
-
-/* Page entrance animation */
-.notion-page-content,
-[class*="page-content"],
-[class*="notion-app-inner"] {
-  animation: fadeIn var(--duration-slow) var(--ease-smooth) both;
+.notion-numbered-list > li::marker {
+  color: var(--bp-green) !important;
+  font-weight: 500 !important;
 }
 
 
-/* ============================================================
+/* ================================================================
    3. SUPER-SPECIFIC SELECTORS
-   âš ï¸  These selectors target Super.so and Notion's generated
-   class names. Inspect your live site to verify these match
-   exactly. Super.so may update their markup without warning.
-   Test after each Super.so update.
-   ============================================================ */
+   ⚠️  Targets Super's rendered HTML structure.
+   If Super updates their DOM, inspect with DevTools and update here.
+   ================================================================ */
 
-/* â”€â”€ Navigation / Navbar â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€ */
+/* ── Navbar ──────────────────────────────────────────────────── */
 
-/*
- * Super renders the navbar in a wrapper with class patterns
- * like .super-navbar, .notion-header, or site-specific classes.
- * Inspect with browser devtools and replace if needed.
- */
-
-/* Navbar container */
-header,
-[class*="super-navbar"],
-[class*="navbar"],
-[class*="site-header"],
-[class*="notion-header"] {
-  background: rgba(245, 242, 237, 0.92) !important; /* --bp-stone with transparency */
-  backdrop-filter: blur(12px) saturate(160%);
-  -webkit-backdrop-filter: blur(12px) saturate(160%);
-  border-bottom: 1px solid var(--bp-ash);
-  position: sticky;
-  top: 0;
-  z-index: 100;
-  transition: box-shadow var(--duration-base) var(--ease-smooth);
+.super-navbar {
+  background-color: rgba(245, 242, 237, 0.95) !important;
+  backdrop-filter: blur(10px) !important;
+  -webkit-backdrop-filter: blur(10px) !important;
+  border-bottom: 1px solid var(--bp-ash) !important;
+  box-shadow: none !important;
 }
 
-/* Scrolled state â€” slightly deeper shadow */
-header.scrolled,
-[class*="navbar"].scrolled {
-  box-shadow: var(--shadow-sm);
+.super-navbar__logo,
+.super-navbar__title {
+  font-family: var(--font-display) !important;
+  font-size: 1.55rem !important;
+  font-weight: 400 !important;
+  font-style: italic !important;
+  color: var(--bp-green-deep) !important;
+  letter-spacing: -0.03em !important;
 }
 
-/* Navbar inner wrapper */
-[class*="navbar-inner"],
-[class*="header-inner"],
-[class*="nav-inner"] {
-  max-width: var(--max-width);
-  margin: 0 auto;
-  padding: 0 var(--content-padding);
-  height: 64px;
-  display: flex;
-  align-items: center;
-  justify-content: space-between;
-}
-
-/* Site logo / wordmark in navbar */
-[class*="site-logo"],
-[class*="navbar-logo"],
-[class*="brand"] {
-  font-family: var(--font-display);
-  font-size: var(--text-2xl);
-  font-weight: 400;
-  font-style: italic;
-  color: var(--bp-green-deeper) !important;
-  letter-spacing: -0.03em;
-  text-decoration: none;
-}
-
-/* Nav links */
-[class*="navbar"] a,
-[class*="nav-link"],
-[class*="nav-item"] a,
-[class*="super-nav"] a {
-  font-family: var(--font-body);
-  font-size: var(--text-sm);
-  font-weight: 400;
-  letter-spacing: var(--tracking-wide);
+.super-navbar__links a,
+.super-navbar .nav-item a {
+  font-family: var(--font-body) !important;
+  font-size: 0.78rem !important;
+  font-weight: 400 !important;
+  letter-spacing: 0.06em !important;
+  text-transform: uppercase !important;
   color: var(--bp-earth) !important;
-  text-decoration: none;
-  padding: var(--space-2) var(--space-3);
-  border-radius: var(--radius-sm);
-  transition:
-    color var(--duration-fast) var(--ease-smooth),
-    background var(--duration-fast) var(--ease-smooth);
-  border-bottom: none !important;
+  transition: color 0.2s !important;
 }
 
-[class*="navbar"] a:hover,
-[class*="nav-link"]:hover,
-[class*="nav-item"] a:hover {
+.super-navbar__links a:hover,
+.super-navbar .nav-item a:hover {
   color: var(--bp-green) !important;
-  background: var(--bp-green-ghost);
 }
 
-/* Active nav link */
-[class*="navbar"] a[aria-current="page"],
-[class*="nav-link--active"],
-[class*="nav-item--active"] a {
-  color: var(--bp-green) !important;
-  font-weight: 500;
+.super-navbar__cta,
+.super-navbar .cta-button {
+  background-color: var(--bp-green) !important;
+  color: var(--bp-white) !important;
+  font-family: var(--font-body) !important;
+  font-size: 0.75rem !important;
+  font-weight: 500 !important;
+  letter-spacing: 0.07em !important;
+  text-transform: uppercase !important;
+  border-radius: 4px !important;
+  border: none !important;
+  transition: background-color 0.2s !important;
 }
 
-/* â”€â”€ Page Layout & Content Width â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€ */
-
-/* Main page wrapper */
-[class*="notion-page"],
-[class*="super-page"],
-[class*="page-wrapper"],
-.notion-app {
-  max-width: 100%;
-  background: var(--bp-stone);
+.super-navbar__cta:hover,
+.super-navbar .cta-button:hover {
+  background-color: var(--bp-green-dark) !important;
 }
 
-/* Content column â€” centred, comfortable measure */
-[class*="notion-page-content"],
-[class*="page-content"],
-[class*="content-wrapper"] {
-  max-width: var(--max-width);
-  margin: 0 auto;
-  padding: var(--space-16) var(--content-padding);
+/* ── Page Layout ─────────────────────────────────────────────── */
+
+.notion-page {
+  background-color: var(--bp-stone) !important;
+  padding-top: 3rem !important;
+  padding-bottom: 4rem !important;
 }
 
-/* â”€â”€ Database / Directory View â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€ */
+.notion-page__content {
+  max-width: 1120px !important;
+  margin: 0 auto !important;
+  padding-left: clamp(1.25rem, 5vw, 3rem) !important;
+  padding-right: clamp(1.25rem, 5vw, 3rem) !important;
+}
 
-/*
- * The Stallion Directory uses a Notion gallery view.
- * Super.so renders this as a CSS grid.
- * These selectors target the gallery container and cards.
- */
+/* ── Stallion Directory Cards ────────────────────────────────── */
 
-/* Gallery grid container */
-[class*="notion-gallery"],
-[class*="gallery-view"],
-[class*="collection-gallery"] {
+/* Gallery grid */
+.notion-collection__cards {
   display: grid !important;
   grid-template-columns: repeat(auto-fill, minmax(300px, 1fr)) !important;
-  gap: var(--space-6) !important;
-  padding: var(--space-8) 0 !important;
-  max-width: var(--max-width-wide);
-  margin: 0 auto;
+  gap: 1.5rem !important;
+  padding: 1.5rem 0 !important;
 }
 
-/* Gallery header (title + filter bar) */
-[class*="notion-collection-header"],
-[class*="collection-header"],
-[class*="gallery-header"] {
-  display: flex;
-  align-items: center;
-  justify-content: space-between;
-  gap: var(--space-4);
-  margin-bottom: var(--space-6);
-  padding-bottom: var(--space-4);
-  border-bottom: var(--border-light);
+/* Individual card */
+.notion-collection-card {
+  background-color: var(--bp-white) !important;
+  border: 1px solid var(--bp-ash) !important;
+  border-radius: 10px !important;
+  overflow: hidden !important;
+  box-shadow: 0 2px 10px rgba(45, 106, 79, 0.06) !important;
+  transition: transform 0.25s cubic-bezier(0.22, 0.68, 0, 1.2),
+              box-shadow 0.25s ease,
+              border-color 0.25s ease !important;
+  cursor: pointer !important;
 }
 
-/* Filter / search bar */
-[class*="notion-search"],
-[class*="collection-search"],
-[class*="filter-bar"] {
-  display: flex;
-  align-items: center;
-  gap: var(--space-3);
-  flex-wrap: wrap;
+.notion-collection-card:hover {
+  transform: translateY(-4px) !important;
+  box-shadow: 0 8px 28px rgba(45, 106, 79, 0.14) !important;
+  border-color: var(--bp-green-pale) !important;
 }
 
-[class*="notion-search"] input,
-[class*="collection-search"] input,
-[class*="filter-input"] {
-  max-width: 280px;
-  background: var(--bp-white);
-  border: var(--border-mid);
-  border-radius: var(--radius-pill);
-  padding: var(--space-2) var(--space-5);
-  font-size: var(--text-sm);
+/* Card cover image */
+.notion-collection-card__cover {
+  aspect-ratio: 4 / 3 !important;
+  overflow: hidden !important;
 }
 
-/* â”€â”€ Notion Content Blocks â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€ */
-
-/* Notion page title (H1 auto-rendered by Super) */
-[class*="notion-page-title"],
-[class*="notion-title"],
-.notion-h1 {
-  font-family: var(--font-display);
-  font-size: clamp(var(--text-3xl), 5vw, var(--text-5xl));
-  font-weight: 400;
-  font-style: italic;
-  color: var(--bp-green-deeper);
-  letter-spacing: -0.04em;
-  line-height: var(--leading-tight);
-  margin-bottom: var(--space-8);
+.notion-collection-card__cover img {
+  width: 100% !important;
+  height: 100% !important;
+  object-fit: cover !important;
+  object-position: center top !important;
+  transition: transform 0.4s ease !important;
 }
 
-/* Notion H2 */
-.notion-h2,
-[class*="notion-heading-2"] {
-  font-family: var(--font-display);
-  font-size: clamp(var(--text-2xl), 3vw, var(--text-3xl));
-  font-weight: 500;
-  color: var(--bp-green-deeper);
-  letter-spacing: -0.03em;
-  margin-top: var(--space-12);
-  margin-bottom: var(--space-4);
-  padding-bottom: var(--space-3);
-  border-bottom: 1px solid var(--bp-ash);
+.notion-collection-card:hover .notion-collection-card__cover img {
+  transform: scale(1.03) !important;
 }
 
-/* Notion H3 */
-.notion-h3,
-[class*="notion-heading-3"] {
-  font-family: var(--font-display);
-  font-size: var(--text-xl);
-  font-weight: 500;
-  color: var(--bp-green-dark);
-  letter-spacing: -0.02em;
-  margin-top: var(--space-8);
-  margin-bottom: var(--space-3);
+/* Card content */
+.notion-collection-card__content {
+  padding: 1.1rem 1.25rem 1.25rem !important;
+  background: var(--bp-white) !important;
 }
 
-/* Notion text blocks */
-.notion-text,
-[class*="notion-text"] {
-  font-size: var(--text-base);
-  line-height: var(--leading-relaxed);
-  color: var(--bp-peat);
-  margin-bottom: var(--space-4);
-  max-width: 68ch;
+/* Card title (stallion name) */
+.notion-collection-card__title {
+  font-family: var(--font-display) !important;
+  font-size: 1.3rem !important;
+  font-weight: 500 !important;
+  color: var(--bp-green-deep) !important;
+  letter-spacing: -0.02em !important;
+  line-height: 1.3 !important;
+  margin-bottom: 0.25rem !important;
 }
 
-/* Notion callout blocks â€” used for key info */
-[class*="notion-callout"] {
-  background: var(--bp-green-ghost) !important;
-  border: var(--border-green) !important;
-  border-left: 3px solid var(--bp-green) !important;
-  border-radius: var(--radius-md);
-  padding: var(--space-5) var(--space-6);
-  margin: var(--space-8) 0;
-  color: var(--bp-green-dark);
+/* Card property values */
+.notion-collection-card__property {
+  font-family: var(--font-body) !important;
+  font-size: 0.78rem !important;
+  font-weight: 400 !important;
+  color: var(--bp-earth) !important;
+  line-height: 1.5 !important;
 }
 
-/* Notion quote blocks */
-[class*="notion-quote"] {
-  border-left: 3px solid var(--bp-green);
-  padding: var(--space-3) var(--space-6);
-  margin: var(--space-8) 0;
-  font-family: var(--font-display);
-  font-style: italic;
-  font-size: var(--text-xl);
-  color: var(--bp-green-dark);
-  background: var(--bp-green-ghost);
-  border-radius: 0 var(--radius-md) var(--radius-md) 0;
+/* Select tag badges */
+.notion-collection-card__property .notion-property__select,
+.notion-collection-card__property .notion-select-value {
+  font-size: 0.7rem !important;
+  font-weight: 500 !important;
+  letter-spacing: 0.04em !important;
+  border-radius: 20px !important;
+  padding: 2px 9px !important;
 }
 
-/* Notion bulleted list */
-[class*="notion-bulleted-list"] {
-  padding-left: var(--space-6);
-  color: var(--bp-peat);
-  line-height: var(--leading-relaxed);
+/* Collection header */
+.notion-collection__header {
+  display: flex !important;
+  align-items: center !important;
+  justify-content: space-between !important;
+  padding-bottom: 1.25rem !important;
+  margin-bottom: 1rem !important;
+  border-bottom: 1px solid var(--bp-ash) !important;
 }
 
-[class*="notion-bulleted-list"] li::marker {
-  color: var(--bp-green);
+.notion-collection__header .notion-collection__title {
+  font-family: var(--font-display) !important;
+  font-size: 1.75rem !important;
+  font-weight: 500 !important;
+  color: var(--bp-green-deep) !important;
+  letter-spacing: -0.02em !important;
 }
 
-/* Notion numbered list */
-[class*="notion-numbered-list"] {
-  padding-left: var(--space-6);
-  color: var(--bp-peat);
-  line-height: var(--leading-relaxed);
+/* ── Footer ──────────────────────────────────────────────────── */
+
+.super-footer {
+  background-color: var(--bp-green-deep) !important;
+  color: rgba(255, 255, 255, 0.6) !important;
+  padding: 3rem 2.5rem 2rem !important;
+  margin-top: 4rem !important;
 }
 
-[class*="notion-numbered-list"] li::marker {
-  color: var(--bp-green);
-  font-weight: 500;
+.super-footer a {
+  color: rgba(255, 255, 255, 0.6) !important;
+  transition: color 0.2s !important;
 }
 
-/* Notion table */
-[class*="notion-table"] {
-  border-collapse: collapse;
-  width: 100%;
-  font-size: var(--text-sm);
-  margin: var(--space-8) 0;
-  border-radius: var(--radius-md);
-  overflow: hidden;
-  box-shadow: var(--shadow-xs);
+.super-footer a:hover {
+  color: var(--bp-white) !important;
 }
 
-[class*="notion-table"] th {
-  background: var(--bp-green);
-  color: var(--bp-white);
-  font-family: var(--font-body);
-  font-size: var(--text-xs);
-  font-weight: 500;
-  letter-spacing: var(--tracking-wide);
-  text-transform: uppercase;
-  padding: var(--space-3) var(--space-4);
-  text-align: left;
+.super-footer__inner {
+  max-width: 1120px !important;
+  margin: 0 auto !important;
 }
 
-[class*="notion-table"] td {
-  padding: var(--space-3) var(--space-4);
-  border-bottom: 1px solid var(--bp-ash);
-  color: var(--bp-peat);
+.super-footer__title {
+  font-family: var(--font-display) !important;
+  font-size: 1.5rem !important;
+  font-weight: 400 !important;
+  font-style: italic !important;
+  color: var(--bp-white) !important;
+  letter-spacing: -0.03em !important;
 }
 
-[class*="notion-table"] tr:last-child td {
-  border-bottom: none;
+.super-footer__description {
+  font-size: 0.82rem !important;
+  color: rgba(255, 255, 255, 0.45) !important;
+  line-height: 1.7 !important;
 }
 
-[class*="notion-table"] tr:nth-child(even) td {
-  background: var(--bp-green-ghost);
-}
 
-/* Notion toggle blocks */
-[class*="notion-toggle"] {
-  border: var(--border-light);
-  border-radius: var(--radius-md);
-  padding: var(--space-4) var(--space-5);
-  margin: var(--space-3) 0;
-  cursor: pointer;
-  transition: background var(--duration-fast) var(--ease-smooth);
-}
-
-[class*="notion-toggle"]:hover {
-  background: var(--bp-green-ghost);
-}
-
-/* Notion divider */
-[class*="notion-hr"],
-[class*="notion-divider"] {
-  border: none;
-  border-top: 1px solid var(--bp-ash);
-  margin: var(--space-10) 0;
-}
-
-/* â”€â”€ Mobile Responsive â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€ */
+/* ================================================================
+   4. RESPONSIVE
+   ================================================================ */
 
 @media (max-width: 768px) {
-
-  :root {
-    --content-padding: 1.25rem;
-  }
-
-  /* Navbar mobile */
-  [class*="navbar-inner"],
-  [class*="header-inner"] {
-    height: 56px;
-    padding: 0 var(--content-padding);
-  }
-
-  /* Collapse gallery to 1 column on small screens */
-  [class*="notion-gallery"],
-  [class*="collection-gallery"] {
+  .notion-collection__cards {
     grid-template-columns: 1fr !important;
-    gap: var(--space-4) !important;
+    gap: 1rem !important;
   }
-
-  /* Looser spacing on mobile */
-  [class*="notion-page-content"],
-  [class*="page-content"] {
-    padding: var(--space-8) var(--content-padding);
+  h1.notion-heading {
+    font-size: clamp(1.85rem, 6vw, 2.5rem) !important;
   }
-
-  h1 {
-    letter-spacing: -0.03em;
+  .notion-page {
+    padding-top: 2rem !important;
   }
 }
 
-@media (max-width: 480px) {
-
-  /* Stack cards fully on smallest screens */
-  [class*="notion-gallery"],
-  [class*="collection-gallery"] {
-    grid-template-columns: 1fr !important;
-  }
-}
-
-@media (min-width: 900px) {
-
-  /* Two columns on medium screens */
-  [class*="notion-gallery"],
-  [class*="collection-gallery"] {
+@media (min-width: 769px) and (max-width: 1099px) {
+  .notion-collection__cards {
     grid-template-columns: repeat(2, 1fr) !important;
   }
 }
 
 @media (min-width: 1100px) {
-
-  /* Three columns on large screens */
-  [class*="notion-gallery"],
-  [class*="collection-gallery"] {
+  .notion-collection__cards {
     grid-template-columns: repeat(3, 1fr) !important;
   }
 }
 
-
-/* ============================================================
-   END OF BREEDPULSE THEME
-   ============================================================
-   Questions: message Connemara Pony World on Facebook
-   or open a GitHub issue at your-repo/breedpulse-theme
-   ============================================================ */
+/* ================================================================
+   END — BREEDPULSE THEME v2.0.0
+   ================================================================ */
