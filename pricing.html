@@ -1,0 +1,159 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>BreedPulse — Membership &amp; Pricing</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,400;0,500;0,600;1,400;1,500&family=DM+Sans:opsz,wght@9..40,300;9..40,400;9..40,500;9..40,600&display=swap" rel="stylesheet">
+<style>
+  :root {
+    --green:#2D6A4F;--green-dark:#1E4D38;--green-deep:#142F22;--green-mid:#3D8A67;
+    --green-pale:#D4EAE0;--green-ghost:#EEF7F2;--stone:#F5F2ED;--linen:#EDE8E0;
+    --ash:#E6E1DB;--peat:#2C2825;--earth:#5C5248;--fog:#9C948C;--mist:#C4BCB4;
+    --white:#FFFFFF;--copper:#A0522D;
+    --font-display:'Cormorant Garamond',Georgia,serif;
+    --font-body:'DM Sans',sans-serif;
+    --radius:10px;
+    --shadow:0 2px 12px rgba(44,40,37,.08),0 1px 3px rgba(44,40,37,.04);
+    --shadow-hover:0 12px 40px rgba(45,106,79,.16),0 4px 16px rgba(45,106,79,.08);
+  }
+  *,*::before,*::after{box-sizing:border-box;margin:0;padding:0}
+  body{font-family:var(--font-body);background:var(--stone);color:var(--peat);font-weight:300;-webkit-font-smoothing:antialiased;min-height:100vh}
+
+  .header{background:linear-gradient(160deg,var(--green-deep) 0%,#0d2016 100%);padding:3.5rem 2rem 3rem;text-align:center;position:relative;overflow:hidden}
+  .header::before{content:'';position:absolute;inset:0;background:radial-gradient(ellipse at 50% -20%,rgba(45,106,79,.5) 0%,transparent 65%);pointer-events:none}
+  .header-eyebrow{font-size:.68rem;font-weight:500;letter-spacing:.16em;text-transform:uppercase;color:var(--green-pale);opacity:.65;margin-bottom:1rem;position:relative}
+  .header h1{font-family:var(--font-display);font-size:clamp(2.4rem,5vw,4rem);font-weight:400;font-style:italic;color:var(--white);letter-spacing:-.04em;line-height:1.1;margin-bottom:.875rem;position:relative}
+  .header p{font-size:.92rem;font-weight:300;color:rgba(255,255,255,.55);max-width:520px;margin:0 auto;line-height:1.75;position:relative}
+
+  .main{max-width:860px;margin:0 auto;padding:3rem 1.5rem 5rem}
+
+  .section-label{font-size:.68rem;font-weight:600;letter-spacing:.14em;text-transform:uppercase;color:var(--green);margin-bottom:1.25rem}
+  .section-title{font-family:var(--font-display);font-size:clamp(1.75rem,3.5vw,2.5rem);font-weight:400;font-style:italic;color:var(--green-deep);letter-spacing:-.03em;line-height:1.2;margin-bottom:2rem}
+
+  /* Plans */
+  .plans{display:grid;grid-template-columns:minmax(280px,480px);gap:1.5rem;margin-bottom:3rem}
+  .plan{background:var(--white);border:1.5px solid var(--ash);border-radius:14px;padding:2rem;box-shadow:var(--shadow);transition:transform .2s,box-shadow .2s,border-color .2s;display:flex;flex-direction:column}
+  .plan:hover{transform:translateY(-4px);box-shadow:var(--shadow-hover)}
+  .plan.featured{border-color:var(--green-pale);background:var(--green-ghost)}
+  .plan-badge{display:inline-block;padding:.2rem .65rem;background:var(--green);color:var(--white);border-radius:20px;font-size:.6rem;font-weight:700;letter-spacing:.08em;text-transform:uppercase;margin-bottom:1rem}
+  .plan-name{font-size:.68rem;font-weight:600;letter-spacing:.12em;text-transform:uppercase;color:var(--fog);margin-bottom:.5rem}
+  .plan-price{font-family:var(--font-display);font-size:3rem;font-weight:500;color:var(--green-deep);letter-spacing:-.05em;line-height:1;margin-bottom:.3rem}
+  .plan-period{font-size:.75rem;color:var(--fog);font-weight:300;margin-bottom:1.5rem;padding-bottom:1.5rem;border-bottom:1px solid var(--ash)}
+  .plan-features{list-style:none;margin-bottom:1.75rem;flex:1}
+  .plan-features li{font-size:.8rem;font-weight:300;color:var(--earth);line-height:1.6;padding:.35rem 0;display:flex;align-items:flex-start;gap:.5rem;border-bottom:1px solid var(--linen)}
+  .plan-features li:last-child{border-bottom:none}
+  .plan-features li::before{content:'✓';color:var(--green);font-weight:700;font-size:.7rem;margin-top:.2rem;flex-shrink:0}
+  .plan-btn{display:block;text-align:center;padding:.8rem 1.5rem;background:var(--green);color:var(--white);border-radius:8px;font-family:var(--font-body);font-size:.78rem;font-weight:700;letter-spacing:.05em;text-decoration:none;text-transform:uppercase;transition:background .15s,transform .15s;box-shadow:0 2px 8px rgba(45,106,79,.2)}
+  .plan-btn:hover{background:var(--green-dark);transform:translateY(-1px)}
+  .plan.featured .plan-btn{background:var(--green-dark)}
+  .plan.featured .plan-btn:hover{background:var(--green-deep)}
+
+  /* Free browsing */
+  .free-panel{background:var(--white);border:1px solid var(--ash);border-radius:var(--radius);padding:1.75rem 2rem;margin-bottom:3rem;box-shadow:var(--shadow);display:flex;align-items:center;justify-content:space-between;gap:1.5rem;flex-wrap:wrap}
+  .free-text h3{font-family:var(--font-display);font-size:1.25rem;font-weight:500;color:var(--green-deep);letter-spacing:-.02em;margin-bottom:.35rem}
+  .free-text p{font-size:.8rem;font-weight:300;color:var(--earth);line-height:1.65;max-width:480px}
+  .free-btn{padding:.65rem 1.4rem;background:transparent;color:var(--green-dark);border:1.5px solid var(--green-pale);border-radius:8px;font-family:var(--font-body);font-size:.78rem;font-weight:600;letter-spacing:.04em;text-decoration:none;text-transform:uppercase;white-space:nowrap;transition:all .15s}
+  .free-btn:hover{background:var(--green-ghost);border-color:var(--green)}
+
+  /* FAQ */
+  .faq{margin-bottom:3rem}
+  .faq-item{border-bottom:1px solid var(--ash);padding:1.25rem 0}
+  .faq-item:first-of-type{border-top:1px solid var(--ash)}
+  .faq-q{font-size:.85rem;font-weight:500;color:var(--peat);margin-bottom:.4rem}
+  .faq-a{font-size:.78rem;font-weight:300;color:var(--earth);line-height:1.7}
+
+  /* CTA */
+  .cta{background:linear-gradient(135deg,var(--green-deep) 0%,var(--green-dark) 100%);border-radius:14px;padding:2.25rem 2.5rem;display:flex;align-items:center;justify-content:space-between;gap:2rem;flex-wrap:wrap;box-shadow:0 8px 32px rgba(20,47,34,.3)}
+  .cta-text h3{font-family:var(--font-display);font-size:1.5rem;font-weight:400;font-style:italic;color:var(--white);margin-bottom:.4rem;letter-spacing:-.02em}
+  .cta-text p{font-size:.82rem;color:rgba(255,255,255,.52);font-weight:300;line-height:1.7}
+  .cta-btn{padding:.85rem 2rem;background:var(--white);color:var(--green-dark);border:none;border-radius:8px;font-family:var(--font-body);font-size:.82rem;font-weight:700;letter-spacing:.05em;text-transform:uppercase;cursor:pointer;white-space:nowrap;text-decoration:none;display:inline-block;transition:transform .15s,box-shadow .15s;box-shadow:0 2px 12px rgba(0,0,0,.15)}
+  .cta-btn:hover{transform:translateY(-2px);box-shadow:0 8px 24px rgba(0,0,0,.25)}
+
+  .footer-note{text-align:center;margin-top:3rem;font-size:.75rem;color:var(--fog);font-weight:300;line-height:1.7}
+  .footer-note a{color:var(--green-mid);text-decoration:none}
+  .footer-note a:hover{color:var(--green)}
+
+  @media(max-width:580px){
+    .header{padding:2.5rem 1.25rem 2.25rem}
+    .main{padding:2rem 1.1rem 4rem}
+    .plans{grid-template-columns:1fr}
+    .cta{padding:1.75rem 1.5rem;flex-direction:column;gap:1.5rem}
+    .free-panel{flex-direction:column;align-items:flex-start}
+  }
+</style>
+</head>
+<body>
+
+<div class="header">
+  <p class="header-eyebrow">BreedPulse · Membership</p>
+  <h1>Unlock the full directory</h1>
+  <p>Stud fees, booking contacts, covering methods, and mare requirements for every verified stallion in the directory.</p>
+</div>
+
+<div class="main">
+
+  <div class="section-label">Choose your plan</div>
+  <div class="section-title">Simple, honest pricing</div>
+
+  <div class="plans">
+    <div class="plan">
+      <div class="plan-name">Covering Season Pass</div>
+      <div class="plan-price">€9.99</div>
+      <div class="plan-period">90 days access · covers one covering season</div>
+      <ul class="plan-features">
+        <li>Stud fees for all verified stallions</li>
+        <li>Direct booking contact details</li>
+        <li>Covering methods (natural, chilled AI, frozen AI)</li>
+        <li>Mare requirements and vaccination policies</li>
+        <li>Season dates for 2026</li>
+        <li>Additional photos where provided</li>
+        <li>Valid for 90 days from date of purchase</li>
+      </ul>
+      <a href="https://breedpulse.com/checkout" class="plan-btn">Get Season Access</a>
+    </div>
+
+  </div>
+
+  <div class="free-panel">
+    <div class="free-text">
+      <h3>Free browsing — no account needed</h3>
+      <p>HWSD status, height, colour, studbook registration, and pedigree are visible to everyone. Browse every verified stallion profile for free before deciding whether to unlock full details.</p>
+    </div>
+    <a href="https://lucindakelly-beep.github.io/breedpulse/stallion-search.html" class="free-btn">Browse Free →</a>
+  </div>
+
+  <div class="section-label">Questions</div>
+  <div class="faq">
+    <div class="faq-item">
+      <div class="faq-q">How do payments work?</div>
+      <div class="faq-a">Payments are processed securely via Stripe. You'll receive access immediately after payment.</div>
+    </div>
+    <div class="faq-item">
+      <div class="faq-q">Can I see stud fees before purchasing?</div>
+      <div class="faq-a">Stud fees are shown to paying members only. You can browse HWSD status, height, colour, studbook, and pedigree for free before deciding to purchase.</div>
+    </div>
+    <div class="faq-item">
+      <div class="faq-q">How many stallions are in the directory?</div>
+      <div class="faq-a">The directory is growing throughout the 2026 season. All stallions listed are verified against studbook records before publishing. Annual members get access to new profiles as they are added.</div>
+    </div>
+    <div class="faq-item">
+      <div class="faq-q">I have a question before purchasing.</div>
+      <div class="faq-a">Message us on <a href="https://facebook.com/connemaraponyworld" target="_blank" style="color:var(--green-mid);text-decoration:none">Connemara Pony World</a> on Facebook and we'll get back to you.</div>
+    </div>
+  </div>
+
+  <div class="cta">
+    <div class="cta-text">
+      <h3>Browse the directory first</h3>
+      <p>HWSD status, height, colour, and pedigree — free for everyone.</p>
+    </div>
+    <a href="https://lucindakelly-beep.github.io/breedpulse/stallion-search.html" class="cta-btn">Open the Directory →</a>
+  </div>
+
+  <p class="footer-note">BreedPulse is built in partnership with <a href="https://facebook.com/connemaraponyworld" target="_blank">Connemara Pony World</a> — the global Connemara community with over 9,200 members.</p>
+
+</div>
+</body>
+</html>
