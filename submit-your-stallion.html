@@ -1,0 +1,181 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>BreedPulse — Submit Your Stallion</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,400;0,500;0,600;1,400;1,500&family=DM+Sans:opsz,wght@9..40,300;9..40,400;9..40,500;9..40,600&display=swap" rel="stylesheet">
+<style>
+  :root {
+    --green:#2D6A4F;--green-dark:#1E4D38;--green-deep:#142F22;--green-mid:#3D8A67;
+    --green-pale:#D4EAE0;--green-ghost:#EEF7F2;--stone:#F5F2ED;--linen:#EDE8E0;
+    --ash:#E6E1DB;--peat:#2C2825;--earth:#5C5248;--fog:#9C948C;--mist:#C4BCB4;
+    --white:#FFFFFF;--copper:#A0522D;
+    --font-display:'Cormorant Garamond',Georgia,serif;
+    --font-body:'DM Sans',sans-serif;
+    --radius:10px;
+    --shadow:0 2px 12px rgba(44,40,37,.08),0 1px 3px rgba(44,40,37,.04);
+    --shadow-hover:0 12px 40px rgba(45,106,79,.16),0 4px 16px rgba(45,106,79,.08);
+  }
+  *,*::before,*::after{box-sizing:border-box;margin:0;padding:0}
+  body{font-family:var(--font-body);background:var(--stone);color:var(--peat);font-weight:300;-webkit-font-smoothing:antialiased;min-height:100vh}
+
+  .header{background:linear-gradient(160deg,var(--green-deep) 0%,#0d2016 100%);padding:3.5rem 2rem 3rem;text-align:center;position:relative;overflow:hidden}
+  .header::before{content:'';position:absolute;inset:0;background:radial-gradient(ellipse at 50% -20%,rgba(45,106,79,.5) 0%,transparent 65%);pointer-events:none}
+  .header-eyebrow{font-size:.68rem;font-weight:500;letter-spacing:.16em;text-transform:uppercase;color:var(--green-pale);opacity:.65;margin-bottom:1rem;position:relative}
+  .header h1{font-family:var(--font-display);font-size:clamp(2.4rem,5vw,4rem);font-weight:400;font-style:italic;color:var(--white);letter-spacing:-.04em;line-height:1.1;margin-bottom:.875rem;position:relative}
+  .header p{font-size:.92rem;font-weight:300;color:rgba(255,255,255,.55);max-width:520px;margin:0 auto 1.75rem;line-height:1.75;position:relative}
+  .btn-primary{padding:.85rem 2rem;background:var(--white);color:var(--green-dark);border:none;border-radius:8px;font-family:var(--font-body);font-size:.82rem;font-weight:700;letter-spacing:.05em;text-transform:uppercase;cursor:pointer;text-decoration:none;display:inline-block;transition:transform .15s,box-shadow .15s;box-shadow:0 2px 12px rgba(0,0,0,.15);position:relative}
+  .btn-primary:hover{transform:translateY(-2px);box-shadow:0 8px 24px rgba(0,0,0,.25)}
+
+  .main{max-width:860px;margin:0 auto;padding:3rem 1.5rem 5rem}
+
+  .section-label{font-size:.68rem;font-weight:600;letter-spacing:.14em;text-transform:uppercase;color:var(--green);margin-bottom:1.25rem}
+  .section-title{font-family:var(--font-display);font-size:clamp(1.75rem,3.5vw,2.5rem);font-weight:400;font-style:italic;color:var(--green-deep);letter-spacing:-.03em;line-height:1.2;margin-bottom:1rem}
+  .section-body{font-size:.9rem;font-weight:300;color:var(--earth);line-height:1.8;margin-bottom:2rem}
+
+  /* Benefits */
+  .benefits{display:grid;grid-template-columns:repeat(auto-fill,minmax(200px,1fr));gap:1.25rem;margin-bottom:3rem}
+  .benefit{background:var(--white);border:1px solid var(--ash);border-radius:var(--radius);padding:1.4rem;box-shadow:var(--shadow);transition:transform .2s,box-shadow .2s,border-color .2s}
+  .benefit:hover{transform:translateY(-3px);box-shadow:var(--shadow-hover);border-color:var(--green-pale)}
+  .benefit-icon{font-size:1.3rem;margin-bottom:.75rem;display:block}
+  .benefit h3{font-size:.82rem;font-weight:600;color:var(--peat);margin-bottom:.3rem}
+  .benefit p{font-size:.75rem;font-weight:300;color:var(--earth);line-height:1.6}
+
+  /* Checklist */
+  .checklist-panel{background:var(--white);border:1px solid var(--ash);border-radius:14px;padding:2rem 2.5rem;margin-bottom:3rem;box-shadow:var(--shadow)}
+  .checklist-panel h3{font-family:var(--font-display);font-size:1.3rem;font-weight:500;color:var(--green-deep);letter-spacing:-.02em;margin-bottom:1.25rem}
+  .checklist{list-style:none;display:grid;grid-template-columns:1fr 1fr;gap:.6rem}
+  .checklist li{font-size:.8rem;font-weight:300;color:var(--earth);line-height:1.6;display:flex;align-items:flex-start;gap:.5rem}
+  .checklist li::before{content:'✓';color:var(--green);font-weight:700;font-size:.7rem;margin-top:.2rem;flex-shrink:0}
+
+  /* Process */
+  .process{background:var(--linen);border:1px solid var(--ash);border-radius:14px;padding:2rem 2.5rem;margin-bottom:3rem}
+  .process h3{font-family:var(--font-display);font-size:1.3rem;font-weight:500;color:var(--green-deep);letter-spacing:-.02em;margin-bottom:1.25rem}
+  .steps{display:flex;flex-direction:column;gap:1rem}
+  .step-row{display:flex;gap:1rem;align-items:flex-start}
+  .step-dot{width:28px;height:28px;background:var(--green);border-radius:50%;display:flex;align-items:center;justify-content:center;font-size:.65rem;font-weight:700;color:var(--white);flex-shrink:0;margin-top:.1rem}
+  .step-content h4{font-size:.82rem;font-weight:600;color:var(--peat);margin-bottom:.2rem}
+  .step-content p{font-size:.76rem;font-weight:300;color:var(--earth);line-height:1.65}
+
+  /* Privacy note */
+  .privacy{background:var(--green-ghost);border:1px solid var(--green-pale);border-radius:var(--radius);padding:1.25rem 1.5rem;margin-bottom:3rem;font-size:.78rem;font-weight:300;color:var(--earth);line-height:1.7}
+  .privacy strong{color:var(--green-dark);font-weight:600}
+
+  /* CTA */
+  .cta{background:linear-gradient(135deg,var(--green-deep) 0%,var(--green-dark) 100%);border-radius:14px;padding:2.25rem 2.5rem;display:flex;align-items:center;justify-content:space-between;gap:2rem;flex-wrap:wrap;box-shadow:0 8px 32px rgba(20,47,34,.3)}
+  .cta-text h3{font-family:var(--font-display);font-size:1.5rem;font-weight:400;font-style:italic;color:var(--white);margin-bottom:.4rem;letter-spacing:-.02em}
+  .cta-text p{font-size:.82rem;color:rgba(255,255,255,.52);font-weight:300;line-height:1.7}
+  .cta-btn{padding:.85rem 2rem;background:var(--white);color:var(--green-dark);border:none;border-radius:8px;font-family:var(--font-body);font-size:.82rem;font-weight:700;letter-spacing:.05em;text-transform:uppercase;cursor:pointer;white-space:nowrap;text-decoration:none;display:inline-block;transition:transform .15s,box-shadow .15s;box-shadow:0 2px 12px rgba(0,0,0,.15)}
+  .cta-btn:hover{transform:translateY(-2px);box-shadow:0 8px 24px rgba(0,0,0,.25)}
+
+  .footer-note{text-align:center;margin-top:3rem;font-size:.75rem;color:var(--fog);font-weight:300;line-height:1.7}
+  .footer-note a{color:var(--green-mid);text-decoration:none}
+  .footer-note a:hover{color:var(--green)}
+
+  @media(max-width:580px){
+    .header{padding:2.5rem 1.25rem 2.25rem}
+    .main{padding:2rem 1.1rem 4rem}
+    .checklist{grid-template-columns:1fr}
+    .cta{padding:1.75rem 1.5rem;flex-direction:column;gap:1.5rem}
+    .checklist-panel,.process{padding:1.5rem}
+  }
+</style>
+</head>
+<body>
+
+<div class="header">
+  <p class="header-eyebrow">BreedPulse · Stallion Owners</p>
+  <h1>Get in front of mare owners across Ireland and beyond</h1>
+  <p>Submitting your stallion is completely free and takes around 10 minutes. Once verified, your profile is live in the most trusted Connemara stallion directory.</p>
+  <a href="https://tally.so/r/VLVYKJ" class="btn-primary" target="_blank">Submit Your Stallion — Free →</a>
+</div>
+
+<div class="main">
+
+  <div class="section-label">Why submit to BreedPulse</div>
+  <div class="section-title">Reach the right mare owners</div>
+  <p class="section-body">BreedPulse is built in partnership with Connemara Pony World — the global Connemara community with over 9,200 members. Your profile is searchable by HWSD status, height, studbook, discipline, covering method, and more.</p>
+
+  <div class="benefits">
+    <div class="benefit">
+      <span class="benefit-icon">🆓</span>
+      <h3>Completely free</h3>
+      <p>No charge to submit or to keep your profile live in the directory.</p>
+    </div>
+    <div class="benefit">
+      <span class="benefit-icon">🔍</span>
+      <h3>Fully searchable</h3>
+      <p>Mare owners filter by country, height, colour, studbook, discipline, HWSD status, and more.</p>
+    </div>
+    <div class="benefit">
+      <span class="benefit-icon">🔒</span>
+      <h3>Contact details protected</h3>
+      <p>Your booking contact and stud fee are shown to paying members only — never publicly visible.</p>
+    </div>
+    <div class="benefit">
+      <span class="benefit-icon">✅</span>
+      <h3>Studbook verified</h3>
+      <p>The BreedPulse verification badge tells mare owners your profile has been independently checked.</p>
+    </div>
+  </div>
+
+  <div class="checklist-panel">
+    <h3>What you'll need before you start</h3>
+    <ul class="checklist">
+      <li>Stallion's registered name and studbook number</li>
+      <li>HWSD test certificate or studbook status confirmation</li>
+      <li>Licence class and current licence year</li>
+      <li>Height, colour, and pedigree details</li>
+      <li>Covering methods offered for 2026</li>
+      <li>Contact for booking enquiries (members only)</li>
+      <li>Stud fee for 2026 (members only)</li>
+      <li>Photo (optional but recommended)</li>
+    </ul>
+  </div>
+
+  <div class="process">
+    <h3>What happens after you submit</h3>
+    <div class="steps">
+      <div class="step-row">
+        <div class="step-dot">1</div>
+        <div class="step-content">
+          <h4>Submit your profile</h4>
+          <p>Complete the submission form — takes around 10 minutes. No account required.</p>
+        </div>
+      </div>
+      <div class="step-row">
+        <div class="step-dot">2</div>
+        <div class="step-content">
+          <h4>Verification within 3 working days</h4>
+          <p>We check your stallion's details against studbook records. Profiles that cannot be verified are not published.</p>
+        </div>
+      </div>
+      <div class="step-row">
+        <div class="step-dot">3</div>
+        <div class="step-content">
+          <h4>You're notified when live</h4>
+          <p>You'll receive a direct message when your profile is published and searchable in the directory.</p>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <div class="privacy">
+    <strong>Your privacy is protected.</strong> Stud fees, covering details, and your booking contact are shown to paying members only — they are never displayed publicly on the directory.
+  </div>
+
+  <div class="cta">
+    <div class="cta-text">
+      <h3>Ready to submit?</h3>
+      <p>Free to submit. Live within 3 working days. Questions? Message us on <a href="https://facebook.com/connemaraponyworld" target="_blank" style="color:rgba(255,255,255,.6);text-decoration:none">Connemara Pony World</a> on Facebook.</p>
+    </div>
+    <a href="https://tally.so/r/VLVYKJ" class="cta-btn" target="_blank">Submit Your Stallion →</a>
+  </div>
+
+  <p class="footer-note">BreedPulse is built in partnership with <a href="https://facebook.com/connemaraponyworld" target="_blank">Connemara Pony World</a> — the global Connemara community with over 9,200 members.</p>
+
+</div>
+</body>
+</html>
