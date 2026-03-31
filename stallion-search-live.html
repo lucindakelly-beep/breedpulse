@@ -1,0 +1,446 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>BreedPulse — Stallion Directory</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,400;0,500;0,600;1,400;1,500&family=DM+Sans:opsz,wght@9..40,300;9..40,400;9..40,500;9..40,600&display=swap" rel="stylesheet">
+<style>
+  :root {
+    --green:#2D6A4F;--green-dark:#1E4D38;--green-deep:#142F22;--green-mid:#3D8A67;
+    --green-pale:#D4EAE0;--green-ghost:#EEF7F2;--stone:#F5F2ED;--linen:#EDE8E0;
+    --ash:#E6E1DB;--peat:#2C2825;--earth:#5C5248;--fog:#9C948C;--mist:#C4BCB4;
+    --white:#FFFFFF;--copper:#A0522D;
+    --font-display:'Cormorant Garamond',Georgia,serif;
+    --font-body:'DM Sans',sans-serif;
+    --radius:10px;
+    --shadow:0 2px 12px rgba(44,40,37,.08),0 1px 3px rgba(44,40,37,.04);
+    --shadow-hover:0 12px 40px rgba(45,106,79,.16),0 4px 16px rgba(45,106,79,.08);
+  }
+  *,*::before,*::after{box-sizing:border-box;margin:0;padding:0}
+  body{font-family:var(--font-body);background:var(--stone);color:var(--peat);font-weight:300;-webkit-font-smoothing:antialiased;min-height:100vh}
+
+  /* Header */
+  .header{background:linear-gradient(160deg,var(--green-deep) 0%,#0d2016 100%);padding:3.5rem 2rem 3rem;text-align:center;position:relative;overflow:hidden}
+  .header::before{content:'';position:absolute;inset:0;background:radial-gradient(ellipse at 50% -20%,rgba(45,106,79,.5) 0%,transparent 65%);pointer-events:none}
+  .header-eyebrow{font-size:.68rem;font-weight:500;letter-spacing:.16em;text-transform:uppercase;color:var(--green-pale);opacity:.65;margin-bottom:1rem;position:relative}
+  .header h1{font-family:var(--font-display);font-size:clamp(2.4rem,5vw,4rem);font-weight:400;font-style:italic;color:var(--white);letter-spacing:-.04em;line-height:1.1;margin-bottom:.875rem;position:relative}
+  .header p{font-size:.92rem;font-weight:300;color:rgba(255,255,255,.55);max-width:520px;margin:0 auto;line-height:1.75;position:relative}
+
+  /* Search bar */
+  .search-bar{background:var(--white);border-bottom:1px solid var(--ash);padding:1.25rem 1.5rem;position:sticky;top:0;z-index:100;box-shadow:0 2px 16px rgba(44,40,37,.07)}
+  .search-inner{max-width:1240px;margin:0 auto;display:flex;flex-direction:column;gap:.875rem}
+  .name-row{display:flex;gap:.75rem;align-items:center}
+  .search-wrap{position:relative;flex:1}
+  .search-icon{position:absolute;left:.875rem;top:50%;transform:translateY(-50%);color:var(--fog);font-size:.85rem;pointer-events:none}
+  .search-input{width:100%;padding:.7rem 1rem .7rem 2.25rem;border:1.5px solid var(--ash);border-radius:8px;font-family:var(--font-body);font-size:.88rem;font-weight:300;color:var(--peat);background:var(--stone);transition:border-color .15s,box-shadow .15s,background .15s;outline:none}
+  .search-input:focus{border-color:var(--green);box-shadow:0 0 0 3px rgba(45,106,79,.1);background:var(--white)}
+  .search-input::placeholder{color:var(--fog)}
+  .count-inline{font-size:.78rem;color:var(--fog);white-space:nowrap;font-weight:300}
+  .count-inline strong{color:var(--green-dark);font-weight:600}
+
+  /* Filter row */
+  .filter-row{display:flex;gap:.5rem;flex-wrap:wrap;align-items:center}
+  .filter-label{font-size:.68rem;font-weight:600;letter-spacing:.08em;text-transform:uppercase;color:var(--fog);white-space:nowrap;margin-right:.25rem}
+  .filter-select{padding:.45rem 1.75rem .45rem .75rem;border:1.5px solid var(--ash);border-radius:20px;font-family:var(--font-body);font-size:.775rem;font-weight:400;color:var(--earth);background:var(--stone);cursor:pointer;transition:border-color .15s,background .15s,color .15s;outline:none;appearance:none;background-image:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='10' height='10' viewBox='0 0 24 24' fill='none' stroke='%239C948C' stroke-width='2.5'%3E%3Cpath d='M6 9l6 6 6-6'/%3E%3C/svg%3E");background-repeat:no-repeat;background-position:right .55rem center;background-color:var(--stone)}
+  .filter-select:hover{border-color:var(--mist)}
+  .filter-select.active{border-color:var(--green);background-color:var(--green-ghost);color:var(--green-dark);font-weight:500}
+  .clear-btn{padding:.4rem .8rem;border:1.5px solid var(--ash);border-radius:20px;font-family:var(--font-body);font-size:.72rem;font-weight:400;color:var(--fog);background:transparent;cursor:pointer;transition:all .15s;white-space:nowrap;display:none}
+  .clear-btn.show{display:block}
+  .clear-btn:hover{border-color:var(--mist);color:var(--earth)}
+
+  /* Active chips */
+  .chips{display:none;gap:.4rem;flex-wrap:wrap;align-items:center}
+  .chips.show{display:flex}
+  .chip{display:inline-flex;align-items:center;gap:.3rem;padding:.22rem .6rem;background:var(--green-ghost);border:1px solid var(--green-pale);border-radius:20px;font-size:.68rem;color:var(--green-dark);font-weight:500}
+  .chip button{background:none;border:none;cursor:pointer;color:var(--green-mid);font-size:.8rem;line-height:1;padding:0;display:flex;align-items:center}
+  .chip button:hover{color:var(--green-dark)}
+
+  /* Results */
+  .results{max-width:1240px;margin:0 auto;padding:2rem 1.5rem 5rem}
+  .grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(295px,1fr));gap:1.5rem}
+
+  /* Card */
+  .card{background:var(--white);border:1px solid var(--ash);border-radius:var(--radius);overflow:hidden;box-shadow:var(--shadow);transition:transform .25s cubic-bezier(.22,.68,0,1.2),box-shadow .25s,border-color .25s;cursor:pointer;display:flex;flex-direction:column;animation:cardIn .3s ease both}
+  .card:hover{transform:translateY(-5px);box-shadow:var(--shadow-hover);border-color:var(--green-pale)}
+  @keyframes cardIn{from{opacity:0;transform:translateY(14px)}to{opacity:1;transform:translateY(0)}}
+
+  .card-photo{aspect-ratio:3/2;background:linear-gradient(145deg,var(--green-dark) 0%,var(--green-deep) 100%);overflow:hidden;position:relative;flex-shrink:0}
+  .card-photo img{width:100%;height:100%;object-fit:cover;object-position:center 20%;transition:transform .45s ease}
+  .card:hover .card-photo img{transform:scale(1.05)}
+  .no-photo{width:100%;height:100%;display:flex;align-items:center;justify-content:center;font-size:2.75rem;opacity:.22}
+
+  .badges{position:absolute;top:.7rem;right:.7rem;display:flex;flex-direction:column;gap:.3rem;align-items:flex-end}
+  .badge{padding:.2rem .55rem;border-radius:20px;font-size:.6rem;font-weight:700;letter-spacing:.06em;text-transform:uppercase;backdrop-filter:blur(8px);white-space:nowrap}
+  .b-clear{background:rgba(30,77,56,.9);color:#fff}
+  .b-carrier{background:rgba(155,95,10,.92);color:#fff}
+  .b-affected{background:rgba(140,25,25,.9);color:#fff}
+  .b-unknown{background:rgba(90,85,80,.82);color:#fff}
+  .b-licence{background:rgba(20,47,34,.88);color:#D4EAE0}
+
+  .card-body{padding:1.1rem 1.25rem 1.35rem;flex:1;display:flex;flex-direction:column;gap:.6rem}
+  .card-name{font-family:var(--font-display);font-size:1.35rem;font-weight:500;color:var(--green-deep);letter-spacing:-.025em;line-height:1.2}
+  .tags{display:flex;flex-wrap:wrap;gap:.3rem}
+  .tag{padding:.18rem .55rem;border-radius:20px;font-size:.66rem;font-weight:500;letter-spacing:.02em}
+  .tg{background:var(--green-ghost);color:var(--green-dark);border:1px solid var(--green-pale)}
+  .tn{background:var(--linen);color:var(--earth);border:1px solid var(--ash)}
+
+  .details{display:flex;flex-direction:column;gap:.18rem}
+  .detail{font-size:.77rem;color:var(--earth);font-weight:300;line-height:1.55;display:flex;gap:.4rem}
+  .dl{font-weight:500;color:var(--peat);min-width:48px;flex-shrink:0}
+
+  .covering{display:flex;gap:.3rem;flex-wrap:wrap;margin-top:.1rem}
+  .cpill{padding:.15rem .5rem;background:var(--stone);border:1px solid var(--ash);border-radius:4px;font-size:.63rem;color:var(--earth);font-weight:400}
+
+  .locked{margin-top:auto;padding-top:.8rem;border-top:1px solid var(--ash);font-size:.7rem;color:var(--fog);display:flex;align-items:center;gap:.4rem;font-weight:300}
+  .locked::before{content:'🔒';font-size:.6rem}
+
+  /* States */
+  .loading{grid-column:1/-1;display:flex;flex-direction:column;align-items:center;gap:1.25rem;padding:5rem 2rem;color:var(--fog)}
+  .spinner{width:34px;height:34px;border:2.5px solid var(--ash);border-top-color:var(--green);border-radius:50%;animation:spin .75s linear infinite}
+  @keyframes spin{to{transform:rotate(360deg)}}
+  .loading-text{font-size:.82rem;font-weight:300}
+  .empty{grid-column:1/-1;text-align:center;padding:5rem 2rem}
+  .empty h3{font-family:var(--font-display);font-size:1.6rem;font-weight:400;font-style:italic;color:var(--earth);margin-bottom:.5rem;letter-spacing:-.02em}
+  .empty p{font-size:.83rem;color:var(--fog);margin-bottom:1rem}
+  .empty button{padding:.6rem 1.4rem;background:var(--green);color:white;border:none;border-radius:6px;font-family:var(--font-body);font-size:.8rem;font-weight:500;cursor:pointer;transition:background .15s}
+  .empty button:hover{background:var(--green-dark)}
+  .error{grid-column:1/-1;background:#fef2f2;border:1px solid #fecaca;border-radius:var(--radius);padding:2rem;text-align:center;color:#991b1b;font-size:.83rem;line-height:1.6}
+
+  /* CTA */
+  .cta{background:linear-gradient(135deg,var(--green-deep) 0%,var(--green-dark) 100%);border-radius:14px;padding:2.25rem 2.5rem;display:flex;align-items:center;justify-content:space-between;gap:2rem;flex-wrap:wrap;margin-top:3rem;box-shadow:0 8px 32px rgba(20,47,34,.3)}
+  .cta-text h3{font-family:var(--font-display);font-size:1.5rem;font-weight:400;font-style:italic;color:var(--white);margin-bottom:.4rem;letter-spacing:-.02em}
+  .cta-text p{font-size:.82rem;color:rgba(255,255,255,.52);font-weight:300;line-height:1.7}
+  .prices{display:flex;gap:1.25rem;flex-wrap:wrap;margin-bottom:.35rem}
+  .price{font-family:var(--font-display);font-size:1.4rem;font-weight:500;color:var(--green-pale);letter-spacing:-.02em;line-height:1}
+  .price span{font-size:.7rem;font-family:var(--font-body);color:rgba(255,255,255,.4);font-weight:300;letter-spacing:.04em;display:block;margin-top:.2rem}
+  .cta-btn{padding:.85rem 2rem;background:var(--white);color:var(--green-dark);border:none;border-radius:8px;font-family:var(--font-body);font-size:.82rem;font-weight:700;letter-spacing:.05em;text-transform:uppercase;cursor:pointer;white-space:nowrap;text-decoration:none;display:inline-block;transition:transform .15s,box-shadow .15s;box-shadow:0 2px 12px rgba(0,0,0,.15)}
+  .cta-btn:hover{transform:translateY(-2px);box-shadow:0 8px 24px rgba(0,0,0,.25)}
+
+  /* Responsive */
+  @media(max-width:580px){
+    .header{padding:2.5rem 1.25rem 2.25rem}
+    .search-bar{padding:1rem 1.1rem}
+    .results{padding:1.5rem 1.1rem 4rem}
+    .grid{grid-template-columns:1fr;gap:1rem}
+    .cta{padding:1.75rem 1.5rem;flex-direction:column;gap:1.5rem}
+    .filter-select{font-size:.72rem}
+  }
+  @media(min-width:581px) and (max-width:900px){.grid{grid-template-columns:repeat(2,1fr)}}
+  @media(min-width:1100px){.grid{grid-template-columns:repeat(3,1fr)}}
+</style>
+</head>
+<body>
+
+<div class="header">
+  <p class="header-eyebrow">BreedPulse · 2026 Covering Season</p>
+  <h1>Stallion Directory</h1>
+  <p>Every verified Connemara stallion for the 2026 covering season. Use the filters below to find the right match for your mare.</p>
+</div>
+
+<div class="search-bar">
+  <div class="search-inner">
+    <div class="name-row">
+      <div class="search-wrap">
+        <span class="search-icon">🔍</span>
+        <input type="text" class="search-input" id="nameSearch" placeholder="Search by stallion name, sire, dam…" autocomplete="off">
+      </div>
+      <span class="count-inline" id="cnt"></span>
+    </div>
+
+    <div class="filter-row">
+      <span class="filter-label">Filter by</span>
+
+      <select class="filter-select" id="f_country" onchange="go()">
+        <option value="">Country</option>
+        <option>Ireland</option><option value="UK — England">England</option>
+        <option value="UK — Scotland">Scotland</option><option value="UK — Wales">Wales</option>
+        <option value="UK — N. Ireland">N. Ireland</option><option>Germany</option>
+        <option>France</option><option>Netherlands</option><option>Belgium</option>
+        <option>USA</option><option>Canada</option><option>Australia</option>
+        <option>New Zealand</option><option>Other</option>
+      </select>
+
+      <select class="filter-select" id="f_height" onchange="go()">
+        <option value="">Height</option>
+        <option value="143cm">143cm &amp; under</option>
+        <option value="144-148cm">144cm – 148cm (standard)</option>
+        <option value="Over 148cm">Over 148cm</option>
+      </select>
+
+      <select class="filter-select" id="f_colour" onchange="go()">
+        <option value="">Colour</option>
+        <option>Grey</option><option>Bay</option><option>Brown</option>
+        <option>Black</option><option>Chestnut</option>
+        <option value="Buckskin">Buckskin / Dun</option><option>Dun</option>
+        <option>Palomino</option><option>Roan</option>
+        <option>Cremello</option><option>Perlino</option>
+      </select>
+
+      <select class="filter-select" id="f_studbook" onchange="go()">
+        <option value="">Studbook</option>
+        <option>CPBS</option><option>BCPS</option><option>HSI</option>
+        <option value="ACPS — Australia">ACPS</option>
+        <option value="NZCPS — New Zealand">NZCPS</option>
+        <option value="CPAA — United States">CPAA</option>
+        <option value="CPCSA — South Africa">CPCSA</option>
+        <option value="CPCS — Sweden">CPCS</option>
+        <option value="CPCDN — Denmark">CPCDN</option>
+        <option value="CPCN — Netherlands">CPCN</option>
+        <option value="Other Connemara Society">Other</option>
+      </select>
+
+      <select class="filter-select" id="f_discipline" onchange="go()">
+        <option value="">Discipline</option>
+        <option>Working Hunter</option><option>Show Jumping</option>
+        <option>Dressage</option><option>Eventing</option>
+        <option>In-Hand</option><option>Ridden</option>
+        <option>Endurance</option>
+        <option value="Showing / In-Hand">Showing</option>
+        <option value="Breeding Only">Breeding Only</option>
+      </select>
+
+      <select class="filter-select" id="f_covering" onchange="go()">
+        <option value="">Covering Method</option>
+        <option>Natural Cover</option>
+        <option>Chilled AI</option>
+        <option>Frozen AI</option>
+      </select>
+
+      <select class="filter-select" id="f_hwsd" onchange="go()">
+        <option value="">HWSD Status</option>
+        <option value="N/N (Clear)">Clear (N/N)</option>
+        <option value="N/Hw (Carrier)">Carrier (N/Hw)</option>
+        <option value="Hw/Hw (Affected)">Affected</option>
+        <option value="Not Tested">Not Tested</option>
+      </select>
+
+      <button class="clear-btn" id="clearBtn" onclick="clearAll()">✕ Clear all</button>
+    </div>
+
+    <div class="chips" id="chips"></div>
+  </div>
+</div>
+
+<div class="results">
+  <div class="grid" id="grid">
+    <div class="loading">
+      <div class="spinner"></div>
+      <span class="loading-text">Loading verified stallions…</span>
+    </div>
+  </div>
+
+  <div class="cta">
+    <div class="cta-text">
+      <div class="prices">
+        <div class="price">€9.99 <span>Season Pass · 90 days</span></div>
+        <div class="price">€19.99 <span>Annual Membership</span></div>
+      </div>
+      <p>Stud fees, covering dates, mare requirements and direct booking contact — unlocked for members.</p>
+    </div>
+    <a href="/pricing" class="cta-btn">View membership →</a>
+  </div>
+</div>
+
+<script>
+const FILTERS = [
+  {id:'f_country',  label:'Country'},
+  {id:'f_height',   label:'Height'},
+  {id:'f_colour',   label:'Colour'},
+  {id:'f_studbook', label:'Studbook'},
+  {id:'f_discipline',label:'Discipline'},
+  {id:'f_covering', label:'Covering'},
+  {id:'f_hwsd',     label:'HWSD'}
+];
+
+let allStallions = [];
+
+async function load() {
+  const WORKER_URL = 'https://summer-river-93fa.lucindakelly.workers.dev';
+  try {
+    const res = await fetch(WORKER_URL);
+    const data = await res.json();
+    if (data.stallions && data.stallions.length > 0) {
+      allStallions = data.stallions;
+    } else {
+      // Fallback to sample data if Notion returns nothing yet
+      allStallions = getFallbackStallions();
+    }
+  } catch(e) {
+    console.error('Worker fetch failed, using fallback:', e);
+    allStallions = getFallbackStallions();
+  }
+  go();
+}
+
+function getFallbackStallions() {
+  return [
+    {
+      id: 'western-boy',
+      name: 'Western Boy',
+      hwsdStatus: 'N/N (Clear)',
+      height: '148cm',
+      colour: 'Dun',
+      country: 'Ireland',
+      studbook: 'CPBS',
+      licenceClass: 'Class 1',
+      coveringMethod: ['Natural Cover', 'Chilled AI'],
+      sire: 'West Tide Village',
+      dam: 'Trabane Lady Ann',
+      damSire: 'Moy Johnnys Pride',
+      foalingYear: 2006,
+      discipline: ['Show Jumping', 'Working Hunter'],
+      photoUrl: null
+    },
+    {
+      id: 'lough-melvin-gorteen',
+      name: 'Lough Melvin Gorteen',
+      hwsdStatus: 'N/N (Clear)',
+      height: '148cm',
+      colour: 'Dun',
+      country: 'Ireland',
+      studbook: 'CPBS',
+      licenceClass: 'Class 1',
+      coveringMethod: ['Natural Cover', 'Chilled AI'],
+      sire: 'Lough Melvin Paddy',
+      dam: 'Ballybuck Lass',
+      damSire: 'Derrigragh Robin',
+      foalingYear: null,
+      discipline: ['Working Hunter', 'In-Hand'],
+      photoUrl: null
+    },
+    {
+      id: 'killaneen-boy',
+      name: 'Killaneen Boy',
+      hwsdStatus: 'N/Hw (Carrier)',
+      height: '148cm',
+      colour: 'Buckskin',
+      country: 'Ireland',
+      studbook: 'CPBS',
+      licenceClass: 'Class 1',
+      coveringMethod: ['Natural Cover', 'Chilled AI'],
+      sire: 'Western Boy',
+      dam: 'Truelight Trixie',
+      damSire: 'Moorland Snowy River',
+      foalingYear: 2012,
+      discipline: ['Working Hunter', 'In-Hand', 'Ridden'],
+      photoUrl: null
+    }
+  ];
+}
+
+function go() {
+  const name = document.getElementById('nameSearch').value.toLowerCase().trim();
+  const vals = Object.fromEntries(FILTERS.map(f => [f.id, document.getElementById(f.id).value]));
+
+  const out = allStallions.filter(s => {
+    if (name && !`${s.name||''} ${s.sire||''} ${s.dam||''}`.toLowerCase().includes(name)) return false;
+    if (vals.f_country   && s.country !== vals.f_country) return false;
+    if (vals.f_height) {
+      if (vals.f_height === '144-148cm') {
+        const std = ['144cm','145cm','146cm','147cm','148cm'];
+        if (!std.includes(s.height)) return false;
+      } else {
+        if (s.height !== vals.f_height) return false;
+      }
+    }
+    if (vals.f_colour    && !(s.colour||'').toLowerCase().includes(vals.f_colour.toLowerCase())) return false;
+    if (vals.f_studbook  && s.studbook !== vals.f_studbook) return false;
+    if (vals.f_discipline&& !(s.discipline||[]).includes(vals.f_discipline)) return false;
+    if (vals.f_covering  && !(s.coveringMethod||[]).includes(vals.f_covering)) return false;
+    if (vals.f_hwsd      && s.hwsdStatus !== vals.f_hwsd) return false;
+    return true;
+  });
+
+  const hasActive = FILTERS.some(f => vals[f.id]) || !!name;
+  FILTERS.forEach(f => document.getElementById(f.id).classList.toggle('active', !!vals[f.id]));
+  document.getElementById('clearBtn').classList.toggle('show', hasActive);
+  updateChips(vals, name);
+  render(out);
+}
+
+function updateChips(vals, name) {
+  const wrap = document.getElementById('chips');
+  const chips = [];
+  if (name) chips.push(`<span class="chip">"${name}" <button onclick="clrName()">×</button></span>`);
+  FILTERS.forEach(f => {
+    if (vals[f.id]) {
+      const sel = document.getElementById(f.id);
+      const lbl = sel.options[sel.selectedIndex].text;
+      chips.push(`<span class="chip">${f.label}: ${lbl} <button onclick="clrFilter('${f.id}')">×</button></span>`);
+    }
+  });
+  wrap.classList.toggle('show', chips.length > 0);
+  wrap.innerHTML = chips.join('');
+}
+
+function clrFilter(id) { document.getElementById(id).value=''; go(); }
+function clrName()     { document.getElementById('nameSearch').value=''; go(); }
+function clearAll()    { document.getElementById('nameSearch').value=''; FILTERS.forEach(f=>document.getElementById(f.id).value=''); go(); }
+
+function hwsdBadge(s) {
+  s = normaliseHwsd(s);
+  if (!s) return '<span class="badge b-unknown">Not Tested</span>';
+  if (s.includes('Clear'))    return '<span class="badge b-clear">HWSD Clear</span>';
+  if (s.includes('Carrier'))  return '<span class="badge b-carrier">HWSD Carrier</span>';
+  if (s.includes('Affected')) return '<span class="badge b-affected">HWSD Affected</span>';
+  return '<span class="badge b-unknown">Not Tested</span>';
+}
+
+function normaliseHwsd(s) {
+  if (!s) return null;
+  if (s.includes("Clear") || s.includes("N/N"))     return "N/N (Clear)";
+  if (s.includes("Carrier") || s.includes("N/Hw") || s.includes("N/HWSD")) return "N/Hw (Carrier)";
+  if (s.includes("Affected") || s.includes("HWSD/HWSD")) return "Hw/Hw (Affected)";
+  return "Not Tested";
+}
+
+function render(items) {
+  const cnt = document.getElementById('cnt');
+  cnt.innerHTML = `<strong>${items.length}</strong> stallion${items.length!==1?'s':''}`;
+
+  if (!items.length) {
+    document.getElementById('grid').innerHTML=`
+      <div class="empty">
+        <h3>No results found</h3>
+        <p>Try adjusting your filters.</p>
+        <button onclick="clearAll()">Clear all filters</button>
+      </div>`;
+    return;
+  }
+
+  document.getElementById('grid').innerHTML = items.map((s,i) => `
+    <div class="card" style="animation-delay:${Math.min(i*.04,.4)}s">
+      <div class="card-photo">
+        ${s.photoUrl ? `<img src="${s.photoUrl}" alt="${s.name}" loading="lazy">` : '<div class="no-photo">🐴</div>'}
+        <div class="badges">
+          ${hwsdBadge(s.hwsdStatus)}
+          ${s.licenceClass && s.licenceClass!=='Not applicable' ? `<span class="badge b-licence">${s.licenceClass}</span>` : ''}
+        </div>
+      </div>
+      <div class="card-body">
+        <div class="card-name">${s.name||'Unnamed'}</div>
+        <div class="tags">
+          ${s.studbook ? `<span class="tag tg">${s.studbook}</span>` : ''}
+          ${s.height   ? `<span class="tag tn">${s.height}</span>` : ''}
+          ${s.colour   ? `<span class="tag tn">${s.colour}</span>` : ''}
+          ${s.country  ? `<span class="tag tn">${s.country}</span>` : ''}
+        </div>
+        <div class="details">
+          ${s.sire ? `<div class="detail"><span class="dl">Sire</span>${s.sire}</div>` : ''}
+          ${s.dam  ? `<div class="detail"><span class="dl">Dam</span>${s.dam}${s.damSire?` (by ${s.damSire})`:''}</div>` : ''}
+          ${s.foalingYear ? `<div class="detail"><span class="dl">Born</span>${s.foalingYear}</div>` : ''}
+          ${s.discipline?.length ? `<div class="detail"><span class="dl">Sport</span>${s.discipline.join(', ')}</div>` : ''}
+        </div>
+        ${(s.coveringMethod||[]).length ? `<div class="covering">${(s.coveringMethod||[]).map(m=>`<span class="cpill">${m}</span>`).join('')}</div>` : ''}
+        <div class="locked">Stud fee &amp; booking — members only</div>
+      </div>
+    </div>`).join('');
+}
+
+document.getElementById('nameSearch').addEventListener('input', go);
+load();
+</script>
+</body>
+</html>
