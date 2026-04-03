@@ -165,8 +165,7 @@
       <select class="filter-select" id="f_height" onchange="go()">
         <option value="">Height</option>
         <option value="143cm">143cm &amp; under</option>
-        <option>144cm</option><option>145cm</option><option>146cm</option>
-        <option>147cm</option><option>148cm</option>
+        <option value="144-148cm">144cm – 148cm (standard)</option>
         <option value="Over 148cm">Over 148cm</option>
       </select>
 
@@ -200,14 +199,6 @@
         <option>Endurance</option>
         <option value="Showing / In-Hand">Showing</option>
         <option value="Breeding Only">Breeding Only</option>
-      </select>
-
-      <select class="filter-select" id="f_licence" onchange="go()">
-        <option value="">Licence Class</option>
-        <option value="Class 1">Class 1</option>
-        <option value="Class 2">Class 2</option>
-        <option value="Class 3">Class 3</option>
-        <option value="Not applicable">Unlicenced</option>
       </select>
 
       <select class="filter-select" id="f_covering" onchange="go()">
@@ -259,16 +250,32 @@ const FILTERS = [
   {id:'f_colour',   label:'Colour'},
   {id:'f_studbook', label:'Studbook'},
   {id:'f_discipline',label:'Discipline'},
-  {id:'f_licence',  label:'Licence'},
   {id:'f_covering', label:'Covering'},
   {id:'f_hwsd',     label:'HWSD'}
 ];
 
 let allStallions = [];
 
-function load() {
-  // Verified Connemara stallion profiles — BreedPulse directory
-  allStallions = [
+async function load() {
+  const WORKER_URL = 'https://summer-river-93fa.lucindakelly.workers.dev';
+  try {
+    const res = await fetch(WORKER_URL);
+    const data = await res.json();
+    if (data.stallions && data.stallions.length > 0) {
+      allStallions = data.stallions;
+    } else {
+      // Fallback to sample data if Notion returns nothing yet
+      allStallions = getFallbackStallions();
+    }
+  } catch(e) {
+    console.error('Worker fetch failed, using fallback:', e);
+    allStallions = getFallbackStallions();
+  }
+  go();
+}
+
+function getFallbackStallions() {
+  return [
     {
       id: 'western-boy',
       name: 'Western Boy',
@@ -321,7 +328,6 @@ function load() {
       photoUrl: null
     }
   ];
-  go();
 }
 
 function go() {
@@ -331,11 +337,17 @@ function go() {
   const out = allStallions.filter(s => {
     if (name && !`${s.name||''} ${s.sire||''} ${s.dam||''}`.toLowerCase().includes(name)) return false;
     if (vals.f_country   && s.country !== vals.f_country) return false;
-    if (vals.f_height    && s.height !== vals.f_height) return false;
+    if (vals.f_height) {
+      if (vals.f_height === '144-148cm') {
+        const std = ['144cm','145cm','146cm','147cm','148cm'];
+        if (!std.includes(s.height)) return false;
+      } else {
+        if (s.height !== vals.f_height) return false;
+      }
+    }
     if (vals.f_colour    && !(s.colour||'').toLowerCase().includes(vals.f_colour.toLowerCase())) return false;
     if (vals.f_studbook  && s.studbook !== vals.f_studbook) return false;
     if (vals.f_discipline&& !(s.discipline||[]).includes(vals.f_discipline)) return false;
-    if (vals.f_licence   && s.licenceClass !== vals.f_licence) return false;
     if (vals.f_covering  && !(s.coveringMethod||[]).includes(vals.f_covering)) return false;
     if (vals.f_hwsd      && s.hwsdStatus !== vals.f_hwsd) return false;
     return true;
@@ -368,11 +380,20 @@ function clrName()     { document.getElementById('nameSearch').value=''; go(); }
 function clearAll()    { document.getElementById('nameSearch').value=''; FILTERS.forEach(f=>document.getElementById(f.id).value=''); go(); }
 
 function hwsdBadge(s) {
+  s = normaliseHwsd(s);
   if (!s) return '<span class="badge b-unknown">Not Tested</span>';
   if (s.includes('Clear'))    return '<span class="badge b-clear">HWSD Clear</span>';
   if (s.includes('Carrier'))  return '<span class="badge b-carrier">HWSD Carrier</span>';
   if (s.includes('Affected')) return '<span class="badge b-affected">HWSD Affected</span>';
   return '<span class="badge b-unknown">Not Tested</span>';
+}
+
+function normaliseHwsd(s) {
+  if (!s) return null;
+  if (s.includes("Clear") || s.includes("N/N"))     return "N/N (Clear)";
+  if (s.includes("Carrier") || s.includes("N/Hw") || s.includes("N/HWSD")) return "N/Hw (Carrier)";
+  if (s.includes("Affected") || s.includes("HWSD/HWSD")) return "Hw/Hw (Affected)";
+  return "Not Tested";
 }
 
 function render(items) {
