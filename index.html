@@ -3,7 +3,7 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>BreedPulse — The Verified Connemara Stallion Directory</title>
+<title>BreedPulse — Verified Connemara Stallion Directory</title>
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,400;0,500;0,600;1,400;1,500&family=DM+Sans:opsz,wght@9..40,300;9..40,400;9..40,500;9..40,600&display=swap" rel="stylesheet">
 <style>
@@ -21,170 +21,189 @@
   *,*::before,*::after{box-sizing:border-box;margin:0;padding:0}
   body{font-family:var(--font-body);background:var(--stone);color:var(--peat);font-weight:300;-webkit-font-smoothing:antialiased;min-height:100vh}
 
-  /* Header */
-  .header{background:linear-gradient(160deg,var(--green-deep) 0%,#0d2016 100%);padding:3.5rem 2rem 3rem;text-align:center;position:relative;overflow:hidden}
-  .header::before{content:'';position:absolute;inset:0;background:radial-gradient(ellipse at 50% -20%,rgba(45,106,79,.5) 0%,transparent 65%);pointer-events:none}
-  .header-eyebrow{font-size:.68rem;font-weight:500;letter-spacing:.16em;text-transform:uppercase;color:var(--green-pale);opacity:.65;margin-bottom:1rem;position:relative}
-  .header h1{font-family:var(--font-display);font-size:clamp(2.4rem,5vw,4rem);font-weight:400;font-style:italic;color:var(--white);letter-spacing:-.04em;line-height:1.1;margin-bottom:.875rem;position:relative}
-  .header p{font-size:.92rem;font-weight:300;color:rgba(255,255,255,.55);max-width:520px;margin:0 auto 1.75rem;line-height:1.75;position:relative}
-  .header-actions{display:flex;gap:.875rem;justify-content:center;flex-wrap:wrap;position:relative}
-  .btn-primary{padding:.85rem 2rem;background:var(--white);color:var(--green-dark);border:none;border-radius:8px;font-family:var(--font-body);font-size:.82rem;font-weight:700;letter-spacing:.05em;text-transform:uppercase;cursor:pointer;text-decoration:none;display:inline-block;transition:transform .15s,box-shadow .15s;box-shadow:0 2px 12px rgba(0,0,0,.15)}
-  .btn-primary:hover{transform:translateY(-2px);box-shadow:0 8px 24px rgba(0,0,0,.25)}
-  .btn-ghost{padding:.85rem 2rem;background:transparent;color:rgba(255,255,255,.8);border:1.5px solid rgba(255,255,255,.25);border-radius:8px;font-family:var(--font-body);font-size:.82rem;font-weight:500;letter-spacing:.04em;cursor:pointer;text-decoration:none;display:inline-block;transition:all .15s}
-  .btn-ghost:hover{border-color:rgba(255,255,255,.5);color:var(--white);background:rgba(255,255,255,.07)}
+  /* Nav */
+  .nav{background:linear-gradient(160deg,var(--green-deep) 0%,#0d2016 100%);padding:0 2rem;display:flex;align-items:center;justify-content:space-between;height:56px;position:sticky;top:0;z-index:200}
+  .nav-brand{font-family:var(--font-display);font-size:1.15rem;font-weight:500;font-style:italic;color:var(--white);letter-spacing:-.01em;text-decoration:none}
+  .nav-links{display:flex;gap:2rem;align-items:center}
+  .nav-links a{font-size:.76rem;font-weight:400;letter-spacing:.08em;text-transform:uppercase;color:rgba(255,255,255,.7);text-decoration:none;transition:color .15s}
+  .nav-links a:hover{color:var(--white)}
+  .nav-cta{padding:.4rem 1rem;background:var(--green);color:var(--white)!important;border-radius:6px;font-weight:500!important;opacity:1!important}
+  .nav-cta:hover{background:var(--green-mid)!important}
 
-  /* Main content */
-  .main{max-width:1000px;margin:0 auto;padding:3rem 1.5rem 5rem}
+  /* Hero */
+  .hero{background:linear-gradient(160deg,var(--green-deep) 0%,#0d2016 100%);padding:6rem 2rem 5rem;text-align:center;position:relative;overflow:hidden}
+  .hero::before{content:'';position:absolute;inset:0;background:radial-gradient(ellipse at 50% -20%,rgba(45,106,79,.5) 0%,transparent 65%);pointer-events:none}
+  .hero-eyebrow{font-size:.68rem;font-weight:500;letter-spacing:.16em;text-transform:uppercase;color:var(--green-pale);opacity:.65;margin-bottom:1.25rem;position:relative}
+  .hero h1{font-family:var(--font-display);font-size:clamp(2.8rem,6vw,5rem);font-weight:400;font-style:italic;color:var(--white);letter-spacing:-.04em;line-height:1.08;margin-bottom:1.25rem;position:relative}
+  .hero p{font-size:1rem;font-weight:300;color:rgba(255,255,255,.55);max-width:540px;margin:0 auto 2.5rem;line-height:1.75;position:relative}
+  .hero-btns{display:flex;gap:1rem;justify-content:center;flex-wrap:wrap;position:relative}
+  .btn-primary{padding:.9rem 2.25rem;background:var(--white);color:var(--green-deep);border:none;border-radius:8px;font-family:var(--font-body);font-size:.82rem;font-weight:700;letter-spacing:.06em;text-transform:uppercase;cursor:pointer;text-decoration:none;display:inline-block;transition:transform .15s,box-shadow .15s;box-shadow:0 2px 12px rgba(0,0,0,.2)}
+  .btn-primary:hover{transform:translateY(-2px);box-shadow:0 8px 28px rgba(0,0,0,.3)}
+  .btn-ghost{padding:.9rem 2.25rem;background:transparent;color:rgba(255,255,255,.75);border:1.5px solid rgba(255,255,255,.25);border-radius:8px;font-family:var(--font-body);font-size:.82rem;font-weight:400;letter-spacing:.06em;text-transform:uppercase;cursor:pointer;text-decoration:none;display:inline-block;transition:all .15s}
+  .btn-ghost:hover{border-color:rgba(255,255,255,.6);color:var(--white)}
 
-  /* Feature grid */
-  .section-label{font-size:.68rem;font-weight:600;letter-spacing:.14em;text-transform:uppercase;color:var(--green);margin-bottom:1.25rem}
-  .section-title{font-family:var(--font-display);font-size:clamp(1.75rem,3.5vw,2.5rem);font-weight:400;font-style:italic;color:var(--green-deep);letter-spacing:-.03em;line-height:1.2;margin-bottom:1rem}
-  .section-body{font-size:.9rem;font-weight:300;color:var(--earth);line-height:1.8;max-width:600px;margin-bottom:2rem}
+  /* Trust bar */
+  .trust{background:var(--green-deep);border-bottom:1px solid rgba(255,255,255,.06);padding:1rem 2rem;display:flex;justify-content:center;gap:3rem;flex-wrap:wrap}
+  .trust-item{font-size:.72rem;font-weight:400;letter-spacing:.08em;text-transform:uppercase;color:rgba(255,255,255,.45);display:flex;align-items:center;gap:.5rem}
+  .trust-item strong{color:var(--green-pale);font-weight:600}
 
-  .features{display:grid;grid-template-columns:repeat(auto-fill,minmax(220px,1fr));gap:1.25rem;margin-bottom:3.5rem}
-  .feature{background:var(--white);border:1px solid var(--ash);border-radius:var(--radius);padding:1.5rem 1.4rem;box-shadow:var(--shadow);transition:transform .2s,box-shadow .2s,border-color .2s}
-  .feature:hover{transform:translateY(-3px);box-shadow:var(--shadow-hover);border-color:var(--green-pale)}
-  .feature-icon{font-size:1.4rem;margin-bottom:.875rem;display:block}
-  .feature h3{font-family:var(--font-display);font-size:1.1rem;font-weight:500;color:var(--green-deep);letter-spacing:-.02em;margin-bottom:.4rem;line-height:1.3}
-  .feature p{font-size:.78rem;font-weight:300;color:var(--earth);line-height:1.65}
+  /* Features */
+  .section{padding:5rem 2rem}
+  .section-inner{max-width:1100px;margin:0 auto}
+  .section-label{font-size:.68rem;font-weight:600;letter-spacing:.14em;text-transform:uppercase;color:var(--green);margin-bottom:.75rem}
+  .section h2{font-family:var(--font-display);font-size:clamp(2rem,4vw,3rem);font-weight:400;font-style:italic;color:var(--peat);letter-spacing:-.03em;line-height:1.15;margin-bottom:1rem}
+  .section-lead{font-size:.95rem;color:var(--earth);font-weight:300;line-height:1.8;max-width:580px;margin-bottom:3.5rem}
 
-  /* How it works */
-  .how{background:var(--white);border:1px solid var(--ash);border-radius:14px;padding:2.5rem;margin-bottom:3.5rem;box-shadow:var(--shadow)}
-  .steps{display:grid;grid-template-columns:repeat(auto-fill,minmax(200px,1fr));gap:1.5rem;margin-top:1.5rem}
-  .step{position:relative}
-  .step-num{font-family:var(--font-display);font-size:2.5rem;font-weight:400;color:var(--green-pale);line-height:1;margin-bottom:.5rem;letter-spacing:-.04em}
-  .step h4{font-size:.85rem;font-weight:600;color:var(--peat);margin-bottom:.35rem;letter-spacing:.01em}
-  .step p{font-size:.78rem;font-weight:300;color:var(--earth);line-height:1.65}
+  .features{display:grid;grid-template-columns:repeat(auto-fill,minmax(280px,1fr));gap:1.5rem}
+  .feature{background:var(--white);border:1px solid var(--ash);border-radius:var(--radius);padding:1.75rem;box-shadow:var(--shadow);transition:transform .2s,box-shadow .2s,border-color .2s}
+  .feature:hover{transform:translateY(-4px);box-shadow:var(--shadow-hover);border-color:var(--green-pale)}
+  .feature-icon{font-size:1.75rem;margin-bottom:1rem}
+  .feature h3{font-family:var(--font-display);font-size:1.3rem;font-weight:500;color:var(--green-deep);margin-bottom:.5rem;letter-spacing:-.02em}
+  .feature p{font-size:.82rem;color:var(--earth);line-height:1.75;font-weight:300}
 
-  /* Pricing strip */
-  .pricing-strip{background:var(--linen);border:1px solid var(--ash);border-radius:14px;padding:2rem 2.5rem;margin-bottom:3.5rem}
-  .price-card{background:var(--white);border:1px solid var(--ash);border-radius:var(--radius);padding:1.5rem;box-shadow:var(--shadow)}
-  .price-card.featured{border-color:var(--green-pale);background:var(--green-ghost)}
-  .price-label{font-size:.65rem;font-weight:600;letter-spacing:.12em;text-transform:uppercase;color:var(--fog);margin-bottom:.5rem}
-  .price-amount{font-family:var(--font-display);font-size:2.25rem;font-weight:500;color:var(--green-deep);letter-spacing:-.04em;line-height:1;margin-bottom:.25rem}
-  .price-period{font-size:.72rem;color:var(--fog);font-weight:300;margin-bottom:1rem}
-  .price-features{list-style:none;margin-bottom:1.25rem}
-  .price-features li{font-size:.76rem;font-weight:300;color:var(--earth);line-height:1.6;padding:.2rem 0;display:flex;align-items:flex-start;gap:.4rem}
-  .price-features li::before{content:'✓';color:var(--green);font-weight:600;font-size:.7rem;margin-top:.15rem;flex-shrink:0}
-  .price-btn{display:block;text-align:center;padding:.65rem 1.25rem;background:var(--green);color:var(--white);border-radius:6px;font-family:var(--font-body);font-size:.76rem;font-weight:600;letter-spacing:.04em;text-decoration:none;text-transform:uppercase;transition:background .15s}
-  .price-btn:hover{background:var(--green-dark)}
-  .price-card.featured .price-btn{background:var(--green-dark)}
-  .price-card.featured .price-btn:hover{background:var(--green-deep)}
+  /* How it works strip */
+  .how{background:var(--linen);border-top:1px solid var(--ash);border-bottom:1px solid var(--ash);padding:4.5rem 2rem}
+  .steps{display:grid;grid-template-columns:repeat(auto-fill,minmax(220px,1fr));gap:2.5rem;max-width:1100px;margin:2.5rem auto 0}
+  .step{text-align:center}
+  .step-num{width:40px;height:40px;background:var(--green);border-radius:50%;display:flex;align-items:center;justify-content:center;font-size:.8rem;font-weight:700;color:var(--white);margin:0 auto 1rem}
+  .step h4{font-family:var(--font-display);font-size:1.15rem;font-weight:500;color:var(--peat);margin-bottom:.4rem;letter-spacing:-.01em}
+  .step p{font-size:.79rem;color:var(--earth);line-height:1.7;font-weight:300}
 
   /* CTA */
-  .cta{background:linear-gradient(135deg,var(--green-deep) 0%,var(--green-dark) 100%);border-radius:14px;padding:2.25rem 2.5rem;display:flex;align-items:center;justify-content:space-between;gap:2rem;flex-wrap:wrap;box-shadow:0 8px 32px rgba(20,47,34,.3)}
-  .cta-text h3{font-family:var(--font-display);font-size:1.5rem;font-weight:400;font-style:italic;color:var(--white);margin-bottom:.4rem;letter-spacing:-.02em}
-  .cta-text p{font-size:.82rem;color:rgba(255,255,255,.52);font-weight:300;line-height:1.7}
-  .cta-btn{padding:.85rem 2rem;background:var(--white);color:var(--green-dark);border:none;border-radius:8px;font-family:var(--font-body);font-size:.82rem;font-weight:700;letter-spacing:.05em;text-transform:uppercase;cursor:pointer;white-space:nowrap;text-decoration:none;display:inline-block;transition:transform .15s,box-shadow .15s;box-shadow:0 2px 12px rgba(0,0,0,.15)}
+  .cta-section{padding:5rem 2rem;background:var(--stone)}
+  .cta{background:linear-gradient(135deg,var(--green-deep) 0%,var(--green-dark) 100%);border-radius:14px;padding:3rem 3.5rem;display:flex;align-items:center;justify-content:space-between;gap:2rem;flex-wrap:wrap;max-width:1100px;margin:0 auto;box-shadow:0 8px 32px rgba(20,47,34,.3)}
+  .cta-text h3{font-family:var(--font-display);font-size:2rem;font-weight:400;font-style:italic;color:var(--white);margin-bottom:.5rem;letter-spacing:-.02em}
+  .cta-text p{font-size:.85rem;color:rgba(255,255,255,.5);font-weight:300;line-height:1.75;max-width:460px}
+  .cta-btn{padding:.9rem 2.25rem;background:var(--white);color:var(--green-dark);border:none;border-radius:8px;font-family:var(--font-body);font-size:.82rem;font-weight:700;letter-spacing:.05em;text-transform:uppercase;cursor:pointer;white-space:nowrap;text-decoration:none;display:inline-block;transition:transform .15s,box-shadow .15s;box-shadow:0 2px 12px rgba(0,0,0,.15)}
   .cta-btn:hover{transform:translateY(-2px);box-shadow:0 8px 24px rgba(0,0,0,.25)}
 
-  /* Footer note */
-  .footer-note{text-align:center;margin-top:3rem;font-size:.75rem;color:var(--fog);font-weight:300;line-height:1.7}
-  .footer-note a{color:var(--green-mid);text-decoration:none}
-  .footer-note a:hover{color:var(--green)}
+  /* Footer */
+  .footer{background:var(--green-deep);padding:2.5rem 2rem;text-align:center}
+  .footer p{font-size:.75rem;color:rgba(255,255,255,.3);font-weight:300}
+  .footer a{color:rgba(255,255,255,.5);text-decoration:none}
+  .footer a:hover{color:rgba(255,255,255,.8)}
 
-  /* Divider */
-  hr{border:none;border-top:1px solid var(--ash);margin:3rem 0}
-
-  @media(max-width:580px){
-    .header{padding:2.5rem 1.25rem 2.25rem}
-    .main{padding:2rem 1.1rem 4rem}
-    .pricing-strip{grid-template-columns:1fr;padding:1.5rem}
-    .cta{padding:1.75rem 1.5rem;flex-direction:column;gap:1.5rem}
-    .how{padding:1.75rem 1.5rem}
+  @media(max-width:600px){
+    .nav-links{gap:1rem}
+    .hero{padding:4rem 1.25rem 3.5rem}
+    .section{padding:3.5rem 1.25rem}
+    .cta{padding:2rem 1.5rem;flex-direction:column}
+    .trust{gap:1.5rem}
   }
 </style>
 </head>
 <body>
 
-<div class="header">
-  <p class="header-eyebrow">BreedPulse · 2026 Covering Season</p>
+<nav class="nav">
+  <a href="/" class="nav-brand">BreedPulse</a>
+  <div class="nav-links">
+    <a href="/stallion-directory">Directory</a>
+    <a href="/how-it-works">How It Works</a>
+    <a href="/pricing">Pricing</a>
+    <a href="/submit-your-stallion">List Your Stallion</a>
+    <a href="/pricing" class="nav-cta">Season Pass</a>
+  </div>
+</nav>
+
+<section class="hero">
+  <p class="hero-eyebrow">BreedPulse · 2026 Covering Season</p>
   <h1>The verified Connemara stallion directory</h1>
-  <p>Every licensed stallion for the 2026 covering season — HWSD tested, studbook verified, and ready to book.</p>
-  <div class="header-actions">
-    <a href="https://lucindakelly-beep.github.io/breedpulse/stallion-search.html" class="btn-primary">Browse the Directory →</a>
-    <a href="https://breedpulse.com/submit-your-stallion" class="btn-ghost">Submit Your Stallion — Free</a>
+  <p>Every stallion HWSD tested, studbook checked, and ready for the 2026 covering season. Find the right match for your mare.</p>
+  <div class="hero-btns">
+    <a href="/stallion-directory" class="btn-primary">Browse the Directory →</a>
+    <a href="/how-it-works" class="btn-ghost">How it works</a>
+  </div>
+</section>
+
+<div class="trust">
+  <span class="trust-item"><strong>100+</strong> Verified Stallions</span>
+  <span class="trust-item"><strong>HWSD</strong> Tested &amp; Confirmed</span>
+  <span class="trust-item"><strong>CPBS</strong> Studbook Verified</span>
+  <span class="trust-item"><strong>2026</strong> Season Ready</span>
+</div>
+
+<section class="section">
+  <div class="section-inner">
+    <p class="section-label">Why BreedPulse</p>
+    <h2>Built for mare owners who need certainty</h2>
+    <p class="section-lead">BreedPulse cuts through the noise — every stallion is verified before listing. HWSD status confirmed, studbook registration checked, covering details accurate for this season.</p>
+    <div class="features">
+      <div class="feature">
+        <div class="feature-icon">🧬</div>
+        <h3>HWSD Tested</h3>
+        <p>Every stallion on BreedPulse carries a verified HWSD result. Clear, Carrier, or Affected — you'll always know before you book.</p>
+      </div>
+      <div class="feature">
+        <div class="feature-icon">📋</div>
+        <h3>Studbook Verified</h3>
+        <p>CPBS, BCPS, and international studbook registrations confirmed. No unregistered animals, no guesswork on pedigree credentials.</p>
+      </div>
+      <div class="feature">
+        <div class="feature-icon">📅</div>
+        <h3>2026 Season Ready</h3>
+        <p>Listings are current and updated for the 2026 covering season. Covering methods, availability, and mare requirements — all confirmed.</p>
+      </div>
+      <div class="feature">
+        <div class="feature-icon">🌍</div>
+        <h3>Ireland &amp; Beyond</h3>
+        <p>Stallions based in Ireland, the UK, mainland Europe, and North America. Search by country, height, colour, discipline, and more.</p>
+      </div>
+      <div class="feature">
+        <div class="feature-icon">🔒</div>
+        <h3>Members-Only Details</h3>
+        <p>Browse and filter the full directory for free. Stud fees, covering dates, and direct booking contacts unlocked with a Season Pass.</p>
+      </div>
+      <div class="feature">
+        <div class="feature-icon">⚡</div>
+        <h3>Powerful Filters</h3>
+        <p>Filter by HWSD status, height, colour, studbook, discipline, covering method, and country — to find exactly the right stallion for your mare.</p>
+      </div>
+    </div>
+  </div>
+</section>
+
+<div class="how">
+  <div class="section-inner" style="text-align:center">
+    <p class="section-label" style="text-align:center">Simple to use</p>
+    <h2 style="text-align:center;max-width:500px;margin:0 auto">Find your stallion in minutes</h2>
+  </div>
+  <div class="steps">
+    <div class="step">
+      <div class="step-num">1</div>
+      <h4>Search &amp; Filter</h4>
+      <p>Use the filters to narrow by country, height, colour, studbook, discipline, covering method, and HWSD status.</p>
+    </div>
+    <div class="step">
+      <div class="step-num">2</div>
+      <h4>Review Stallions</h4>
+      <p>Browse verified stallion cards — pedigree, sport record, HWSD status, and covering methods all visible for free.</p>
+    </div>
+    <div class="step">
+      <div class="step-num">3</div>
+      <h4>Unlock Details</h4>
+      <p>Get a Season Pass to reveal stud fees, covering dates, mare requirements, and direct booking contact.</p>
+    </div>
+    <div class="step">
+      <div class="step-num">4</div>
+      <h4>Book Direct</h4>
+      <p>Contact the stud directly — no middleman, no commission. BreedPulse connects you, you take it from there.</p>
+    </div>
   </div>
 </div>
 
-<div class="main">
-
-  <div class="section-label">Why mare owners use BreedPulse</div>
-  <div class="section-title">Everything you need before you book</div>
-  <p class="section-body">Browse, compare, and contact verified Connemara stallions across Ireland, the UK, and internationally. Every profile is checked against studbook records before it goes live.</p>
-
-  <div class="features">
-    <div class="feature">
-      <span class="feature-icon">🧬</span>
-      <h3>HWSD on every card</h3>
-      <p>Clear, Carrier, or Affected status displayed prominently on every profile, sourced directly from test certificates.</p>
-    </div>
-    <div class="feature">
-      <span class="feature-icon">📋</span>
-      <h3>Studbook verified</h3>
-      <p>Every profile is checked against CPBS, BCPS, and international studbook records before publishing.</p>
-    </div>
-    <div class="feature">
-      <span class="feature-icon">🔒</span>
-      <h3>Full details for members</h3>
-      <p>Stud fees, covering methods, season dates, mare requirements, and direct booking contact — for paying members.</p>
-    </div>
-    <div class="feature">
-      <span class="feature-icon">👁</span>
-      <h3>Free to browse</h3>
-      <p>HWSD status, height, colour, studbook, and pedigree are visible to all visitors at no cost.</p>
-    </div>
-  </div>
-
-  <div class="how">
-    <div class="section-label">How it works</div>
-    <div class="section-title" style="margin-bottom:0">Three simple steps</div>
-    <div class="steps">
-      <div class="step">
-        <div class="step-num">01</div>
-        <h4>Browse free</h4>
-        <p>Every verified stallion profile shows HWSD status, height, colour, studbook, and pedigree. No account needed.</p>
-      </div>
-      <div class="step">
-        <div class="step-num">02</div>
-        <h4>Unlock full details</h4>
-        <p>A Season Pass (€9.99) gives you stud fees, booking contacts, covering methods, and mare requirements for every verified stallion.</p>
-      </div>
-      <div class="step">
-        <div class="step-num">03</div>
-        <h4>Book with confidence</h4>
-        <p>Contact stallion owners directly. All details independently verified before publishing.</p>
-      </div>
-    </div>
-  </div>
-
-  <div class="section-label">Membership</div>
-  <div class="section-title">Unlock the full directory</div>
-  <div class="pricing-strip">
-    <div class="price-card">
-      <div class="price-label">Season Pass</div>
-      <div class="price-amount">€9.99</div>
-      <div class="price-period">90 days access · one covering season</div>
-      <ul class="price-features">
-        <li>Stud fees for all verified stallions</li>
-        <li>Direct booking contact details</li>
-        <li>Covering methods &amp; mare requirements</li>
-        <li>Season dates for 2026</li>
-      </ul>
-      <a href="https://breedpulse.com/pricing" class="price-btn">Get Season Access</a>
-    </div>
-  </div>
-
+<section class="cta-section">
   <div class="cta">
     <div class="cta-text">
-      <h3>Ready to find your match?</h3>
-      <p>Browse every verified Connemara stallion for the 2026 covering season.</p>
+      <h3>Ready to find your stallion?</h3>
+      <p>Browse the full verified directory for free, or get a Season Pass from €9.99 to unlock stud fees and booking contacts for the full 2026 covering season.</p>
     </div>
-    <a href="https://lucindakelly-beep.github.io/breedpulse/stallion-search.html" class="cta-btn">Open the Directory →</a>
+    <a href="/stallion-directory" class="cta-btn">Browse the Directory →</a>
   </div>
+</section>
 
-  <p class="footer-note">BreedPulse is built in partnership with <a href="https://facebook.com/connemaraponyworld" target="_blank">Connemara Pony World</a> — the global Connemara community with over 9,200 members.</p>
+<footer class="footer">
+  <p>© 2026 BreedPulse · <a href="/pricing">Pricing</a> · <a href="/submit-your-stallion">List Your Stallion</a> · <a href="/how-it-works">How It Works</a></p>
+</footer>
 
-</div>
 </body>
 </html>
