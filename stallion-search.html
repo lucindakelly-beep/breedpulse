@@ -93,19 +93,32 @@
   .price span{font-size:.7rem;font-family:var(--font-body);color:rgba(255,255,255,.4);font-weight:300;letter-spacing:.04em;display:block;margin-top:.2rem}
   .cta-btn{padding:.85rem 2rem;background:var(--white);color:var(--green-dark);border:none;border-radius:8px;font-family:var(--font-body);font-size:.82rem;font-weight:700;letter-spacing:.05em;text-transform:uppercase;cursor:pointer;white-space:nowrap;text-decoration:none;display:inline-block;transition:transform .15s,box-shadow .15s;box-shadow:0 2px 12px rgba(0,0,0,.15)}
   .cta-btn:hover{transform:translateY(-2px);box-shadow:0 8px 24px rgba(0,0,0,.25)}
-
-  /* MODAL */
   .modal-overlay{position:fixed;inset:0;background:rgba(14,28,20,.72);backdrop-filter:blur(6px);z-index:500;display:flex;align-items:center;justify-content:center;padding:1.5rem;opacity:0;pointer-events:none;transition:opacity .25s ease}
   .modal-overlay.open{opacity:1;pointer-events:all}
   .modal{background:var(--white);border-radius:16px;width:100%;max-width:780px;max-height:90vh;overflow:hidden;display:flex;flex-direction:column;box-shadow:0 32px 80px rgba(14,28,20,.35);transform:translateY(24px) scale(.97);transition:transform .3s cubic-bezier(.22,.68,0,1.2)}
   .modal-overlay.open .modal{transform:translateY(0) scale(1)}
-  .modal-hero{position:relative;height:280px;flex-shrink:0;background:linear-gradient(145deg,var(--green-dark),var(--green-deep));overflow:hidden}
-  .modal-hero img{width:100%;height:100%;object-fit:cover;object-position:center 20%}
-  .modal-hero-overlay{position:absolute;inset:0;background:linear-gradient(to top,rgba(14,28,20,.85) 0%,rgba(14,28,20,.1) 55%,transparent 100%)}
-  .modal-hero-content{position:absolute;bottom:0;left:0;right:0;padding:1.75rem 2rem 1.5rem}
-  .modal-name{font-family:var(--font-display);font-size:2.2rem;font-weight:500;font-style:italic;color:var(--white);letter-spacing:-.04em;line-height:1.1;margin-bottom:.6rem}
+  .modal-gallery{position:relative;height:300px;flex-shrink:0;background:var(--green-deep);overflow:hidden}
+  .gallery-track{display:flex;height:100%;transition:transform .35s cubic-bezier(.4,0,.2,1)}
+  .gallery-slide{flex:0 0 100%;height:100%;position:relative;background:var(--green-deep)}
+  .gallery-slide img{width:100%;height:100%;object-fit:cover;object-position:center 20%}
+  .gallery-slide iframe{width:100%;height:100%;border:none}
+  .gallery-slide .video-placeholder{width:100%;height:100%;display:flex;flex-direction:column;align-items:center;justify-content:center;gap:.75rem;color:rgba(255,255,255,.7);font-size:.85rem;cursor:pointer;background:linear-gradient(145deg,var(--green-dark),var(--green-deep))}
+  .gallery-slide .video-placeholder .play-icon{width:56px;height:56px;border-radius:50%;background:rgba(255,255,255,.15);backdrop-filter:blur(8px);border:2px solid rgba(255,255,255,.3);display:flex;align-items:center;justify-content:center;font-size:1.4rem;transition:background .2s}
+  .gallery-slide .video-placeholder:hover .play-icon{background:rgba(255,255,255,.25)}
+  .gallery-nav{position:absolute;top:50%;transform:translateY(-50%);width:36px;height:36px;border-radius:50%;background:rgba(255,255,255,.15);backdrop-filter:blur(8px);border:1px solid rgba(255,255,255,.2);color:white;font-size:1rem;cursor:pointer;display:flex;align-items:center;justify-content:center;transition:background .15s;z-index:10}
+  .gallery-nav:hover{background:rgba(255,255,255,.28)}
+  .gallery-prev{left:.75rem}
+  .gallery-next{right:.75rem}
+  .gallery-nav.hidden{display:none}
+  .gallery-dots{position:absolute;bottom:.65rem;left:50%;transform:translateX(-50%);display:flex;gap:.35rem;z-index:10}
+  .gallery-dot{width:6px;height:6px;border-radius:50%;background:rgba(255,255,255,.4);cursor:pointer;transition:background .2s,transform .2s}
+  .gallery-dot.active{background:white;transform:scale(1.3)}
+  .gallery-counter{position:absolute;top:.7rem;left:.75rem;padding:.18rem .5rem;background:rgba(0,0,0,.35);backdrop-filter:blur(6px);border-radius:20px;font-size:.65rem;color:rgba(255,255,255,.8);font-weight:500;z-index:10}
+  .modal-hero-overlay{position:absolute;inset:0;background:linear-gradient(to top,rgba(14,28,20,.85) 0%,rgba(14,28,20,.1) 45%,transparent 100%);pointer-events:none;z-index:5}
+  .modal-hero-content{position:absolute;bottom:0;left:0;right:0;padding:1.5rem 2rem 1.25rem;z-index:6}
+  .modal-name{font-family:var(--font-display);font-size:2rem;font-weight:500;font-style:italic;color:var(--white);letter-spacing:-.04em;line-height:1.1;margin-bottom:.5rem}
   .modal-badges{display:flex;gap:.4rem;flex-wrap:wrap}
-  .modal-close{position:absolute;top:1rem;right:1rem;width:36px;height:36px;border-radius:50%;background:rgba(255,255,255,.15);backdrop-filter:blur(8px);border:1px solid rgba(255,255,255,.2);color:white;font-size:1.1rem;cursor:pointer;display:flex;align-items:center;justify-content:center;transition:background .15s;z-index:10;line-height:1}
+  .modal-close{position:absolute;top:.75rem;right:.75rem;width:34px;height:34px;border-radius:50%;background:rgba(255,255,255,.15);backdrop-filter:blur(8px);border:1px solid rgba(255,255,255,.2);color:white;font-size:1rem;cursor:pointer;display:flex;align-items:center;justify-content:center;transition:background .15s;z-index:20;line-height:1}
   .modal-close:hover{background:rgba(255,255,255,.25)}
   .modal-body{overflow-y:auto;padding:1.75rem 2rem 2rem;flex:1;display:flex;flex-direction:column;gap:1.5rem}
   .modal-tags{display:flex;flex-wrap:wrap;gap:.4rem}
@@ -126,7 +139,6 @@
   .modal-locked-item::before{content:'🔒';font-size:.6rem}
   .modal-unlock-btn{padding:.7rem 1.5rem;background:var(--white);color:var(--green-dark);border:none;border-radius:8px;font-family:var(--font-body);font-size:.78rem;font-weight:700;letter-spacing:.05em;text-transform:uppercase;cursor:pointer;white-space:nowrap;text-decoration:none;display:inline-block;transition:transform .15s,box-shadow .15s;box-shadow:0 2px 8px rgba(0,0,0,.2);flex-shrink:0}
   .modal-unlock-btn:hover{transform:translateY(-2px);box-shadow:0 6px 20px rgba(0,0,0,.25)}
-
   @media(max-width:580px){
     .header{padding:2.5rem 1.25rem 2.25rem}
     .search-bar{padding:1rem 1.1rem}
@@ -135,8 +147,8 @@
     .cta{padding:1.75rem 1.5rem;flex-direction:column;gap:1.5rem}
     .filter-select{font-size:.72rem}
     .modal{max-height:95vh}
-    .modal-hero{height:200px}
-    .modal-name{font-size:1.6rem}
+    .modal-gallery{height:220px}
+    .modal-name{font-size:1.5rem}
     .modal-body{padding:1.25rem 1.25rem 1.5rem}
     .modal-grid{grid-template-columns:1fr}
     .modal-locked{flex-direction:column;gap:1rem}
@@ -184,8 +196,7 @@
         <option>Grey</option><option>Bay</option><option>Brown</option>
         <option>Black</option><option>Chestnut</option>
         <option value="Buckskin">Buckskin / Dun</option><option>Dun</option>
-        <option>Palomino</option><option>Roan</option>
-        <option>Cremello</option><option>Perlino</option>
+        <option>Palomino</option><option>Roan</option><option>Cremello</option><option>Perlino</option>
       </select>
       <select class="filter-select" id="f_studbook" onchange="go()">
         <option value="">Studbook</option>
@@ -203,16 +214,13 @@
         <option value="">Discipline</option>
         <option>Working Hunter</option><option>Show Jumping</option>
         <option>Dressage</option><option>Eventing</option>
-        <option>In-Hand</option><option>Ridden</option>
-        <option>Endurance</option>
+        <option>In-Hand</option><option>Ridden</option><option>Endurance</option>
         <option value="Showing / In-Hand">Showing</option>
         <option value="Breeding Only">Breeding Only</option>
       </select>
       <select class="filter-select" id="f_covering" onchange="go()">
         <option value="">Covering Method</option>
-        <option>Natural Cover</option>
-        <option>Chilled AI</option>
-        <option>Frozen AI</option>
+        <option>Natural Cover</option><option>Chilled AI</option><option>Frozen AI</option>
       </select>
       <select class="filter-select" id="f_hwsd" onchange="go()">
         <option value="">HWSD Status</option>
@@ -229,32 +237,31 @@
 
 <div class="results">
   <div class="grid" id="grid">
-    <div class="loading">
-      <div class="spinner"></div>
-      <span class="loading-text">Loading verified stallions…</span>
-    </div>
+    <div class="loading"><div class="spinner"></div><span class="loading-text">Loading verified stallions…</span></div>
   </div>
   <div class="cta">
     <div class="cta-text">
-      <div class="prices">
-        <div class="price">€9.99 <span>Season Pass · 90 days</span></div>
-      </div>
+      <div class="prices"><div class="price">€9.99 <span>Season Pass · 90 days</span></div></div>
       <p>Stud fees, covering dates, mare requirements and direct booking contact — unlocked for members.</p>
     </div>
     <a href="/pricing" class="cta-btn">View membership →</a>
   </div>
 </div>
 
-<!-- MODAL -->
 <div class="modal-overlay" id="modalOverlay" onclick="closeModal(event)">
   <div class="modal" id="modal">
-    <div class="modal-hero" id="modalHero">
+    <div class="modal-gallery" id="modalGallery">
       <div class="modal-hero-overlay"></div>
       <div class="modal-hero-content">
         <div class="modal-name" id="modalName"></div>
         <div class="modal-badges" id="modalBadges"></div>
       </div>
       <button class="modal-close" onclick="closeModalDirect()">✕</button>
+      <div class="gallery-track" id="galleryTrack"></div>
+      <button class="gallery-nav gallery-prev hidden" id="galleryPrev" onclick="slideGallery(-1)">&#8592;</button>
+      <button class="gallery-nav gallery-next hidden" id="galleryNext" onclick="slideGallery(1)">&#8594;</button>
+      <div class="gallery-dots" id="galleryDots"></div>
+      <div class="gallery-counter" id="galleryCounter"></div>
     </div>
     <div class="modal-body" id="modalBody"></div>
   </div>
@@ -262,48 +269,43 @@
 
 <script>
 const FILTERS = [
-  {id:'f_country',  label:'Country'},
-  {id:'f_height',   label:'Height'},
-  {id:'f_colour',   label:'Colour'},
-  {id:'f_studbook', label:'Studbook'},
-  {id:'f_discipline',label:'Discipline'},
-  {id:'f_covering', label:'Covering'},
-  {id:'f_hwsd',     label:'HWSD'}
+  {id:'f_country',label:'Country'},{id:'f_height',label:'Height'},
+  {id:'f_colour',label:'Colour'},{id:'f_studbook',label:'Studbook'},
+  {id:'f_discipline',label:'Discipline'},{id:'f_covering',label:'Covering'},
+  {id:'f_hwsd',label:'HWSD'}
 ];
-
 let allStallions = [];
+let currentSlide = 0;
+let totalSlides = 0;
 
 async function load() {
-  const WORKER_URL = 'https://summer-river-93fa.lucindakelly.workers.dev';
   try {
-    const res = await fetch(WORKER_URL);
+    const res = await fetch('https://summer-river-93fa.lucindakelly.workers.dev');
     const data = await res.json();
     allStallions = (data.stallions && data.stallions.length > 0) ? data.stallions : [];
-  } catch(e) {
-    allStallions = [];
-  }
+  } catch(e) { allStallions = []; }
   go();
 }
 
 function go() {
   const name = document.getElementById('nameSearch').value.toLowerCase().trim();
-  const vals = Object.fromEntries(FILTERS.map(function(f) { return [f.id, document.getElementById(f.id).value]; }));
+  const vals = Object.fromEntries(FILTERS.map(function(f){return [f.id, document.getElementById(f.id).value];}));
   const out = allStallions.filter(function(s) {
-    if (name && !((s.name||'') + ' ' + (s.sire||'') + ' ' + (s.dam||'')).toLowerCase().includes(name)) return false;
-    if (vals.f_country  && s.country !== vals.f_country) return false;
+    if (name && !((s.name||'')+' '+(s.sire||'')+' '+(s.dam||'')).toLowerCase().includes(name)) return false;
+    if (vals.f_country && s.country !== vals.f_country) return false;
     if (vals.f_height) {
-      if (vals.f_height === '144-148cm') { if (!['144cm','145cm','146cm','147cm','148cm'].includes(s.height)) return false; }
-      else { if (s.height !== vals.f_height) return false; }
+      if (vals.f_height==='144-148cm'){if(!['144cm','145cm','146cm','147cm','148cm'].includes(s.height))return false;}
+      else{if(s.height!==vals.f_height)return false;}
     }
-    if (vals.f_colour    && !(s.colour||'').toLowerCase().includes(vals.f_colour.toLowerCase())) return false;
-    if (vals.f_studbook  && s.studbook !== vals.f_studbook) return false;
+    if (vals.f_colour && !(s.colour||'').toLowerCase().includes(vals.f_colour.toLowerCase())) return false;
+    if (vals.f_studbook && s.studbook !== vals.f_studbook) return false;
     if (vals.f_discipline && !(s.discipline||[]).includes(vals.f_discipline)) return false;
-    if (vals.f_covering  && !(s.coveringMethod||[]).includes(vals.f_covering)) return false;
-    if (vals.f_hwsd      && s.hwsdStatus !== vals.f_hwsd) return false;
+    if (vals.f_covering && !(s.coveringMethod||[]).includes(vals.f_covering)) return false;
+    if (vals.f_hwsd && s.hwsdStatus !== vals.f_hwsd) return false;
     return true;
   });
-  const hasActive = FILTERS.some(function(f) { return vals[f.id]; }) || !!name;
-  FILTERS.forEach(function(f) { document.getElementById(f.id).classList.toggle('active', !!vals[f.id]); });
+  const hasActive = FILTERS.some(function(f){return vals[f.id];}) || !!name;
+  FILTERS.forEach(function(f){document.getElementById(f.id).classList.toggle('active',!!vals[f.id]);});
   document.getElementById('clearBtn').classList.toggle('show', hasActive);
   updateChips(vals, name);
   render(out);
@@ -312,32 +314,32 @@ function go() {
 function updateChips(vals, name) {
   const wrap = document.getElementById('chips');
   const chips = [];
-  if (name) chips.push('<span class="chip">"' + name + '" <button onclick="clrName()">×</button></span>');
-  FILTERS.forEach(function(f) {
+  if (name) chips.push('<span class="chip">"'+name+'" <button onclick="clrName()">×</button></span>');
+  FILTERS.forEach(function(f){
     if (vals[f.id]) {
       const sel = document.getElementById(f.id);
-      chips.push('<span class="chip">' + f.label + ': ' + sel.options[sel.selectedIndex].text + ' <button onclick="clrFilter(\'' + f.id + '\')">×</button></span>');
+      chips.push('<span class="chip">'+f.label+': '+sel.options[sel.selectedIndex].text+' <button onclick="clrFilter(\''+f.id+'\')">×</button></span>');
     }
   });
   wrap.classList.toggle('show', chips.length > 0);
   wrap.innerHTML = chips.join('');
 }
 
-function clrFilter(id) { document.getElementById(id).value=''; go(); }
-function clrName()     { document.getElementById('nameSearch').value=''; go(); }
-function clearAll()    { document.getElementById('nameSearch').value=''; FILTERS.forEach(function(f){document.getElementById(f.id).value='';}); go(); }
+function clrFilter(id){document.getElementById(id).value='';go();}
+function clrName(){document.getElementById('nameSearch').value='';go();}
+function clearAll(){document.getElementById('nameSearch').value='';FILTERS.forEach(function(f){document.getElementById(f.id).value='';});go();}
 
 function normaliseHwsd(s) {
   if (!s) return null;
-  if (s.includes('Clear') || s.includes('N/N'))     return 'N/N (Clear)';
-  if (s.includes('Carrier') || s.includes('N/Hw') || s.includes('N/HWSD')) return 'N/Hw (Carrier)';
-  if (s.includes('Affected') || s.includes('HWSD/HWSD')) return 'Hw/Hw (Affected)';
+  if (s.includes('Clear')||s.includes('N/N')) return 'N/N (Clear)';
+  if (s.includes('Carrier')||s.includes('N/Hw')||s.includes('N/HWSD')) return 'N/Hw (Carrier)';
+  if (s.includes('Affected')||s.includes('HWSD/HWSD')) return 'Hw/Hw (Affected)';
   return 'Not Tested';
 }
 
 function hwsdBadge(s) {
   s = normaliseHwsd(s);
-  if (!s || s === 'Not Tested') return '<span class="badge b-unknown">Not Tested</span>';
+  if (!s||s==='Not Tested') return '<span class="badge b-unknown">Not Tested</span>';
   if (s.includes('Clear'))   return '<span class="badge b-clear">HWSD Clear</span>';
   if (s.includes('Carrier')) return '<span class="badge b-carrier">HWSD Carrier</span>';
   if (s.includes('Affected'))return '<span class="badge b-affected">HWSD Affected</span>';
@@ -345,111 +347,165 @@ function hwsdBadge(s) {
 }
 
 function render(items) {
-  document.getElementById('cnt').innerHTML = '<strong>' + items.length + '</strong> stallion' + (items.length !== 1 ? 's' : '');
+  document.getElementById('cnt').innerHTML = '<strong>'+items.length+'</strong> stallion'+(items.length!==1?'s':'');
   if (!items.length) {
-    document.getElementById('grid').innerHTML = '<div class="empty"><h3>No results found</h3><p>Try adjusting your filters.</p><button onclick="clearAll()">Clear all filters</button></div>';
+    document.getElementById('grid').innerHTML='<div class="empty"><h3>No results found</h3><p>Try adjusting your filters.</p><button onclick="clearAll()">Clear all filters</button></div>';
     return;
   }
-  document.getElementById('grid').innerHTML = items.map(function(s, i) {
-    return '<div class="card" style="animation-delay:' + Math.min(i*.04,.4) + 's" onclick="openModal(\'' + s.id + '\')">' +
-      '<div class="card-photo">' +
-        (s.photoUrl ? '<img src="' + s.photoUrl + '" alt="' + s.name + '" loading="lazy">' : '<div class="no-photo">🐴</div>') +
-        '<div class="badges">' + hwsdBadge(s.hwsdStatus) +
-          (s.licenceClass && s.licenceClass !== 'Not applicable' ? '<span class="badge b-licence">' + s.licenceClass + '</span>' : '') +
-        '</div>' +
-      '</div>' +
-      '<div class="card-body">' +
-        '<div class="card-name">' + (s.name||'Unnamed') + '</div>' +
-        '<div class="tags">' +
-          (s.studbook ? '<span class="tag tg">' + s.studbook + '</span>' : '') +
-          (s.height   ? '<span class="tag tn">' + s.height + '</span>' : '') +
-          (s.colour   ? '<span class="tag tn">' + s.colour + '</span>' : '') +
-          (s.country  ? '<span class="tag tn">' + s.country + '</span>' : '') +
-        '</div>' +
-        '<div class="details">' +
-          (s.sire ? '<div class="detail"><span class="dl">Sire</span>' + s.sire + '</div>' : '') +
-          (s.foalingYear ? '<div class="detail"><span class="dl">Born</span>' + s.foalingYear + '</div>' : '') +
-          (s.discipline && s.discipline.length ? '<div class="detail"><span class="dl">Sport</span>' + s.discipline.join(', ') + '</div>' : '') +
-        '</div>' +
-        ((s.coveringMethod||[]).length ? '<div class="covering">' + (s.coveringMethod||[]).map(function(m){return '<span class="cpill">'+m+'</span>';}).join('') + '</div>' : '') +
-        '<div class="locked">Stud fee &amp; booking — members only</div>' +
+  document.getElementById('grid').innerHTML = items.map(function(s,i){
+    return '<div class="card" style="animation-delay:'+Math.min(i*.04,.4)+'s" onclick="openModal(\''+s.id+'\')">'+
+      '<div class="card-photo">'+
+        (s.photoUrl?'<img src="'+s.photoUrl+'" alt="'+s.name+'" loading="lazy">':'<div class="no-photo">🐴</div>')+
+        '<div class="badges">'+hwsdBadge(s.hwsdStatus)+
+          (s.licenceClass&&s.licenceClass!=='Not applicable'?'<span class="badge b-licence">'+s.licenceClass+'</span>':'')+
+        '</div>'+
+      '</div>'+
+      '<div class="card-body">'+
+        '<div class="card-name">'+(s.name||'Unnamed')+'</div>'+
+        '<div class="tags">'+
+          (s.studbook?'<span class="tag tg">'+s.studbook+'</span>':'')+
+          (s.height?'<span class="tag tn">'+s.height+'</span>':'')+
+          (s.colour?'<span class="tag tn">'+s.colour+'</span>':'')+
+          (s.country?'<span class="tag tn">'+s.country+'</span>':'')+
+        '</div>'+
+        '<div class="details">'+
+          (s.sire?'<div class="detail"><span class="dl">Sire</span>'+s.sire+'</div>':'')+
+          (s.foalingYear?'<div class="detail"><span class="dl">Born</span>'+s.foalingYear+'</div>':'')+
+          (s.discipline&&s.discipline.length?'<div class="detail"><span class="dl">Sport</span>'+s.discipline.join(', ')+'</div>':'')+
+        '</div>'+
+        ((s.coveringMethod||[]).length?'<div class="covering">'+(s.coveringMethod||[]).map(function(m){return '<span class="cpill">'+m+'</span>';}).join('')+'</div>':'')+
+        '<div class="locked">Stud fee &amp; booking — members only</div>'+
       '</div></div>';
   }).join('');
 }
 
+function buildGallerySlides(s) {
+  var slides = [];
+  if (s.photoUrl) slides.push({type:'photo', url:s.photoUrl});
+  if (s.extraPhotos&&s.extraPhotos.length) s.extraPhotos.forEach(function(u){if(u)slides.push({type:'photo',url:u});});
+  if (s.videoLink) slides.push({type:'video', url:s.videoLink});
+  return slides;
+}
+
+function getYouTubeId(url) {
+  var m = url.match(/(?:v=|youtu\.be\/)([a-zA-Z0-9_-]{11})/);
+  return m ? m[1] : null;
+}
+
+function renderGallery(slides) {
+  var track = document.getElementById('galleryTrack');
+  var dots = document.getElementById('galleryDots');
+  var counter = document.getElementById('galleryCounter');
+  var prev = document.getElementById('galleryPrev');
+  var next = document.getElementById('galleryNext');
+  track.innerHTML = slides.map(function(slide){
+    if (slide.type==='photo') {
+      return slide.url ? '<div class="gallery-slide"><img src="'+slide.url+'" alt="" loading="lazy"></div>'
+        : '<div class="gallery-slide"><div class="no-photo">🐴</div></div>';
+    } else {
+      var ytId = getYouTubeId(slide.url);
+      if (ytId) {
+        return '<div class="gallery-slide"><div class="video-placeholder" onclick="loadVideo(this,\''+ytId+'\')"><div class="play-icon">▶</div><span>Watch video</span></div></div>';
+      } else {
+        return '<div class="gallery-slide"><div class="video-placeholder" onclick="window.open(\''+slide.url+'\',\'_blank\')"><div class="play-icon">▶</div><span>Watch video</span></div></div>';
+      }
+    }
+  }).join('');
+  dots.innerHTML = slides.length>1 ? slides.map(function(_,i){return '<div class="gallery-dot'+(i===0?' active':'')+'" onclick="goToSlide('+i+')"></div>';}).join('') : '';
+  var show = slides.length>1;
+  prev.classList.toggle('hidden',!show);
+  next.classList.toggle('hidden',!show);
+  counter.textContent = slides.length>1 ? '1 / '+slides.length : '';
+  counter.style.display = slides.length>1 ? '' : 'none';
+  currentSlide = 0;
+  totalSlides = slides.length;
+  updateGalleryPosition();
+}
+
+function loadVideo(el, ytId) {
+  var iframe = document.createElement('iframe');
+  iframe.src = 'https://www.youtube.com/embed/'+ytId+'?autoplay=1';
+  iframe.allow = 'autoplay; encrypted-media';
+  iframe.allowFullscreen = true;
+  el.parentNode.replaceChild(iframe, el);
+}
+
+function goToSlide(n) {
+  currentSlide = Math.max(0, Math.min(n, totalSlides-1));
+  updateGalleryPosition();
+}
+
+function slideGallery(dir){goToSlide(currentSlide+dir);}
+
+function updateGalleryPosition() {
+  document.getElementById('galleryTrack').style.transform = 'translateX(-'+currentSlide+'00%)';
+  document.querySelectorAll('.gallery-dot').forEach(function(d,i){d.classList.toggle('active',i===currentSlide);});
+  if (totalSlides>1) document.getElementById('galleryCounter').textContent = (currentSlide+1)+' / '+totalSlides;
+}
+
 function openModal(id) {
-  const s = allStallions.find(function(x) { return x.id === id; });
+  var s = allStallions.find(function(x){return x.id===id;});
   if (!s) return;
-  const hero = document.getElementById('modalHero');
-  const existingImg = hero.querySelector('img');
-  if (existingImg) existingImg.remove();
-  if (s.photoUrl) {
-    const img = document.createElement('img');
-    img.src = s.photoUrl;
-    img.alt = s.name || '';
-    hero.insertBefore(img, hero.firstChild);
-  }
-  document.getElementById('modalName').textContent = s.name || 'Unnamed';
+  var slides = buildGallerySlides(s);
+  if (!slides.length) slides.push({type:'photo',url:null});
+  renderGallery(slides);
+  document.getElementById('modalName').textContent = s.name||'Unnamed';
   document.getElementById('modalBadges').innerHTML =
-    hwsdBadge(s.hwsdStatus) +
-    (s.licenceClass && s.licenceClass !== 'Not applicable' ? '<span class="badge b-licence">' + s.licenceClass + '</span>' : '') +
-    (s.studbook ? '<span class="badge b-licence" style="background:rgba(61,138,103,.85)">' + s.studbook + '</span>' : '');
-
-  let body = '';
-  body += '<div class="modal-tags">' +
-    (s.height  ? '<span class="tag tn">' + s.height + '</span>' : '') +
-    (s.colour  ? '<span class="tag tn">' + s.colour + '</span>' : '') +
-    (s.country ? '<span class="tag tn">' + s.country + '</span>' : '') +
-    (s.foalingYear ? '<span class="tag tn">Born ' + s.foalingYear + '</span>' : '') +
+    hwsdBadge(s.hwsdStatus)+
+    (s.licenceClass&&s.licenceClass!=='Not applicable'?'<span class="badge b-licence">'+s.licenceClass+'</span>':'')+
+    (s.studbook?'<span class="badge b-licence" style="background:rgba(61,138,103,.85)">'+s.studbook+'</span>':'');
+  var body = '';
+  body += '<div class="modal-tags">'+
+    (s.height?'<span class="tag tn">'+s.height+'</span>':'')+
+    (s.colour?'<span class="tag tn">'+s.colour+'</span>':'')+
+    (s.country?'<span class="tag tn">'+s.country+'</span>':'')+
+    (s.foalingYear?'<span class="tag tn">Born '+s.foalingYear+'</span>':'')+
   '</div>';
-
-  if (s.profileBio) {
-    body += '<div class="modal-bio">' + s.profileBio + '</div>';
-  }
-
+  if (s.profileBio) body += '<div class="modal-bio">'+s.profileBio+'</div>';
   body += '<div class="modal-section"><div class="modal-section-title">Breeding</div><div class="modal-grid">';
-  if (s.sire)        body += '<div class="modal-row"><div class="modal-row-label">Sire</div><div class="modal-row-value">' + s.sire + '</div></div>';
-  if (s.dam)         body += '<div class="modal-row"><div class="modal-row-label">Dam</div><div class="modal-row-value">' + s.dam + '</div></div>';
-  if (s.damSire)     body += '<div class="modal-row"><div class="modal-row-label">Dam Sire</div><div class="modal-row-value">' + s.damSire + '</div></div>';
-  if (s.foalingYear) body += '<div class="modal-row"><div class="modal-row-label">Foaling Year</div><div class="modal-row-value">' + s.foalingYear + '</div></div>';
+  if (s.sire) body += '<div class="modal-row"><div class="modal-row-label">Sire</div><div class="modal-row-value">'+s.sire+'</div></div>';
+  if (s.dam)  body += '<div class="modal-row"><div class="modal-row-label">Dam</div><div class="modal-row-value">'+s.dam+'</div></div>';
+  if (s.damSire) body += '<div class="modal-row"><div class="modal-row-label">Dam Sire</div><div class="modal-row-value">'+s.damSire+'</div></div>';
+  if (s.foalingYear) body += '<div class="modal-row"><div class="modal-row-label">Foaling Year</div><div class="modal-row-value">'+s.foalingYear+'</div></div>';
   body += '</div></div>';
-
-  if (s.discipline && s.discipline.length) {
-    body += '<div class="modal-section"><div class="modal-section-title">Sport &amp; Discipline</div>' +
-      '<div class="modal-covering">' + s.discipline.map(function(d){return '<span class="modal-pill">'+d+'</span>';}).join('') + '</div></div>';
+  if (s.discipline&&s.discipline.length) {
+    body += '<div class="modal-section"><div class="modal-section-title">Sport &amp; Discipline</div>'+
+      '<div class="modal-covering">'+s.discipline.map(function(d){return '<span class="modal-pill">'+d+'</span>';}).join('')+'</div></div>';
   }
-
-  if (s.coveringMethod && s.coveringMethod.length) {
-    body += '<div class="modal-section"><div class="modal-section-title">Covering Method</div>' +
-      '<div class="modal-covering">' + s.coveringMethod.map(function(m){return '<span class="modal-pill">'+m+'</span>';}).join('') + '</div></div>';
+  if (s.coveringMethod&&s.coveringMethod.length) {
+    body += '<div class="modal-section"><div class="modal-section-title">Covering Method</div>'+
+      '<div class="modal-covering">'+s.coveringMethod.map(function(m){return '<span class="modal-pill">'+m+'</span>';}).join('')+'</div></div>';
   }
-
-  body += '<div class="modal-section"><div class="modal-section-title">HWSD Status</div>' +
-    '<div class="modal-grid"><div class="modal-row"><div class="modal-row-label">Test Result</div>' +
-    '<div class="modal-row-value">' + (normaliseHwsd(s.hwsdStatus) || 'Not recorded') + '</div></div></div></div>';
-
-  body += '<div class="modal-locked">' +
-    '<div class="modal-locked-text">' +
-      '<h4>Member details</h4>' +
-      '<p>Unlock stud fee, season dates, mare requirements and direct booking contact.</p>' +
-      '<div class="modal-locked-items">' +
-        '<span class="modal-locked-item">Stud Fee 2026</span>' +
-        '<span class="modal-locked-item">Season Dates</span>' +
-        '<span class="modal-locked-item">Mare Requirements</span>' +
-        '<span class="modal-locked-item">Booking Contact</span>' +
-      '</div>' +
-    '</div>' +
-    '<a href="/pricing" class="modal-unlock-btn">Get Season Pass &#8594;</a>' +
+  body += '<div class="modal-section"><div class="modal-section-title">HWSD Status</div>'+
+    '<div class="modal-grid"><div class="modal-row"><div class="modal-row-label">Test Result</div>'+
+    '<div class="modal-row-value">'+(normaliseHwsd(s.hwsdStatus)||'Not recorded')+'</div></div></div></div>';
+  body += '<div class="modal-locked">'+
+    '<div class="modal-locked-text"><h4>Member details</h4>'+
+    '<p>Unlock stud fee, season dates, mare requirements and direct booking contact.</p>'+
+    '<div class="modal-locked-items">'+
+      '<span class="modal-locked-item">Stud Fee 2026</span>'+
+      '<span class="modal-locked-item">Season Dates</span>'+
+      '<span class="modal-locked-item">Mare Requirements</span>'+
+      '<span class="modal-locked-item">Booking Contact</span>'+
+    '</div></div>'+
+    '<a href="/pricing" class="modal-unlock-btn">Get Season Pass &#8594;</a>'+
   '</div>';
-
   document.getElementById('modalBody').innerHTML = body;
   document.getElementById('modalOverlay').classList.add('open');
   document.body.style.overflow = 'hidden';
 }
 
-function closeModal(e) { if (e.target === document.getElementById('modalOverlay')) closeModalDirect(); }
-function closeModalDirect() { document.getElementById('modalOverlay').classList.remove('open'); document.body.style.overflow = ''; }
-document.addEventListener('keydown', function(e) { if (e.key === 'Escape') closeModalDirect(); });
+function closeModal(e){if(e.target===document.getElementById('modalOverlay'))closeModalDirect();}
+function closeModalDirect(){document.getElementById('modalOverlay').classList.remove('open');document.body.style.overflow='';}
+document.addEventListener('keydown',function(e){if(e.key==='Escape')closeModalDirect();});
+
+var touchStartX = 0;
+document.getElementById('modalGallery').addEventListener('touchstart',function(e){touchStartX=e.touches[0].clientX;},{passive:true});
+document.getElementById('modalGallery').addEventListener('touchend',function(e){
+  var diff = touchStartX - e.changedTouches[0].clientX;
+  if (Math.abs(diff)>50) slideGallery(diff>0?1:-1);
+},{passive:true});
+
 document.getElementById('nameSearch').addEventListener('input', go);
 load();
 </script>
