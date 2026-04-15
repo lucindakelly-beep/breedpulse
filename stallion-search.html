@@ -1,3 +1,4 @@
+
 <!DOCTYPE html>
 <html lang="en">
 <head>
@@ -382,7 +383,9 @@ function render(items) {
 function buildGallerySlides(s) {
   var slides = [];
   if (s.photoUrl) slides.push({type:'photo', url:s.photoUrl});
-  if (s.extraPhotos&&s.extraPhotos.length) s.extraPhotos.forEach(function(u){if(u)slides.push({type:'photo',url:u});});
+  if (s.photo2)   slides.push({type:'photo', url:s.photo2});
+  if (s.photo3)   slides.push({type:'photo', url:s.photo3});
+  if (s.photo4)   slides.push({type:'photo', url:s.photo4});
   if (s.videoLink) slides.push({type:'video', url:s.videoLink});
   return slides;
 }
