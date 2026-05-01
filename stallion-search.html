@@ -1,4 +1,5 @@
 
+
 <!DOCTYPE html>
 <html lang="en">
 <head>
@@ -8,8 +9,14 @@
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,400;0,500;0,600;1,400;1,500&family=DM+Sans:opsz,wght@9..40,300;9..40,400;9..40,500;9..40,600&display=swap" rel="stylesheet">
 <!--
-  BreedPulse Stallion Directory — v2 (Paywall enabled)
+  BreedPulse Stallion Directory — v3 (Deep-link support)
   Last updated: 2026-05-01
+
+  CHANGES FROM v2:
+   • Added URL parameter support: ?stallion=<slug> auto-opens the matching stallion's modal
+   • Modal open/close now updates browser history (pushState) — back button closes modal
+   • Modals are now shareable/bookmarkable
+   • Slug function matches the one in all-stallions.html (lowercase, hyphenated, accents stripped)
 
   CHANGES FROM v1:
    • Added Season Pass paywall: photos 2-4, video, pedigree, performance, booking are now gated
@@ -23,15 +30,6 @@
    Use GitHub's history:  https://github.com/lucindakelly-beep/breedpulse/commits/main/stallion-search.html
    Click the previous commit, click "View at this commit", click "Raw", copy the file content,
    replace the current stallion-search.html.
-
-  ARCHITECTURE NOTES:
-   • Membership check happens on page load via /me endpoint (returns {active: bool, daysLeft: int})
-   • If member: full data fetched and rendered, no blurs
-   • If visitor: sensitive fields rendered blurred or replaced with upsell cards
-   • Worker should ideally redact sensitive fields server-side (defence in depth) — frontend
-     blur is for UX, not security. The stallion data Worker still returns full data today;
-     once PAID_FIELDS redaction is added on the Worker, the frontend code here gracefully
-     handles missing fields too.
 -->
 <style>
   :root {
@@ -154,8 +152,6 @@
   .modal-overlay.open .modal{transform:translateY(0) scale(1)}
 
   /* ============ MODAL GALLERY (photos) ============ */
-  /* Gallery uses min/max heights with vh so it stays proportionate to the viewport.
-     This guarantees the body content always has enough scroll room. */
   .modal-gallery{position:relative;height:38vh;min-height:280px;max-height:420px;flex-shrink:0;background:var(--green-deep);overflow:hidden}
   .gallery-track{display:flex;height:100%;transition:transform .35s cubic-bezier(.4,0,.2,1)}
   .gallery-slide{flex:0 0 100%;height:100%;position:relative;background:var(--green-deep);display:flex;align-items:center;justify-content:center}
@@ -974,6 +970,16 @@ function clearAll(){document.getElementById('nameSearch').value='';FILTERS.forEa
 
 function esc(s){return String(s||'').replace(/[&<>"']/g,function(c){return {'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c];});}
 
+/* Slugify name for URL params — must match the function in all-stallions.html */
+function toSlug(name) {
+  return String(name || '')
+    .toLowerCase()
+    .normalize('NFD').replace(/[\u0300-\u036f]/g, '')
+    .replace(/['\u2019]/g, '')
+    .replace(/[^a-z0-9]+/g, '-')
+    .replace(/^-+|-+$/g, '');
+}
+
 /* =================================================================
    HWSD HELPERS
    ================================================================= */
@@ -1039,9 +1045,6 @@ function render(items) {
    ================================================================= */
 
 function buildGallerySlides(s) {
-  // Gallery is built differently for members vs visitors:
-  //  - Members see all photos + video as photo/video slides
-  //  - Visitors see photo 1 + 3 "gated" placeholder slides for the locked content
   const slides = [];
   if (s.photoUrl) slides.push({type:'photo', url:s.photoUrl});
   else slides.push({type:'photo', url:null});
@@ -1052,7 +1055,6 @@ function buildGallerySlides(s) {
     if (s.photo4)   slides.push({type:'photo', url:s.photo4});
     if (s.videoLink) slides.push({type:'video', url:s.videoLink});
   } else {
-    // Show gated placeholders for items that exist in the data
     if (s.photo2 || s.photo3 || s.photo4) {
       slides.push({type:'gated', label:'More photos'});
     }
@@ -1136,22 +1138,12 @@ function updateGalleryPosition() {
 
 /* =================================================================
    PEDIGREE TABLE BUILDER
-   =================================================================
-   Pedigree data comes from Notion's "Pedigree Tree" field as plain text.
-   That field is currently free-form (we'll structure it later). For now,
-   if we have the field we render a basic 2-gen view from sire/dam/damSire,
-   and if the Pedigree Tree text exists we show the tile/inline accordingly.
-
-   When we later structure the Notion field into JSON, this function gets
-   replaced with a renderer that draws the full 5-gen recursive table.
-*/
+   ================================================================= */
 
 function buildPedigreeSection(s) {
-  // For now we render whatever data we have. Future: structured pedigree.
   const hasFullPedigree = !!s.pedigreeTree && s.pedigreeTree.trim().length > 0;
   const ancestorCount = countAncestors(s);
 
-  // Section header
   const header =
     '<div class="modal-section-title">'+
       '<span>Pedigree · 5 generations</span>'+
@@ -1165,7 +1157,6 @@ function buildPedigreeSection(s) {
   const tableHtml = renderPedTable(s);
 
   if (isMember) {
-    // Inline (desktop) + tile (mobile, opens fullscreen)
     return '<div class="modal-section">'+header+
       '<div class="ped-frame">'+tableHtml+
         '<div class="ped-foot">'+
@@ -1194,7 +1185,6 @@ function buildPedigreeSection(s) {
     '</div>';
   }
 
-  // Visitor — locked view
   return '<div class="modal-section">'+header+
     '<div class="ped-frame ped-locked">'+tableHtml+
       '<div class="ped-overlay">'+
@@ -1206,7 +1196,6 @@ function buildPedigreeSection(s) {
         '<button class="ped-cta" onclick="startCheckout(event)">Unlock pedigree · €9.99 →</button>'+
       '</div>'+
     '</div>'+
-    /* Mobile tile also locked */
     '<button class="ped-tile" onclick="startCheckout(event)">'+
       '<div class="ped-tile-left">'+
         '<div class="ped-mini" aria-hidden="true" style="filter:blur(1.2px)">'+
@@ -1226,14 +1215,11 @@ function buildPedigreeSection(s) {
 }
 
 function countAncestors(s) {
-  // Count only ancestors we actually have, never inflate.
-  // Priority: explicit count from API > parsed pedigreeTree > count of populated structured fields.
   if (s.pedigreeAncestorCount) return s.pedigreeAncestorCount;
   if (s.pedigreeTree) {
     const lines = s.pedigreeTree.split(/\r?\n/).filter(function(l){return l.trim().length > 0;});
     if (lines.length > 0) return lines.length;
   }
-  // Fall back to count of known structured ancestor fields.
   let n = 0;
   if (s.sire) n++;
   if (s.dam) n++;
@@ -1242,14 +1228,9 @@ function countAncestors(s) {
 }
 
 function renderPedTable(s) {
-  // Render whatever generations we have. Cells we don't have are marked .empty.
-  // Layout matches AllBreedPedigree five-gen table.
-  // Currently we only have sire/dam/damSire as structured data in the API,
-  // so most cells render empty until we add structured pedigree.
-
   const cell = function(name, meta, side) {
     if (!name) return '<td class="empty"></td>';
-    const cls = side; // 's' or 'd'
+    const cls = side;
     return '<td class="'+cls+'"><span class="nm">'+esc(name)+'</span>'+(meta?'<span class="meta">'+esc(meta)+'</span>':'')+'</td>';
   };
 
@@ -1258,23 +1239,18 @@ function renderPedTable(s) {
     return '<td class="'+side+'" rowspan="'+span+'"><span class="nm">'+esc(name)+'</span>'+(meta?'<span class="meta">'+esc(meta)+'</span>':'')+'</td>';
   };
 
-  // Gen 1: sire and dam
   const sire = s.sire || '';
   const dam = s.dam || '';
   const damSire = s.damSire || '';
-  // We don't yet have damDam, sireDam, sireSire as structured fields — show empty.
 
-  // Build the 16-row half tables
-  // For now we have minimal data — render mostly empty cells with the structure intact.
   let html = '<table class="ped-table"><tbody>';
 
-  // SIRE HALF (rows 1-16)
   html += '<tr>';
   html += cellSpan(sire, s.sireMeta || '', 's', 16);
-  html += cellSpan('', '', 's', 8);  // sire's sire (gen 2)
-  html += cellSpan('', '', 's', 4);  // gen 3
-  html += cellSpan('', '', 's', 2);  // gen 4
-  html += cell('', '', 's');         // gen 5
+  html += cellSpan('', '', 's', 8);
+  html += cellSpan('', '', 's', 4);
+  html += cellSpan('', '', 's', 2);
+  html += cell('', '', 's');
   html += '</tr>';
   for (let i=0; i<7; i++) {
     html += '<tr>';
@@ -1287,9 +1263,8 @@ function renderPedTable(s) {
     else if (i === 6) html += cell('', '', 'd');
     html += '</tr>';
   }
-  // sire's dam half (gen 2)
   html += '<tr>';
-  html += cellSpan('', '', 'd', 8);  // sire's dam
+  html += cellSpan('', '', 'd', 8);
   html += cellSpan('', '', 's', 4);
   html += cellSpan('', '', 's', 2);
   html += cell('', '', 's');
@@ -1306,7 +1281,6 @@ function renderPedTable(s) {
     html += '</tr>';
   }
 
-  // DAM HALF (rows 17-32)
   html += '<tr>';
   html += cellSpan(dam, s.damMeta || '', 'd', 16);
   html += cellSpan(damSire, '', 's', 8);
@@ -1358,7 +1332,6 @@ function openPedFs() {
 
 function closePedFs() {
   document.getElementById('pedFs').classList.remove('open');
-  // Don't reset overflow — modal is still open
 }
 
 function sharePed() {
@@ -1376,12 +1349,22 @@ function sharePed() {
 
 /* =================================================================
    MODAL OPEN / BODY RENDER
-   ================================================================= */
+   =================================================================
+   `fromHistory` is true when called by popstate or initial deep-link load.
+   In those cases we skip pushState (the browser already changed the URL).
+*/
 
-function openModal(id) {
+function openModal(id, fromHistory) {
   const s = allStallions.find(function(x){return x.id===id;});
   if (!s) return;
   currentStallion = s;
+
+  /* Push the stallion slug to the URL so the modal is shareable/bookmarkable */
+  if (!fromHistory) {
+    const url = new URL(window.location.href);
+    url.searchParams.set('stallion', toSlug(s.name));
+    window.history.pushState({stallionId: id}, '', url.toString());
+  }
 
   const slides = buildGallerySlides(s);
   if (!slides.length) slides.push({type:'photo',url:null});
@@ -1395,7 +1378,6 @@ function openModal(id) {
 
   let body = '';
 
-  // Tags
   body += '<div class="modal-tags">'+
     (s.height ? '<span class="tag tn">'+esc(s.height)+'</span>' : '') +
     (s.colour ? '<span class="tag tn">'+esc(s.colour)+'</span>' : '') +
@@ -1403,10 +1385,8 @@ function openModal(id) {
     (s.foalingYear ? '<span class="tag tn">Born '+esc(s.foalingYear)+'</span>' : '') +
   '</div>';
 
-  // Bio (free for everyone)
   if (s.profileBio) body += '<div class="modal-bio">'+esc(s.profileBio)+'</div>';
 
-  // Breeding (free)
   body += '<div class="modal-section"><div class="modal-section-title"><span>Breeding</span></div><div class="modal-grid">';
   if (s.sire) body += row('Sire', s.sire);
   if (s.dam)  body += row('Dam', s.dam);
@@ -1414,30 +1394,24 @@ function openModal(id) {
   if (s.foalingYear) body += row('Foaling Year', s.foalingYear);
   body += '</div></div>';
 
-  // Sport / Discipline (free)
   if (s.discipline && s.discipline.length) {
     body += '<div class="modal-section"><div class="modal-section-title"><span>Sport &amp; Discipline</span></div>'+
       '<div class="modal-covering">'+s.discipline.map(function(d){return '<span class="modal-pill">'+esc(d)+'</span>';}).join('')+'</div></div>';
   }
 
-  // Covering Method (free)
   if (s.coveringMethod && s.coveringMethod.length) {
     body += '<div class="modal-section"><div class="modal-section-title"><span>Covering Method</span></div>'+
       '<div class="modal-covering">'+s.coveringMethod.map(function(m){return '<span class="modal-pill">'+esc(m)+'</span>';}).join('')+'</div></div>';
   }
 
-  // HWSD (free)
   body += '<div class="modal-section"><div class="modal-section-title"><span>HWSD Status</span></div>'+
     '<div class="modal-grid"><div class="modal-row"><div class="modal-row-label">Test Result</div>'+
     '<div class="modal-row-value">'+(normaliseHwsd(s.hwsdStatus)||'Not recorded')+'</div></div></div></div>';
 
-  // Pedigree section (free OR locked depending on member status)
   body += buildPedigreeSection(s);
 
-  // Performance & Progeny (locked for visitors)
   body += buildPerformanceSection(s);
 
-  // Booking (full block for members, upsell card for visitors)
   body += buildBookingSection(s);
 
   document.getElementById('modalBody').innerHTML = body;
@@ -1455,7 +1429,6 @@ function row(label, value, locked) {
 function buildPerformanceSection(s) {
   const hasResults = s.topResults || s.notableProgeny || s.colourGenetics || s.pssm;
   if (!hasResults && !isMember) {
-    // Show teasers anyway so visitor knows there's content
     return '<div class="modal-section">'+
       '<div class="modal-section-title"><span>Performance &amp; progeny</span></div>'+
       '<div class="modal-grid">'+
@@ -1464,9 +1437,8 @@ function buildPerformanceSection(s) {
       '</div></div>';
   }
   if (!hasResults && isMember) {
-    return ''; // no section if no data and we're a member
+    return '';
   }
-  // Member view
   let body = '<div class="modal-section">'+
     '<div class="modal-section-title"><span>Performance &amp; progeny</span><span class="section-ok">✓ Unlocked</span></div>'+
     '<div class="modal-grid" style="grid-template-columns:1fr">';
@@ -1480,7 +1452,6 @@ function buildPerformanceSection(s) {
 
 function buildBookingSection(s) {
   if (isMember) {
-    // Full booking card with all details
     return '<div class="booking-card">'+
       '<h4>Booking 2026 <span class="section-ok">✓ Unlocked</span></h4>'+
       (s.studFee ? bookRow('coin', '<span>Stud fee: <strong>'+esc(s.studFee)+'</strong></span>') : '') +
@@ -1492,7 +1463,6 @@ function buildBookingSection(s) {
     '</div>';
   }
 
-  // Visitor — upsell
   return '<div class="modal-locked">'+
     '<div class="modal-locked-text">'+
       '<h4>Member details</h4>'+
@@ -1525,12 +1495,53 @@ function closeModal(e) {
   if (e.target === document.getElementById('modalOverlay')) closeModalDirect();
 }
 
-function closeModalDirect() {
+function closeModalDirect(fromHistory) {
   document.getElementById('modalOverlay').classList.remove('open');
   document.getElementById('pedFs').classList.remove('open');
   document.body.style.overflow = '';
   currentStallion = null;
+
+  /* Remove the stallion param from the URL */
+  if (!fromHistory) {
+    const url = new URL(window.location.href);
+    if (url.searchParams.has('stallion')) {
+      url.searchParams.delete('stallion');
+      window.history.pushState({}, '', url.toString());
+    }
+  }
 }
+
+/* =================================================================
+   DEEP LINKING — open stallion modal from ?stallion=<slug>
+   ================================================================= */
+
+function openStallionFromUrl() {
+  const params = new URLSearchParams(window.location.search);
+  const slug = params.get('stallion');
+  if (!slug) return;
+  const target = allStallions.find(function(s){return toSlug(s.name) === slug;});
+  if (target) {
+    openModal(target.id, true);
+  } else {
+    /* Slug doesn't match — clean it from URL so it's not stuck */
+    const url = new URL(window.location.href);
+    url.searchParams.delete('stallion');
+    window.history.replaceState({}, '', url.toString());
+    showToast('That stallion isn\u2019t in the directory yet.');
+  }
+}
+
+/* Browser back/forward handling */
+window.addEventListener('popstate', function() {
+  const params = new URLSearchParams(window.location.search);
+  const slug = params.get('stallion');
+  if (slug) {
+    const target = allStallions.find(function(s){return toSlug(s.name) === slug;});
+    if (target) openModal(target.id, true);
+  } else if (document.getElementById('modalOverlay').classList.contains('open')) {
+    closeModalDirect(true);
+  }
+});
 
 
 /* =================================================================
@@ -1583,10 +1594,11 @@ document.getElementById('nameSearch').addEventListener('input', go);
   await handleMagicLinkLanding();
   // 2. Check membership state
   await checkMembership();
-  // 3. Load stallion data
-  load();
-  // 4. Handle post-payment / sign-in landing AFTER membership check so the modal
-  //    appears on top of a properly-rendered page.
+  // 3. Load stallion data — wait so deep-links can find their stallion
+  await load();
+  // 4. If URL contains ?stallion=<slug>, auto-open that stallion's modal
+  openStallionFromUrl();
+  // 5. Handle post-payment / sign-in landing AFTER membership check
   handlePostPaymentLanding();
 })();
 
