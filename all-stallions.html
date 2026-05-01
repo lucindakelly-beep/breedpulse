@@ -1,3 +1,4 @@
+
 <!DOCTYPE html>
 <html lang="en">
 <head>
@@ -23,6 +24,7 @@
   --whisper: #9C948C;
   --gold: #B8915C;
   --paper: #FFFFFF;
+  --green-pale: #D4EAE0;
   --shadow-card: 0 1px 2px rgba(20, 47, 34, 0.04), 0 4px 12px rgba(20, 47, 34, 0.04);
   --shadow-hover: 0 2px 4px rgba(20, 47, 34, 0.06), 0 12px 24px rgba(20, 47, 34, 0.08);
 }
@@ -377,7 +379,7 @@ header.site nav a:hover { opacity: 1; }
   letter-spacing: 0.08em;
   text-transform: uppercase;
   color: var(--green-deep);
-  background: var(--green-pale, #D4EAE0);
+  background: var(--green-pale);
   padding: 0.2rem 0.55rem;
   border-radius: 999px;
   vertical-align: middle;
@@ -568,8 +570,8 @@ footer.site a:hover { text-decoration: underline; }
   </select>
   <select id="statusFilter">
     <option value="">All statuses</option>
-    <option value="verified">Verified only</option>
-    <option value="pending">Pending verification</option>
+    <option value="verified">Listed only</option>
+    <option value="pending">Unclaimed</option>
   </select>
   <button class="btn btn-ghost btn-sm" id="resetBtn">Reset</button>
 </section>
@@ -595,24 +597,72 @@ footer.site a:hover { text-decoration: underline; }
 <script>
 /* ─────────────────────────────────────────────────────────────────────
    STALLION DATA — embedded for v1 launch.
-   This will eventually be served by the existing Cloudflare Worker
-   (summer-river-93fa.lucindakelly.workers.dev) reading from the Notion
-   database. For now, these are baked in so the page works standalone.
-   Replace the fetch logic below with an API call once Notion has all 199.
+   Schema: name, status, region, country, class, colour, height, year, studbook, source
+   Status: 'verified' (claimed/listed by owner) or 'pending' (unclaimed)
+   Verified entries link to /stallion-search.html?stallion=<slug> for full profile.
    ───────────────────────────────────────────────────────────────────── */
 
 const STALLIONS = [
-  // The full list of 199 — auto-generated from the v3 register spreadsheet.
-  // Schema: name, status, region, country, class, colour, height, year, studbook, source, profileSlug?
-  // Status: 'verified' or 'pending'
-  // For verified entries, profileSlug should match the existing search-page row.
 
-  /* === BCPS UK 2026 === */
-  ["Canal Feilim","verified","","Ireland","Class 1","Grey","143","2003","CPBS",""],
+  /* === LISTED (claimed via Tally) — sorted by data quality === */
+  ["Canal Feilim","verified","","Ireland","Class 1","Grey","143","2003","CPBS","Owner-listed"],
+  ["Dunbeggan Lightning","verified","UK — N. Ireland","UK","Class 3","Perlino","152","2015","CPBS","Owner-listed"],
+  ["Lough Fadda Rudi","verified","Roscommon","Ireland","Class 1","Grey","148","2011","CPBS","Owner-listed"],
+  ["Knockmoy Silver Shadow","verified","Galway","Ireland","Class 1","Grey","148","2021","CPBS","Owner-listed"],
+  ["Knockmoy Cassanova","verified","Galway","Ireland","Class 2","Grey","148","2022","CPBS","Owner-listed"],
+  ["Knockmoy Dexter","verified","Galway","Ireland","Class 2","Buckskin / Dun","146","2021","CPBS","Owner-listed"],
+  ["Doyles Massimo Pondi","verified","Ireland","Ireland","Class 1","Grey","147","2022","CPBS","Owner-listed"],
+  ["Ardane Millie","verified","Galway","Ireland","Class 1","Buckskin / Dun","146","2021","CPBS","Owner-listed"],
+  ["Kit Harington R'Ose","verified","Ireland","Ireland","Class 1","Bay","147","2020","Other","Owner-listed"],
+  ["Knockma Cloud","verified","UK — England","UK","Class 2","Perlino","146","2013","CPBS","Owner-listed"],
+  ["Addrigoole Silver","verified","UK — England","UK","Class 1","Bay","148","2020","CPBS","Owner-listed"],
+  ["Vinura Timmy","verified","Ireland","Ireland","Class 1","Grey","138","2023","CPBS","Owner-listed"],
+  ["Kingstown Dantheman","verified","Ireland","Ireland","Class 1","Grey","148","2018","CPBS","Owner-listed"],
+  ["Darraheen Fionn","verified","Ireland","Ireland","Class 1","Bay","148","2008","CPBS","Owner-listed"],
+  ["Knockbridge Joey","verified","Other","Other","Class 1","Buckskin / Dun","147","2014","Other","Owner-listed"],
+  ["Skærgårdens Wild to Night","verified","Germany","Germany","Class 1","Bay","145","2020","Other","Owner-listed"],
+  ["Bantrach Micheal","verified","Ireland","Ireland","Class 1","Grey","148","2019","CPBS","Owner-listed"],
+  ["Lickeen Magnus","verified","UK — N. Ireland","UK","Class 3","Chestnut","138","2017","CPBS","Owner-listed"],
+  ["Rathkeery Paddy","verified","Ireland","Ireland","Class 1","Buckskin / Dun","148","2017","CPBS","Owner-listed"],
+  ["Forest View Prince","verified","Other","Other","Class 1","Grey","146","2011","Other","Owner-listed"],
+  ["Copperbeech Franklin","verified","Other","Other","Class 1","Grey","145","2020","CPBS","Owner-listed"],
+  ["Uisneach","verified","UK — England","UK","Class 1","Grey","147","2007","CPBS","Owner-listed"],
+  ["Edenmist Pride of Thieves","verified","Ireland","Ireland","Class 1","Buckskin / Dun","145","2003","CPBS","Owner-listed"],
+  ["Trá Bháin Céileóg","verified","Ireland","Ireland","Class 1","Buckskin / Dun","148","2013","CPBS","Owner-listed"],
+  ["Inverin Danny","verified","UK — Scotland","UK","Class 1","Grey","148","2009","BCPS","Owner-listed"],
+  ["Lonsdale Legend","verified","UK — Scotland","UK","Class 1","Grey","138","2001","BCPS","Owner-listed"],
+  ["Carnane Taylor","verified","Other","Other","Class 1","Grey","148","2022","CPBS","Owner-listed"],
+  ["Knockbridge Over The Moon","verified","UK — England","UK","Class 1","Palomino","148","2016","CPBS","Owner-listed"],
+  ["Currabawn Rambo","verified","Longford","Ireland","Class 1","Buckskin / Dun","148","2020","CPBS","Owner-listed"],
+  ["Rathvaldron Chickatee","verified","Longford","Ireland","Class 1","Buckskin / Dun","148","2021","CPBS","Owner-listed"],
+  ["Kilmoraun Eden Shadow","verified","Ireland","Ireland","Class 1","Buckskin / Dun","148","2022","CPBS","Owner-listed"],
+  ["Diamondczech Full Moon","verified","Other","Other","Class 1","Grey","146","2019","Other","Owner-listed"],
+  ["Poetic Kelly","verified","UK — England","UK","Class 1","Buckskin / Dun","148","2006","Other","Owner-listed"],
+  ["Walstead Falcons Crest","verified","UK — England","UK","Class 2","Grey","143","2014","BCPS","Owner-listed"],
+  ["Trá Bháin Tailors Shadow","verified","UK — England","UK","Class 1","Grey","152","2019","CPBS","Owner-listed"],
+  ["Pineview Sweet Mac","verified","UK — England","UK","Class 1","Buckskin / Dun","147","2022","CPBS","Owner-listed"],
+  ["Lor Ruadh's Galileo","verified","Ireland","Ireland","Class 1","Grey","148","2017","CPBS","Owner-listed"],
+  ["Carrowmore Magic Mist","verified","Ireland","Ireland","Class 1","Grey","148","2018","CPBS","Owner-listed"],
+  ["Killour Star","verified","UK — England","UK","Class 1","Buckskin / Dun","147","2013","BCPS","Owner-listed"],
+  ["Killaspic Ross","verified","UK — England","UK","Class 1","Grey","148","2006","BCPS","Owner-listed"],
+  ["Barrowby Hero","verified","UK — England","UK","Class 1","Buckskin / Dun","145","2022","BCPS","Owner-listed"],
+  ["Disney","verified","UK — England","UK","Class 1","Bay","148","2020","CPBS","Owner-listed"],
+  ["Redbuds Blue Moon","verified","USA","USA","Class 1","Black","148","2013","Other","Owner-listed"],
+  ["Ekely's Turning Leaf","verified","Germany","Germany","Class 1","Roan","148","2016","Other","Owner-listed"],
+  ["Western Boy","verified","Ireland","Ireland","Class 1","Buckskin / Dun","148","2006","CPBS","Owner-listed"],
+  ["Lough Melvin Gorteen","verified","Ireland","Ireland","Class 1","Buckskin / Dun","148","2008","CPBS","Owner-listed"],
+  ["Glencarrig Joe","verified","Ireland","Ireland","Class 1","Grey","148","2008","CPBS","Owner-listed"],
+  ["Summer Hill Bobby","verified","Ireland","Ireland","Class 2","Bay","148","2021","CPBS","Owner-listed"],
+  ["Callaghy Jim","verified","Ireland","Ireland","Class 1","Grey","148","2009","CPBS","Owner-listed"],
+  ["Covid Kid","verified","Ireland","Ireland","Class 1","Buckskin / Dun","148","2021","CPBS","Owner-listed"],
+  ["Avalon Outkast","verified","Galway","Ireland","Class 1","Perlino","148","2018","CPBS","Owner-listed"],
+  ["Aughris Rebel","verified","Cambridgeshire","UK","","Grey","146","","BCPS","Owner-listed"],
+  ["Ballinahown Hero","verified","Northumberland","UK","","Grey (born Bay)","147","","BCPS","Owner-listed"],
+  ["Avonbrae Iceman","verified","Wicklow","Ireland","Class 2","","148","2022","CPBS","Owner-listed"],
+
+  /* === BCPS UK 2026 (Unclaimed) === */
   ["Abbeyside Silver","pending","Somerset","UK","","Bay","142","","BCPS","BCPS 2026"],
   ["Ashfield Party Planner","pending","Isle of Man","UK","","Grey","146","","BCPS","BCPS 2026"],
-  ["Aughris Rebel","pending","Cambridgeshire","UK","","Grey","146","","BCPS","BCPS 2026"],
-  ["Ballinahown Hero","pending","Northumberland","UK","","Grey (born Bay)","147","","BCPS","BCPS 2026"],
   ["Barrowby Thunder Rebel","pending","East Yorkshire","UK","","Dun","151","","BCPS","BCPS 2026"],
   ["Blackthorn Pirate King","pending","Isle of Man","UK","","Grey","146","","BCPS","BCPS 2026"],
   ["Castle Diceman","pending","Perthshire","UK","","Grey","143","","BCPS","BCPS 2026"],
@@ -630,14 +680,9 @@ const STALLIONS = [
   ["Hayselden Kadmus","pending","Kent","UK","","Bay","146","","BCPS","BCPS 2026"],
   ["Hearnesbrook New Moon","pending","Wiltshire","UK","","Grey","142","","BCPS","BCPS 2026"],
   ["Innellan Condor","pending","Wiltshire","UK","","Grey","143","","BCPS","BCPS 2026"],
-  ["Inverin Danny","pending","Aberdeenshire","UK","","Grey","148","","BCPS","BCPS 2026"],
   ["Josie Jump","pending","West Sussex","UK","","Grey","148","","BCPS","BCPS 2026"],
-  ["Killaspic Ross","pending","Harrogate","UK","","Grey (born Chestnut)","148","","BCPS","BCPS 2026"],
-  ["Killour Star","pending","Harrogate","UK","","Buckskin","148","","BCPS","BCPS 2026"],
   ["Kilmolara Sunrise","pending","Cambridgeshire","UK","","Grey","146","","BCPS","BCPS 2026"],
   ["Kilmurray Bay Mirah","pending","West Sussex","UK","","Dun","146","","BCPS","BCPS 2026"],
-  ["Knockbridge Over The Moon","pending","Buckinghamshire","UK","","Palomino","148","","BCPS","BCPS 2026"],
-  ["Lonsdale Legend","pending","Aberdeenshire","UK","","Grey","144","","BCPS","BCPS 2026"],
   ["Magic Morris","pending","Worsley","UK","","Bay","147","","BCPS","BCPS 2026"],
   ["Manor Rebel","pending","Wiltshire","UK","","Grey","143","","BCPS","BCPS 2026"],
   ["Marchington Majestic Boy","pending","Staffordshire","UK","","Chocolate Dun","146","","BCPS","BCPS 2026"],
@@ -654,46 +699,35 @@ const STALLIONS = [
   ["Swanview Silvers Shadow","pending","Staffordshire","UK","","Chocolate Dun","146","","BCPS","BCPS 2026"],
   ["Tawnydun Aengus","pending","Suffolk","UK","","Perlino","150","","BCPS","BCPS 2026"],
   ["Tawnydun Jonjo","pending","England","UK","","Perlino","148","","BCPS","BCPS 2026"],
-  ["Tra Bháin Tailors Shadow","pending","East Sussex","UK","","Grey (born Bay)","153","","BCPS","BCPS 2026"],
   ["Tulira Daróg","pending","Gloucestershire","UK","","Grey (born Black)","148","","BCPS","BCPS 2026"],
-  ["Uisneach","pending","Oxfordshire","UK","","Grey","147","","BCPS","BCPS 2026"],
-  ["Walstead Falcons Crest","pending","East Sussex","UK","","Grey (born Bay)","153","","BCPS","BCPS 2026"],
   ["Whitethorn Fred","pending","East Yorkshire","UK","","Grey","152","","BCPS","BCPS 2026"],
   ["Woodbank Barney","pending","North Yorkshire","UK","","Grey","143","","BCPS","BCPS 2026"],
 
-  /* === CPBS Ireland 2026 Directory === */
+  /* === CPBS Ireland 2026 Directory (Unclaimed) === */
   ["Hillside Joker","pending","Cork","Ireland","Class 1","Grey","148","2011","CPBS","CPBS 2026 Directory"],
   ["Knockbridge Mozart","pending","Cork","Ireland","Class 1","Bay","148","2017","CPBS","CPBS 2026 Directory"],
   ["Village Sparrow","pending","Derry","Ireland","Class 1","Bay","148","2009","CPBS","CPBS 2026 Directory"],
   ["I Love You Jazz","pending","Dublin","Ireland","Class 1","Grey","148","2017","CPBS","CPBS 2026 Directory"],
-  ["Ardane Millie","pending","Galway","Ireland","Class 1","Dun","148","2021","CPBS","CPBS 2026 Directory"],
-  ["Avalon Outkast","pending","Galway","Ireland","Class 1","Perlino","148","2018","CPBS","CPBS 2026 Directory"],
   ["Banks Donovan","pending","Galway","Ireland","Class 1","Grey","146","2015","CPBS","CPBS 2026 Directory"],
   ["Cityview Dexter Lad","pending","Galway","Ireland","Class 1","Dun","147","2021","CPBS","CPBS 2026 Directory"],
-  ["Darraheen Fionn","pending","Galway","Ireland","Class 1","Grey","148","2008","CPBS","CPBS 2026 Directory"],
   ["Doonhill Dakota","pending","Galway","Ireland","Class 1","Grey","148","2022","CPBS","CPBS 2026 Directory"],
   ["Dunguaire King George","pending","Galway","Ireland","Class 1","Dun","145","2022","CPBS","CPBS 2026 Directory"],
   ["Gurteen Otto","pending","Galway","Ireland","Class 1","Grey","148","2021","CPBS","CPBS 2026 Directory"],
   ["Hannah's Only Dun","pending","Galway","Ireland","Class 1","Dun","146","2015","CPBS","CPBS 2026 Directory"],
   ["Kippure Columbus","pending","Galway","Ireland","Class 1","Bay","148","2005","CPBS","CPBS 2026 Directory"],
-  ["Kit Harington R'Ose","pending","Galway","Ireland","Class 1","Bay","148","2020","CPBS","CPBS 2026 Directory"],
   ["Moyabbey Thunder","pending","Galway","Ireland","Class 1","Grey","148","2022","CPBS","CPBS 2026 Directory"],
   ["Tuckmill Rocket Boy","pending","Galway","Ireland","Class 1","Grey","145","2021","CPBS","CPBS 2026 Directory"],
-  ["Currabawn Rambo","pending","Longford","Ireland","Class 1","Dun","146","2020","CPBS","CPBS 2026 Directory"],
-  ["Rathvaldron Chickatee","pending","Longford","Ireland","Class 1","Dun","148","2021","CPBS","CPBS 2026 Directory"],
   ["Caherlistrane Rea Shadow","pending","Louth","Ireland","Class 1","Grey","128","2012","CPBS","CPBS 2026 Directory"],
   ["Cahir Knight","pending","Mayo","Ireland","Class 1","Bay","148","2021","CPBS","CPBS 2026 Directory"],
   ["Kinamara Echo I Love You","pending","Mayo","Ireland","Class 1","Roan","148","2017","CPBS","CPBS 2026 Directory"],
   ["Melody's Boy","pending","Mayo","Ireland","Class 1","Grey","147","2009","CPBS","CPBS 2026 Directory"],
   ["Rogaire Na Locha","pending","Mayo","Ireland","Class 1","Grey","145","2010","CPBS","CPBS 2026 Directory"],
   ["Twinstar JJ Chestnut Chevalier","pending","Mayo","Ireland","Class 2","Chestnut","148","2021","CPBS","CPBS 2026 Directory"],
-  ["Lough Fadda Rudi","pending","Roscommon","Ireland","Class 1","Grey","148","2011","CPBS","CPBS 2026 Directory"],
   ["Emeryt Misbour","pending","Tipperary","Ireland","Class 1","Chestnut","148","2010","CPBS","CPBS 2026 Directory"],
   ["May Boy","pending","Westmeath","Ireland","Class 1","Grey","148","2018","CPBS","CPBS 2026 Directory"],
 
   /* === CPBS 2025 Spring Parade unique === */
   ["Ohill Duke","pending","Galway","Ireland","Class 1","Grey","147","2017","CPBS","CPBS 2025 Spring Parade"],
-  ["Knockmoy Silver Shadow","pending","Galway","Ireland","Class 1","Grey","148","2021","CPBS","CPBS 2025 Spring Parade"],
   ["Gneevebrack Cascade","pending","Westmeath","Ireland","Class 1","Grey","148","2018","CPBS","CPBS 2025 Spring Parade"],
   ["Monaghanstown Merlin","pending","Westmeath","Ireland","Class 1","Dun","148","2021","CPBS","CPBS 2025 Spring Parade"],
   ["Monaghanstown Barney","pending","Westmeath","Ireland","Class 1","Grey","146","2009","CPBS","CPBS 2025 Spring Parade"],
@@ -702,12 +736,10 @@ const STALLIONS = [
   /* === Diamond's Equine Renvyle Stud === */
   ["Silver Shadow","pending","Galway","Ireland","Class 1 (Grade A)","Grey","148","1998","CPBS","Diamond's Equine Renvyle Stud"],
   ["Clifden Silver","pending","Galway","Ireland","Class 1 (Grade A)","Chocolate Dun","148","2006","CPBS","Diamond's Equine Renvyle Stud"],
-  ["Poetic Kelly","pending","Galway","Ireland","Class 1 (Grade A)","Dark Dun","148","2001","CPBS","Diamond's Equine Renvyle Stud"],
   ["Diamond's Ice and Cool","pending","Galway","Ireland","Class 1","Grey","147","2021","CPBS","Diamond's Equine Renvyle Stud"],
   ["Diamond's Shadow Fix","pending","Galway","Ireland","Class 1","","","","CPBS","Diamond's Equine Renvyle Stud"],
 
   /* === Foundation / legacy stallions === */
-  ["Currachmore Cashel","pending","Galway","Ireland","Class 1","Grey","148","","CPBS","Stud reference"],
   ["Glencarrig Knight","pending","Galway","Ireland","Class 1","Grey","148","","CPBS","Stud reference"],
   ["Glencarrig Prince","pending","Galway","Ireland","Class 1","Grey","148","","CPBS","Stud reference"],
   ["Frederiksminde Hazy Match","pending","Galway","Ireland","Class 1","Grey","148","","CPBS","Stud reference"],
@@ -722,7 +754,6 @@ const STALLIONS = [
 
   /* === DoneDeal 2026 active ads === */
   ["Loughries Dare to be Different","pending","Carlow","Ireland","","","","","CPBS","DoneDeal 2026 listing"],
-  ["Lor Ruadh's Galileo","pending","Galway / Mayo","Ireland","Class 1","","148","","CPBS","DoneDeal 2026 listing"],
   ["Rathcoona Lightening","pending","Galway","Ireland","Class 1","Dun","148","","CPBS","DoneDeal 2026 listing"],
   ["Knockillaree Tomás","pending","Galway","Ireland","Class 1","","","","CPBS","DoneDeal 2026 listing"],
   ["Aughnanure Leo","pending","Galway","Ireland","Class 1","","","","CPBS","DoneDeal 2026 listing"],
@@ -768,7 +799,6 @@ const STALLIONS = [
   ["Glenamaddy Lord of Whisper","pending","Galway","Ireland","Class 1","Grey","148","2022","CPBS","CPBS Inspection March 2026"],
 
   /* === CPBS 2026 Spring Inspections — Creagh Tue === */
-  ["Vinura Timmy","pending","Mayo","Ireland","Class 1","Grey","138","2023","CPBS","CPBS Inspection March 2026"],
   ["Carnane Viking","pending","Roscommon","Ireland","Class 1","Grey","146","2023","CPBS","CPBS Inspection March 2026"],
   ["Rosedale Sirocco","pending","Galway","Ireland","Class 1","Grey","148","2023","CPBS","CPBS Inspection March 2026"],
   ["Cuach Cornarone","pending","Galway","Ireland","Class 1","Dun","146","2023","CPBS","CPBS Inspection March 2026"],
@@ -792,8 +822,6 @@ const STALLIONS = [
 
   /* === CPBS 2026 Spring Inspections — Kildare === */
   ["Ballywire Mister Melody","pending","Clare","Ireland","Class 1","","146","2023","CPBS","CPBS Inspection April 2026"],
-  ["Avonbrae Iceman","pending","Wicklow","Ireland","Class 2","","148","2022","CPBS","CPBS Inspection April 2026"],
-  ["Kilmoraun Eden Shadow","pending","Clare","Ireland","Class 1","","148","2022","CPBS","CPBS Inspection April 2026"],
   ["3DR Kavanagh","pending","Galway","Ireland","Class 1","","148","2018","CPBS","CPBS Inspection April 2026"],
   ["Seychelles Emmet","pending","Meath","Ireland","Class 2","","146","2020","CPBS","CPBS Inspection April 2026"],
   ["Erne Valley Setanta","pending","Longford","Ireland","Class 2","","145","2021","CPBS","CPBS Inspection April 2026"],
@@ -802,7 +830,6 @@ const STALLIONS = [
   ["Cuba Outkast","pending","Tipperary","Ireland","Class 1","","147","2023","CPBS","CPBS Inspection April 2026"],
   ["Rynne Andy","pending","Galway","Ireland","Class OH","","150","2023","CPBS","CPBS Inspection April 2026"],
   ["Premices Shadow","pending","Westmeath","Ireland","Class 1","","138","2023","CPBS","CPBS Inspection April 2026"],
-  ["Disney","pending","Laois","Ireland","Class 1","","148","2020","CPBS","CPBS Inspection April 2026"],
   ["Cong Valentino","pending","Westmeath","Ireland","Class 2","","148","2023","CPBS","CPBS Inspection April 2026"],
   ["Muckrim Peadar","pending","Donegal","Ireland","Class 1","Grey","147","2022","CPBS","CPBS Inspection April 2026"],
   ["Castle Phoenix","pending","Galway","Ireland","Class 1","","146","2023","CPBS","CPBS Inspection April 2026"],
@@ -826,7 +853,6 @@ const STALLIONS = [
   ["Mountain Field's Ironman","pending","Utah","USA","Class 1 (ACPS Approved)","","","","Other","ACPS"],
   ["OMS Machno Fear Dun","pending","Georgia","USA","Class 1 (ACPS Approved)","Dun","","","Other","ACPS"],
   ["Pattys Etoile de Paris","pending","Iowa","USA","Class 1 (ACPS Approved)","","","","Other","ACPS"],
-  ["R Blue Moon","pending","California","USA","Class 1 (ACPS Approved)","","","","Other","ACPS"],
   ["Rattle 'N Snap Laddie Boy","pending","Virginia","USA","Class 1 (ACPS Approved)","","","","Other","ACPS"],
   ["Ridgetop Tom Collins","pending","","USA","Class 1 (ACPS Approved)","","","","Other","ACPS"],
   ["Skyview's Triton","pending","Wisconsin","USA","Class 1 (ACPS Approved)","","","","Other","ACPS"],
@@ -885,8 +911,11 @@ const studbookEl = $("#studbookFilter");
 const statusFilterEl = $("#statusFilter");
 const resetBtn = $("#resetBtn");
 
-/* sort alphabetically once */
-STALLIONS.sort((a, b) => a[0].localeCompare(b[0], "en", { sensitivity: "base" }));
+/* sort: verified first, then alphabetical within each group */
+STALLIONS.sort((a, b) => {
+  if (a[1] !== b[1]) return a[1] === "verified" ? -1 : 1;
+  return a[0].localeCompare(b[0], "en", { sensitivity: "base" });
+});
 
 /* populate the county dropdown from data */
 const counties = [...new Set(STALLIONS.map(s => s[2]).filter(Boolean))].sort();
@@ -902,6 +931,16 @@ function escape(s) {
   return String(s ?? "").replace(/[&<>"']/g, c => ({
     "&": "&amp;", "<": "&lt;", ">": "&gt;", '"': "&quot;", "'": "&#39;"
   }[c]));
+}
+
+/* Slugify name for URL params — must match the function in stallion-search.html */
+function toSlug(name) {
+  return String(name || '')
+    .toLowerCase()
+    .normalize('NFD').replace(/[\u0300-\u036f]/g, '')
+    .replace(/['']/g, '')
+    .replace(/[^a-z0-9]+/g, '-')
+    .replace(/^-+|-+$/g, '');
 }
 
 function metaParts(s) {
@@ -920,18 +959,17 @@ function rowHTML(s, idx) {
   const verified = s[1] === "verified";
   const name = escape(s[0]);
   const meta = metaParts(s).map(escape).join('<span class="dot"></span>');
-  const source = escape(s[9]);
   const animDelay = Math.min(idx * 0.015, 0.6);
 
   if (verified) {
     return `
       <article class="stallion" style="animation-delay: ${animDelay}s">
-        <div class="status-badge verified" title="Verified listing">✓</div>
+        <div class="status-badge verified" title="Listed by owner">✓</div>
         <div>
-          <div class="stallion-name">${name} <span class="verified-label">Verified</span></div>
+          <div class="stallion-name">${name} <span class="verified-label">Listed</span></div>
           <div class="stallion-meta">${meta}</div>
         </div>
-        <a href="/stallion-search.html?name=${encodeURIComponent(s[0])}" class="view-link">View profile</a>
+        <a href="/stallion-search.html?stallion=${toSlug(s[0])}" class="view-link">View profile</a>
       </article>`;
   }
 
@@ -943,7 +981,7 @@ function rowHTML(s, idx) {
 
   return `
     <article class="stallion is-pending" style="animation-delay: ${animDelay}s">
-      <div class="status-badge pending" title="Pending verification">◷</div>
+      <div class="status-badge pending" title="Unclaimed">◷</div>
       <div>
         <div class="stallion-name">${name}</div>
         <div class="stallion-meta">${meta}</div>
@@ -978,7 +1016,8 @@ function render() {
     return;
   }
 
-  statusEl.textContent = `Showing ${filtered.length} of ${STALLIONS.length} stallions, in alphabetical order`;
+  const verifiedCount = STALLIONS.filter(s => s[1] === "verified").length;
+  statusEl.innerHTML = `Showing <strong>${filtered.length}</strong> of ${STALLIONS.length} stallions &nbsp;·&nbsp; <strong>${verifiedCount} listed</strong> by owners`;
   list.innerHTML = filtered.map(rowHTML).join("");
 }
 
