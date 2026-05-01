@@ -644,6 +644,14 @@ function closeAuthDirect() {
   if (!document.getElementById('modalOverlay').classList.contains('open')) {
     document.body.style.overflow = '';
   }
+  // Clean up payment-success extras so future opens are fresh
+  const paidEl = document.getElementById('authPaid');
+  if (paidEl) paidEl.remove();
+  // Reset the icon back to the email icon
+  const iconEl = document.getElementById('authModal').querySelector('.auth-icon');
+  iconEl.style.background = '';
+  iconEl.style.color = '';
+  iconEl.innerHTML = '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M4 4h16c1.1 0 2 .9 2 2v12c0 1.1-.9 2-2 2H4c-1.1 0-2-.9-2-2V6c0-1.1.9-2 2-2z"/><polyline points="22,6 12,13 2,6"/></svg>';
 }
 
 // Routes the submit button to the right handler based on the modal's current mode
@@ -760,6 +768,123 @@ async function submitCheckout() {
   }
 }
 
+
+/* =================================================================
+   POST-PAYMENT / SIGN-IN LANDING — handles URL params after Stripe redirect
+   ================================================================= */
+
+function handlePostPaymentLanding() {
+  const params = new URLSearchParams(window.location.search);
+
+  // Success: returned from a completed Stripe checkout
+  if (params.get('paid') === '1') {
+    const email = params.get('email') || '';
+    showPaymentSuccess(email);
+    cleanUrlParams(['paid', 'email']);
+    return true;
+  }
+
+  // Cancelled: returned from Stripe without completing
+  if (params.get('cancelled') === '1') {
+    showToast('Checkout cancelled. You haven\u2019t been charged.');
+    cleanUrlParams(['cancelled']);
+    return true;
+  }
+
+  // Signed in: returned from a magic-link verify (the Worker sets this after /verify)
+  if (params.get('signed_in') === '1') {
+    showToast('Welcome back \u2014 Season Pass active');
+    cleanUrlParams(['signed_in']);
+    return true;
+  }
+
+  // Error from /verify
+  if (params.get('error')) {
+    const err = params.get('error');
+    if (err === 'expired_token') showToast('That sign-in link has expired. Please request a new one.');
+    else if (err === 'membership_expired') showToast('Your Season Pass has expired. Renew to continue.');
+    else if (err === 'missing_token') showToast('Sign-in link was invalid. Please request a new one.');
+    cleanUrlParams(['error']);
+    return true;
+  }
+
+  return false;
+}
+
+function cleanUrlParams(keys) {
+  const url = new URL(window.location.href);
+  keys.forEach(function(k){ url.searchParams.delete(k); });
+  window.history.replaceState({}, '', url.toString());
+}
+
+function showPaymentSuccess(email) {
+  // Use the auth modal frame for consistency, but in "success" mode
+  document.getElementById('authError').style.display = 'none';
+  document.getElementById('authForm').style.display = 'none';
+  document.getElementById('authSent').style.display = 'none';
+
+  const modal = document.getElementById('authModal');
+  modal.dataset.mode = 'paid';
+  modal.querySelector('h3').textContent = 'Welcome to BreedPulse';
+
+  // Replace the icon with a green tick
+  const iconEl = modal.querySelector('.auth-icon');
+  iconEl.style.background = '#EAF3DE';
+  iconEl.style.color = '#27500A';
+  iconEl.innerHTML = '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><polyline points="20 6 9 17 4 12"/></svg>';
+
+  // Replace the body copy
+  const p = modal.querySelector('p');
+  p.innerHTML = 'Payment successful. Your Season Pass is active for <strong>90 days</strong>.<br><br>We\u2019ve emailed your sign-in link to' +
+    (email ? ' <strong>' + escapeAttr(email) + '</strong>' : ' the address you used at checkout') +
+    '. Click it to unlock the full directory.';
+
+  // Replace the form area with helpful next-steps
+  const helpHtml =
+    '<div style="background:#FBF8F2;border:1px solid #E6E1DB;border-radius:7px;padding:.75rem .9rem;margin-bottom:.7rem;font-size:.78rem;color:#5C5248;line-height:1.6;text-align:left">' +
+      '<strong style="color:#142F22;font-weight:600;display:block;margin-bottom:.3rem">Next step</strong>' +
+      'Open your inbox and look for <strong>Welcome to BreedPulse</strong> from <em>noreply@breedpulse.com</em>. ' +
+      'Tap the green <strong>Access the Directory</strong> button \u2014 you\u2019ll be signed in automatically.' +
+    '</div>' +
+    '<button class="primary" onclick="closeAuthDirect()">Got it</button>';
+  document.getElementById('authForm').insertAdjacentHTML('afterend',
+    '<div id="authPaid">' + helpHtml + '</div>'
+  );
+
+  // Reset the footer
+  document.querySelector('.auth-foot').innerHTML = 'Email not arrived in 2 minutes? <a href="#" onclick="resendMagicLink(\'' + escapeAttr(email) + '\', event)">Resend it</a>';
+
+  document.getElementById('authOverlay').classList.add('open');
+  document.body.style.overflow = 'hidden';
+}
+
+function escapeAttr(s) {
+  return String(s||'').replace(/"/g,'&quot;').replace(/'/g,'&#39;').replace(/</g,'&lt;');
+}
+
+async function resendMagicLink(email, e) {
+  if (e) e.preventDefault();
+  if (!email) {
+    // No email captured — open the sign-in modal so they can type it
+    closeAuthDirect();
+    setTimeout(openSignIn, 200);
+    return;
+  }
+  try {
+    const res = await fetch(AUTH_API + '/magic-link', {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({ email: email })
+    });
+    if (res.ok) {
+      showToast('Sign-in link sent again to ' + email);
+    } else {
+      showToast('Could not resend. Try the Sign in button instead.');
+    }
+  } catch (err) {
+    showToast('Could not connect. Please try again.');
+  }
+}
 
 /* =================================================================
    MAGIC-LINK LANDING — handles ?token=… in URL
@@ -1460,6 +1585,9 @@ document.getElementById('nameSearch').addEventListener('input', go);
   await checkMembership();
   // 3. Load stallion data
   load();
+  // 4. Handle post-payment / sign-in landing AFTER membership check so the modal
+  //    appears on top of a properly-rendered page.
+  handlePostPaymentLanding();
 })();
 
 </script>
