@@ -510,7 +510,7 @@
       <div id="authError" class="auth-error" style="display:none"></div>
       <div id="authForm">
         <input type="email" id="authEmail" placeholder="you@example.com" autocomplete="email">
-        <button class="primary" id="authSubmit" onclick="submitMagicLink()">Send sign-in link</button>
+        <button class="primary" id="authSubmit" onclick="authSubmit()">Send sign-in link</button>
       </div>
       <div id="authSent" class="auth-success" style="display:none">
         <strong>Check your inbox</strong><br>
@@ -621,6 +621,15 @@ function openSignIn(e) {
   document.getElementById('authError').style.display = 'none';
   document.getElementById('authForm').style.display = '';
   document.getElementById('authSent').style.display = 'none';
+
+  // Reset modal to sign-in mode (in case it was just used for checkout)
+  const modal = document.getElementById('authModal');
+  modal.dataset.mode = 'signin';
+  modal.querySelector('h3').textContent = 'Sign in to BreedPulse';
+  modal.querySelector('p').textContent = 'Enter the email you used to buy your Season Pass. We\u2019ll send you a one-tap sign-in link.';
+  document.getElementById('authSubmit').textContent = 'Send sign-in link';
+  document.querySelector('.auth-foot').innerHTML = 'No password needed.<br>New here? <a href="#" onclick="startCheckout(event); closeAuthDirect();">Get a Season Pass for €9.99 →</a>';
+
   document.getElementById('authOverlay').classList.add('open');
   document.body.style.overflow = 'hidden';
   setTimeout(function(){ document.getElementById('authEmail').focus(); }, 100);
@@ -635,6 +644,13 @@ function closeAuthDirect() {
   if (!document.getElementById('modalOverlay').classList.contains('open')) {
     document.body.style.overflow = '';
   }
+}
+
+// Routes the submit button to the right handler based on the modal's current mode
+function authSubmit() {
+  const mode = document.getElementById('authModal').dataset.mode || 'signin';
+  if (mode === 'checkout') return submitCheckout();
+  return submitMagicLink();
 }
 
 async function submitMagicLink() {
@@ -682,21 +698,65 @@ async function submitMagicLink() {
 
 async function startCheckout(e) {
   if (e) e.preventDefault();
-  showToast('Redirecting to checkout…');
+  // Open the email entry modal in "checkout" mode, which collects email then POSTs to /checkout
+  openCheckoutModal();
+}
+
+function openCheckoutModal() {
+  // Reuse the auth modal but switch its content to checkout mode
+  document.getElementById('authError').style.display = 'none';
+  document.getElementById('authForm').style.display = '';
+  document.getElementById('authSent').style.display = 'none';
+
+  // Switch heading & copy & button label to checkout mode
+  const modal = document.getElementById('authModal');
+  modal.dataset.mode = 'checkout';
+  modal.querySelector('h3').textContent = 'Get your Season Pass';
+  modal.querySelector('p').textContent = 'Enter the email you want your sign-in link sent to. You\u2019ll be taken to Stripe for secure payment (€9.99 for 90 days).';
+  document.getElementById('authSubmit').textContent = 'Continue to payment →';
+  document.querySelector('.auth-foot').innerHTML = 'Already a member? <a href="#" onclick="openSignIn(event)">Sign in instead</a>';
+
+  document.getElementById('authOverlay').classList.add('open');
+  document.body.style.overflow = 'hidden';
+  setTimeout(function(){ document.getElementById('authEmail').focus(); }, 100);
+}
+
+async function submitCheckout() {
+  const email = document.getElementById('authEmail').value.trim();
+  const errEl = document.getElementById('authError');
+  const submitBtn = document.getElementById('authSubmit');
+
+  if (!email || !email.includes('@')) {
+    errEl.textContent = 'Please enter a valid email address.';
+    errEl.style.display = '';
+    return;
+  }
+
+  errEl.style.display = 'none';
+  submitBtn.disabled = true;
+  submitBtn.textContent = 'Connecting to Stripe…';
+
   try {
     const res = await fetch(AUTH_API + '/checkout', {
       method: 'POST',
       headers: { 'Content-Type': 'application/json' },
-      credentials: 'include'
+      credentials: 'include',
+      body: JSON.stringify({ email: email })
     });
-    const data = await res.json();
-    if (data.url) {
+    const data = await res.json().catch(function(){ return {}; });
+    if (res.ok && data.url) {
       window.location.href = data.url;
     } else {
-      showToast('Could not start checkout. Please try again.');
+      errEl.textContent = data.error || 'Could not start checkout. Please try again.';
+      errEl.style.display = '';
+      submitBtn.disabled = false;
+      submitBtn.textContent = 'Continue to payment →';
     }
-  } catch (e2) {
-    showToast('Could not connect. Please try again in a moment.');
+  } catch (e) {
+    errEl.textContent = 'Could not connect. Please try again in a moment.';
+    errEl.style.display = '';
+    submitBtn.disabled = false;
+    submitBtn.textContent = 'Continue to payment →';
   }
 }
 
@@ -1387,7 +1447,7 @@ document.addEventListener('keydown', function(e) {
 
 // Sign-in modal: Enter to submit
 document.getElementById('authEmail').addEventListener('keydown', function(e){
-  if (e.key === 'Enter') submitMagicLink();
+  if (e.key === 'Enter') authSubmit();
 });
 
 document.getElementById('nameSearch').addEventListener('input', go);
