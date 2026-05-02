@@ -130,6 +130,183 @@ footer.site a:hover { text-decoration: underline; }
 
 @keyframes fadeIn { from { opacity: 0; transform: translateY(8px); } to { opacity: 1; transform: translateY(0); } }
 .stallion { animation: fadeIn 0.4s ease-out backwards; }
+
+/* ---------- Suggest-a-Stallion modal ---------- */
+.bp-suggest-overlay {
+  position: fixed; inset: 0; z-index: 9998;
+  background: rgba(20, 47, 34, 0.55);
+  backdrop-filter: blur(4px);
+  -webkit-backdrop-filter: blur(4px);
+  display: none;
+  align-items: center; justify-content: center;
+  padding: 1.5rem;
+  animation: bpFade .2s ease;
+}
+.bp-suggest-overlay.bp-open { display: flex; }
+@keyframes bpFade { from { opacity: 0; } to { opacity: 1; } }
+
+.bp-suggest-modal {
+  background: #FFFFFF;
+  border-radius: 14px;
+  width: 100%; max-width: 540px;
+  max-height: 90vh; overflow-y: auto;
+  box-shadow: 0 24px 60px rgba(20,47,34,.35), 0 8px 20px rgba(20,47,34,.18);
+  font-family: 'DM Sans', sans-serif;
+  color: #2C2825;
+  position: relative;
+  animation: bpRise .25s ease;
+}
+@keyframes bpRise { from { transform: translateY(12px); opacity: 0; } to { transform: translateY(0); opacity: 1; } }
+
+.bp-suggest-close {
+  position: absolute; top: 12px; right: 12px;
+  width: 36px; height: 36px; border: none; background: transparent;
+  color: #5C5248; font-size: 1.5rem; cursor: pointer;
+  border-radius: 50%;
+  display: flex; align-items: center; justify-content: center;
+  transition: background .15s ease;
+}
+.bp-suggest-close:hover { background: #F5F2ED; color: #142F22; }
+
+.bp-suggest-header {
+  padding: 2rem 2rem 1rem;
+  border-bottom: 1px solid #E6E1DB;
+}
+.bp-suggest-eyebrow {
+  font-size: .68rem; font-weight: 600; letter-spacing: .16em;
+  text-transform: uppercase; color: #2D6A4F; margin: 0 0 .5rem;
+}
+.bp-suggest-header h2 {
+  font-family: 'Cormorant Garamond', Georgia, serif;
+  font-style: italic; font-weight: 400;
+  font-size: 1.85rem; line-height: 1.15; letter-spacing: -.02em;
+  color: #142F22; margin: 0 0 .5rem;
+}
+.bp-suggest-header p {
+  font-size: .92rem; color: #5C5248; line-height: 1.55;
+  font-weight: 300; margin: 0;
+}
+
+.bp-suggest-body { padding: 1.5rem 2rem 2rem; }
+
+.bp-field { margin-bottom: 1.1rem; }
+.bp-field label {
+  display: block; font-size: .72rem; font-weight: 600;
+  letter-spacing: .08em; text-transform: uppercase;
+  color: #142F22; margin-bottom: .4rem;
+}
+.bp-field label .bp-req { color: #8c1919; margin-left: 2px; }
+.bp-field input,
+.bp-field textarea {
+  width: 100%; box-sizing: border-box;
+  padding: .7rem .85rem;
+  font-family: 'DM Sans', sans-serif; font-size: .95rem;
+  color: #2C2825; background: #F5F2ED;
+  border: 1px solid #E6E1DB; border-radius: 8px;
+  transition: border-color .15s ease, background .15s ease, box-shadow .15s ease;
+}
+.bp-field textarea { resize: vertical; min-height: 84px; line-height: 1.5; }
+.bp-field input:focus,
+.bp-field textarea:focus {
+  outline: none; border-color: #2D6A4F;
+  background: #FFFFFF;
+  box-shadow: 0 0 0 3px rgba(45,106,79,.15);
+}
+.bp-field-hint {
+  font-size: .78rem; color: #9C948C;
+  margin-top: .35rem; line-height: 1.45;
+}
+
+.bp-build-btn {
+  width: 100%; padding: .95rem 1.25rem;
+  background: #2D6A4F; color: #FFFFFF;
+  border: none; border-radius: 8px;
+  font-family: 'DM Sans', sans-serif;
+  font-size: .82rem; font-weight: 700;
+  letter-spacing: .05em; text-transform: uppercase;
+  cursor: pointer; margin-top: .25rem;
+  transition: background .15s ease, transform .15s ease, box-shadow .15s ease;
+  box-shadow: 0 4px 12px rgba(45,106,79,.25);
+}
+.bp-build-btn:hover { background: #1E4D38; transform: translateY(-1px); box-shadow: 0 8px 18px rgba(45,106,79,.32); }
+.bp-build-btn:disabled { background: #C4BCB4; cursor: not-allowed; transform: none; box-shadow: none; }
+
+.bp-share-step { display: none; }
+.bp-share-step.bp-show { display: block; }
+.bp-form-step.bp-hide { display: none; }
+
+.bp-message-preview {
+  background: #EEF7F2; border: 1px solid #D4EAE0;
+  border-radius: 10px; padding: 1rem 1.1rem;
+  margin-bottom: 1.25rem;
+  font-size: .9rem; line-height: 1.55; color: #2C2825;
+  white-space: pre-wrap; word-wrap: break-word;
+  max-height: 180px; overflow-y: auto;
+}
+
+.bp-share-grid {
+  display: grid; grid-template-columns: repeat(5, 1fr);
+  gap: .6rem; margin-bottom: 1rem;
+}
+.bp-share-btn {
+  display: flex; flex-direction: column; align-items: center;
+  gap: .4rem; padding: .85rem .25rem;
+  background: #FFFFFF; border: 1px solid #E6E1DB;
+  border-radius: 10px; cursor: pointer;
+  text-decoration: none; color: #2C2825;
+  font-family: 'DM Sans', sans-serif;
+  font-size: .68rem; font-weight: 600;
+  letter-spacing: .04em;
+  transition: transform .15s ease, border-color .15s ease, box-shadow .15s ease, background .15s ease;
+}
+.bp-share-btn:hover {
+  transform: translateY(-2px);
+  border-color: #2D6A4F;
+  box-shadow: 0 6px 16px rgba(45,106,79,.15);
+  background: #FFFFFF;
+}
+.bp-share-btn .bp-share-icon {
+  width: 38px; height: 38px; border-radius: 50%;
+  display: flex; align-items: center; justify-content: center;
+  font-size: 1.15rem;
+}
+.bp-share-btn[data-channel="whatsapp"]  .bp-share-icon { background: #25D366; color: #fff; }
+.bp-share-btn[data-channel="sms"]       .bp-share-icon { background: #0A84FF; color: #fff; }
+.bp-share-btn[data-channel="email"]     .bp-share-icon { background: #2D6A4F; color: #fff; }
+.bp-share-btn[data-channel="messenger"] .bp-share-icon { background: #0084FF; color: #fff; }
+.bp-share-btn[data-channel="copy"]      .bp-share-icon { background: #142F22; color: #fff; }
+
+.bp-share-back {
+  display: inline-block;
+  background: none; border: none; padding: 0;
+  color: #5C5248; font-family: 'DM Sans', sans-serif;
+  font-size: .82rem; cursor: pointer;
+  text-decoration: underline; text-underline-offset: 3px;
+  margin-top: .5rem;
+}
+.bp-share-back:hover { color: #142F22; }
+
+.bp-toast {
+  position: fixed; bottom: 24px; left: 50%; transform: translateX(-50%);
+  background: #142F22; color: #FFFFFF;
+  padding: .75rem 1.25rem; border-radius: 8px;
+  font-family: 'DM Sans', sans-serif; font-size: .85rem; font-weight: 500;
+  box-shadow: 0 8px 24px rgba(0,0,0,.25);
+  z-index: 9999; opacity: 0; pointer-events: none;
+  transition: opacity .2s ease, transform .2s ease;
+}
+.bp-toast.bp-show {
+  opacity: 1; transform: translateX(-50%) translateY(-4px);
+}
+
+@media (max-width: 520px) {
+  .bp-suggest-header { padding: 1.5rem 1.25rem 1rem; }
+  .bp-suggest-body { padding: 1.25rem; }
+  .bp-suggest-header h2 { font-size: 1.55rem; }
+  .bp-share-grid { grid-template-columns: repeat(5, 1fr); gap: .35rem; }
+  .bp-share-btn { padding: .7rem .15rem; font-size: .62rem; }
+  .bp-share-btn .bp-share-icon { width: 34px; height: 34px; font-size: 1rem; }
+}
 </style>
 </head>
 
@@ -209,6 +386,90 @@ footer.site a:hover { text-decoration: underline; }
   <p style="margin-top: 1rem;">Got a correction or a question? <a href="mailto:hello@breedpulse.com">hello@breedpulse.com</a></p>
   <p style="margin-top: 1.5rem; opacity: 0.5; font-size: 0.8125rem;">© 2026 BreedPulse. <a href="/privacy">Privacy</a> &middot; <a href="/contact">Contact</a></p>
 </footer>
+
+<!-- ============================================================ -->
+<!-- Suggest-a-Stallion modal                                      -->
+<!-- ============================================================ -->
+<div class="bp-suggest-overlay" id="bpSuggestOverlay" role="dialog" aria-modal="true" aria-labelledby="bpSuggestTitle">
+  <div class="bp-suggest-modal">
+    <button class="bp-suggest-close" type="button" aria-label="Close" onclick="bpCloseSuggest()">×</button>
+
+    <!-- STEP 1: form -->
+    <div class="bp-form-step" id="bpFormStep">
+      <div class="bp-suggest-header">
+        <p class="bp-suggest-eyebrow">Help us complete the picture</p>
+        <h2 id="bpSuggestTitle">Suggest a stallion</h2>
+        <p>Know a Connemara stallion that's missing? Tell us about him and we'll generate a ready-to-send invite you can share with the owner — by WhatsApp, message, email, or any way you prefer.</p>
+      </div>
+
+      <div class="bp-suggest-body">
+        <div class="bp-field">
+          <label for="bpStallionName">Stallion name <span class="bp-req">*</span></label>
+          <input type="text" id="bpStallionName" placeholder="e.g. Currachmore Cashel" required>
+        </div>
+
+        <div class="bp-field">
+          <label for="bpOwnerContact">Owner's name &amp; contact <span class="bp-req">*</span></label>
+          <input type="text" id="bpOwnerContact" placeholder="e.g. Mary O'Connell · +353 87 123 4567" required>
+          <div class="bp-field-hint">Owner's name plus their phone, email or WhatsApp — whatever you have.</div>
+        </div>
+
+        <div class="bp-field">
+          <label for="bpYourName">Your name <span class="bp-req">*</span></label>
+          <input type="text" id="bpYourName" placeholder="So the owner knows who's getting in touch" required>
+        </div>
+
+        <div class="bp-field">
+          <label for="bpNote">Personal note (optional)</label>
+          <textarea id="bpNote" placeholder="A quick line you'd like to include — e.g. 'Saw your stallion at Clifden last year, he should be on this!'"></textarea>
+        </div>
+
+        <button type="button" class="bp-build-btn" onclick="bpBuildShare()">Generate Share Message →</button>
+      </div>
+    </div>
+
+    <!-- STEP 2: share -->
+    <div class="bp-share-step" id="bpShareStep">
+      <div class="bp-suggest-header">
+        <p class="bp-suggest-eyebrow">Ready to share</p>
+        <h2>Send the invite</h2>
+        <p>Here's your message — pick how you'd like to send it. Owner submission is free and only takes about 10 minutes.</p>
+      </div>
+
+      <div class="bp-suggest-body">
+        <div class="bp-message-preview" id="bpMessagePreview"></div>
+
+        <div class="bp-share-grid">
+          <a class="bp-share-btn" data-channel="whatsapp" id="bpShareWhatsapp" target="_blank" rel="noopener">
+            <span class="bp-share-icon">💬</span>
+            <span>WhatsApp</span>
+          </a>
+          <a class="bp-share-btn" data-channel="sms" id="bpShareSms">
+            <span class="bp-share-icon">📱</span>
+            <span>SMS</span>
+          </a>
+          <a class="bp-share-btn" data-channel="email" id="bpShareEmail">
+            <span class="bp-share-icon">✉️</span>
+            <span>Email</span>
+          </a>
+          <a class="bp-share-btn" data-channel="messenger" id="bpShareMessenger" target="_blank" rel="noopener">
+            <span class="bp-share-icon">📨</span>
+            <span>Messenger</span>
+          </a>
+          <button type="button" class="bp-share-btn" data-channel="copy" onclick="bpCopyMessage()">
+            <span class="bp-share-icon">📋</span>
+            <span>Copy</span>
+          </button>
+        </div>
+
+        <button type="button" class="bp-share-back" onclick="bpBackToForm()">← Edit details</button>
+      </div>
+    </div>
+
+  </div>
+</div>
+
+<div class="bp-toast" id="bpToast">Copied to clipboard ✓</div>
 
 <script>
 /* ─────────────────────────────────────────────────────────────────────
@@ -747,294 +1008,20 @@ resetBtn.addEventListener("click", () => {
   render();
 });
 
+/* ============================================================ */
+/* Suggest-a-Stallion: opens the modal (replaces old alert)     */
+/* ============================================================ */
 $("#suggest-btn").addEventListener("click", e => {
   e.preventDefault();
-  alert("'Suggest a stallion' form coming soon. For now, please email lucinda@breedpulse.com with the stallion name and county and we'll reach out to the owner.");
+  bpOpenSuggest();
 });
 
 render();
 </script>
 
-<!--
-  BreedPulse · Suggest a Stallion (Peer-Share Modal)
-  ==================================================
-  Drop this entire block into the HTML of all-stallions.html
-  (anywhere before </body> is fine — recommended just above </body>).
-
-  Then change the existing "Suggest one" link/button so its
-  onclick fires bpOpenSuggest() instead of alert(...).
-
-  Example:
-    OLD:  <a onclick="alert('Suggest a stallion form coming soon...')">Suggest one</a>
-    NEW:  <a onclick="bpOpenSuggest(); return false;" href="#">Suggest one</a>
-
-  Or, if the existing button has an id you can wire it from this
-  block's <script> at the bottom — see the optional auto-wire snippet.
--->
-
-<style>
-  /* ---------- Suggest-a-Stallion modal ---------- */
-  .bp-suggest-overlay {
-    position: fixed; inset: 0; z-index: 9998;
-    background: rgba(20, 47, 34, 0.55);
-    backdrop-filter: blur(4px);
-    -webkit-backdrop-filter: blur(4px);
-    display: none;
-    align-items: center; justify-content: center;
-    padding: 1.5rem;
-    animation: bpFade .2s ease;
-  }
-  .bp-suggest-overlay.bp-open { display: flex; }
-  @keyframes bpFade { from { opacity: 0; } to { opacity: 1; } }
-
-  .bp-suggest-modal {
-    background: #FFFFFF;
-    border-radius: 14px;
-    width: 100%; max-width: 540px;
-    max-height: 90vh; overflow-y: auto;
-    box-shadow: 0 24px 60px rgba(20,47,34,.35), 0 8px 20px rgba(20,47,34,.18);
-    font-family: 'DM Sans', sans-serif;
-    color: #2C2825;
-    position: relative;
-    animation: bpRise .25s ease;
-  }
-  @keyframes bpRise { from { transform: translateY(12px); opacity: 0; } to { transform: translateY(0); opacity: 1; } }
-
-  .bp-suggest-close {
-    position: absolute; top: 12px; right: 12px;
-    width: 36px; height: 36px; border: none; background: transparent;
-    color: #5C5248; font-size: 1.5rem; cursor: pointer;
-    border-radius: 50%;
-    display: flex; align-items: center; justify-content: center;
-    transition: background .15s ease;
-  }
-  .bp-suggest-close:hover { background: #F5F2ED; color: #142F22; }
-
-  .bp-suggest-header {
-    padding: 2rem 2rem 1rem;
-    border-bottom: 1px solid #E6E1DB;
-  }
-  .bp-suggest-eyebrow {
-    font-size: .68rem; font-weight: 600; letter-spacing: .16em;
-    text-transform: uppercase; color: #2D6A4F; margin: 0 0 .5rem;
-  }
-  .bp-suggest-header h2 {
-    font-family: 'Cormorant Garamond', Georgia, serif;
-    font-style: italic; font-weight: 400;
-    font-size: 1.85rem; line-height: 1.15; letter-spacing: -.02em;
-    color: #142F22; margin: 0 0 .5rem;
-  }
-  .bp-suggest-header p {
-    font-size: .92rem; color: #5C5248; line-height: 1.55;
-    font-weight: 300; margin: 0;
-  }
-
-  .bp-suggest-body { padding: 1.5rem 2rem 2rem; }
-
-  .bp-field { margin-bottom: 1.1rem; }
-  .bp-field label {
-    display: block; font-size: .72rem; font-weight: 600;
-    letter-spacing: .08em; text-transform: uppercase;
-    color: #142F22; margin-bottom: .4rem;
-  }
-  .bp-field label .bp-req { color: #8c1919; margin-left: 2px; }
-  .bp-field input,
-  .bp-field textarea {
-    width: 100%; box-sizing: border-box;
-    padding: .7rem .85rem;
-    font-family: 'DM Sans', sans-serif; font-size: .95rem;
-    color: #2C2825; background: #F5F2ED;
-    border: 1px solid #E6E1DB; border-radius: 8px;
-    transition: border-color .15s ease, background .15s ease, box-shadow .15s ease;
-  }
-  .bp-field textarea { resize: vertical; min-height: 84px; line-height: 1.5; }
-  .bp-field input:focus,
-  .bp-field textarea:focus {
-    outline: none; border-color: #2D6A4F;
-    background: #FFFFFF;
-    box-shadow: 0 0 0 3px rgba(45,106,79,.15);
-  }
-  .bp-field-hint {
-    font-size: .78rem; color: #9C948C;
-    margin-top: .35rem; line-height: 1.45;
-  }
-
-  .bp-build-btn {
-    width: 100%; padding: .95rem 1.25rem;
-    background: #2D6A4F; color: #FFFFFF;
-    border: none; border-radius: 8px;
-    font-family: 'DM Sans', sans-serif;
-    font-size: .82rem; font-weight: 700;
-    letter-spacing: .05em; text-transform: uppercase;
-    cursor: pointer; margin-top: .25rem;
-    transition: background .15s ease, transform .15s ease, box-shadow .15s ease;
-    box-shadow: 0 4px 12px rgba(45,106,79,.25);
-  }
-  .bp-build-btn:hover { background: #1E4D38; transform: translateY(-1px); box-shadow: 0 8px 18px rgba(45,106,79,.32); }
-  .bp-build-btn:disabled { background: #C4BCB4; cursor: not-allowed; transform: none; box-shadow: none; }
-
-  /* ---------- Share step ---------- */
-  .bp-share-step { display: none; }
-  .bp-share-step.bp-show { display: block; }
-  .bp-form-step.bp-hide { display: none; }
-
-  .bp-message-preview {
-    background: #EEF7F2; border: 1px solid #D4EAE0;
-    border-radius: 10px; padding: 1rem 1.1rem;
-    margin-bottom: 1.25rem;
-    font-size: .9rem; line-height: 1.55; color: #2C2825;
-    white-space: pre-wrap; word-wrap: break-word;
-    max-height: 180px; overflow-y: auto;
-  }
-
-  .bp-share-grid {
-    display: grid; grid-template-columns: repeat(5, 1fr);
-    gap: .6rem; margin-bottom: 1rem;
-  }
-  .bp-share-btn {
-    display: flex; flex-direction: column; align-items: center;
-    gap: .4rem; padding: .85rem .25rem;
-    background: #FFFFFF; border: 1px solid #E6E1DB;
-    border-radius: 10px; cursor: pointer;
-    text-decoration: none; color: #2C2825;
-    font-family: 'DM Sans', sans-serif;
-    font-size: .68rem; font-weight: 600;
-    letter-spacing: .04em;
-    transition: transform .15s ease, border-color .15s ease, box-shadow .15s ease, background .15s ease;
-  }
-  .bp-share-btn:hover {
-    transform: translateY(-2px);
-    border-color: #2D6A4F;
-    box-shadow: 0 6px 16px rgba(45,106,79,.15);
-    background: #FFFFFF;
-  }
-  .bp-share-btn .bp-share-icon {
-    width: 38px; height: 38px; border-radius: 50%;
-    display: flex; align-items: center; justify-content: center;
-    font-size: 1.15rem;
-  }
-  .bp-share-btn[data-channel="whatsapp"]  .bp-share-icon { background: #25D366; color: #fff; }
-  .bp-share-btn[data-channel="sms"]       .bp-share-icon { background: #0A84FF; color: #fff; }
-  .bp-share-btn[data-channel="email"]     .bp-share-icon { background: #2D6A4F; color: #fff; }
-  .bp-share-btn[data-channel="messenger"] .bp-share-icon { background: #0084FF; color: #fff; }
-  .bp-share-btn[data-channel="copy"]      .bp-share-icon { background: #142F22; color: #fff; }
-
-  .bp-share-back {
-    display: inline-block;
-    background: none; border: none; padding: 0;
-    color: #5C5248; font-family: 'DM Sans', sans-serif;
-    font-size: .82rem; cursor: pointer;
-    text-decoration: underline; text-underline-offset: 3px;
-    margin-top: .5rem;
-  }
-  .bp-share-back:hover { color: #142F22; }
-
-  .bp-toast {
-    position: fixed; bottom: 24px; left: 50%; transform: translateX(-50%);
-    background: #142F22; color: #FFFFFF;
-    padding: .75rem 1.25rem; border-radius: 8px;
-    font-family: 'DM Sans', sans-serif; font-size: .85rem; font-weight: 500;
-    box-shadow: 0 8px 24px rgba(0,0,0,.25);
-    z-index: 9999; opacity: 0; pointer-events: none;
-    transition: opacity .2s ease, transform .2s ease;
-  }
-  .bp-toast.bp-show {
-    opacity: 1; transform: translateX(-50%) translateY(-4px);
-  }
-
-  @media (max-width: 520px) {
-    .bp-suggest-header { padding: 1.5rem 1.25rem 1rem; }
-    .bp-suggest-body { padding: 1.25rem; }
-    .bp-suggest-header h2 { font-size: 1.55rem; }
-    .bp-share-grid { grid-template-columns: repeat(5, 1fr); gap: .35rem; }
-    .bp-share-btn { padding: .7rem .15rem; font-size: .62rem; }
-    .bp-share-btn .bp-share-icon { width: 34px; height: 34px; font-size: 1rem; }
-  }
-</style>
-
-<!-- Modal markup -->
-<div class="bp-suggest-overlay" id="bpSuggestOverlay" role="dialog" aria-modal="true" aria-labelledby="bpSuggestTitle">
-  <div class="bp-suggest-modal">
-    <button class="bp-suggest-close" type="button" aria-label="Close" onclick="bpCloseSuggest()">×</button>
-
-    <!-- STEP 1: form -->
-    <div class="bp-form-step" id="bpFormStep">
-      <div class="bp-suggest-header">
-        <p class="bp-suggest-eyebrow">Help us complete the picture</p>
-        <h2 id="bpSuggestTitle">Suggest a stallion</h2>
-        <p>Know a Connemara stallion that's missing? Tell us about him and we'll generate a ready-to-send invite you can share with the owner — by WhatsApp, message, email, or any way you prefer.</p>
-      </div>
-
-      <div class="bp-suggest-body">
-        <div class="bp-field">
-          <label for="bpStallionName">Stallion name <span class="bp-req">*</span></label>
-          <input type="text" id="bpStallionName" placeholder="e.g. Currachmore Cashel" required>
-        </div>
-
-        <div class="bp-field">
-          <label for="bpOwnerContact">Owner's name &amp; contact <span class="bp-req">*</span></label>
-          <input type="text" id="bpOwnerContact" placeholder="e.g. Mary O'Connell · +353 87 123 4567" required>
-          <div class="bp-field-hint">Owner's name plus their phone, email or WhatsApp — whatever you have.</div>
-        </div>
-
-        <div class="bp-field">
-          <label for="bpYourName">Your name <span class="bp-req">*</span></label>
-          <input type="text" id="bpYourName" placeholder="So the owner knows who's getting in touch" required>
-        </div>
-
-        <div class="bp-field">
-          <label for="bpNote">Personal note (optional)</label>
-          <textarea id="bpNote" placeholder="A quick line you'd like to include — e.g. 'Saw your stallion at Clifden last year, he should be on this!'"></textarea>
-        </div>
-
-        <button type="button" class="bp-build-btn" onclick="bpBuildShare()">Generate Share Message →</button>
-      </div>
-    </div>
-
-    <!-- STEP 2: share -->
-    <div class="bp-share-step" id="bpShareStep">
-      <div class="bp-suggest-header">
-        <p class="bp-suggest-eyebrow">Ready to share</p>
-        <h2>Send the invite</h2>
-        <p>Here's your message — pick how you'd like to send it. Owner submission is free and only takes about 10 minutes.</p>
-      </div>
-
-      <div class="bp-suggest-body">
-        <div class="bp-message-preview" id="bpMessagePreview"></div>
-
-        <div class="bp-share-grid">
-          <a class="bp-share-btn" data-channel="whatsapp" id="bpShareWhatsapp" target="_blank" rel="noopener">
-            <span class="bp-share-icon">💬</span>
-            <span>WhatsApp</span>
-          </a>
-          <a class="bp-share-btn" data-channel="sms" id="bpShareSms">
-            <span class="bp-share-icon">📱</span>
-            <span>SMS</span>
-          </a>
-          <a class="bp-share-btn" data-channel="email" id="bpShareEmail">
-            <span class="bp-share-icon">✉️</span>
-            <span>Email</span>
-          </a>
-          <a class="bp-share-btn" data-channel="messenger" id="bpShareMessenger" target="_blank" rel="noopener">
-            <span class="bp-share-icon">📨</span>
-            <span>Messenger</span>
-          </a>
-          <button type="button" class="bp-share-btn" data-channel="copy" onclick="bpCopyMessage()">
-            <span class="bp-share-icon">📋</span>
-            <span>Copy</span>
-          </button>
-        </div>
-
-        <button type="button" class="bp-share-back" onclick="bpBackToForm()">← Edit details</button>
-      </div>
-    </div>
-
-  </div>
-</div>
-
-<!-- Toast for "Copied!" feedback -->
-<div class="bp-toast" id="bpToast">Copied to clipboard ✓</div>
-
+<!-- ============================================================ -->
+<!-- Suggest-a-Stallion modal logic                                -->
+<!-- ============================================================ -->
 <script>
   (function () {
     const SUBMIT_URL = 'https://tally.so/r/VLVYKJ';
@@ -1100,7 +1087,6 @@ render();
       $('bpShareEmail').href     = 'mailto:?subject=' + encSubject + '&body=' + enc;
       $('bpShareMessenger').href = 'https://www.facebook.com/dialog/send?app_id=140586622674265&link=' + encodeURIComponent('https://breedpulse.com') + '&redirect_uri=' + encodeURIComponent('https://breedpulse.com');
 
-      // Store latest message so Copy button has access
       window.__bpMessage = message;
 
       $('bpFormStep').classList.add('bp-hide');
@@ -1116,7 +1102,6 @@ render();
       };
       if (navigator.clipboard && navigator.clipboard.writeText) {
         navigator.clipboard.writeText(text).then(finish, function () {
-          // Fallback below
           legacyCopy(text); finish();
         });
       } else {
@@ -1134,7 +1119,6 @@ render();
       document.body.removeChild(ta);
     }
 
-    // Close on backdrop click + Escape
     document.addEventListener('click', function (e) {
       if (e.target && e.target.id === 'bpSuggestOverlay') bpCloseSuggest();
     });
@@ -1142,29 +1126,6 @@ render();
       if (e.key === 'Escape' && $('bpSuggestOverlay').classList.contains('bp-open')) {
         bpCloseSuggest();
       }
-    });
-
-    /* -------- Optional auto-wire --------
-       If the existing "Suggest one" / "Suggest a stallion" link/button has
-       inline alert(...) code, this finds and rebinds it. Comment out
-       if you'd rather wire it manually. */
-    document.addEventListener('DOMContentLoaded', function () {
-      const candidates = document.querySelectorAll('a, button');
-      candidates.forEach(function (el) {
-        const onclickAttr = el.getAttribute('onclick') || '';
-        const text = (el.textContent || '').trim().toLowerCase();
-        const isAlertSuggest = onclickAttr.indexOf("Suggest a stallion") !== -1
-                            || onclickAttr.indexOf("'Suggest a stallion'") !== -1
-                            || (onclickAttr.indexOf('alert') !== -1 && onclickAttr.indexOf('stallion') !== -1);
-        const isSuggestText = (text === 'suggest one' || text === 'suggest a stallion' || text === 'suggest stallion');
-        if (isAlertSuggest || isSuggestText) {
-          el.removeAttribute('onclick');
-          el.addEventListener('click', function (ev) {
-            ev.preventDefault();
-            bpOpenSuggest();
-          });
-        }
-      });
     });
   })();
 </script>
