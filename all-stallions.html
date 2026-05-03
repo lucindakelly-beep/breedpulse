@@ -273,7 +273,10 @@ footer.site a:hover { text-decoration: underline; }
 .bp-share-btn[data-channel="whatsapp"]  .bp-share-icon { background: #25D366; color: #fff; }
 .bp-share-btn[data-channel="sms"]       .bp-share-icon { background: #0A84FF; color: #fff; }
 .bp-share-btn[data-channel="email"]     .bp-share-icon { background: #2D6A4F; color: #fff; }
-.bp-share-btn[data-channel="messenger"] .bp-share-icon { background: #0084FF; color: #fff; }
+.bp-share-btn[data-channel="messenger"] .bp-share-icon {
+  background: #1877F2; color: #fff;
+  font-family: Georgia, serif; font-weight: 700; font-style: italic;
+}
 .bp-share-btn[data-channel="copy"]      .bp-share-icon { background: #142F22; color: #fff; }
 
 .bp-share-back {
@@ -454,8 +457,8 @@ footer.site a:hover { text-decoration: underline; }
             <span>Email</span>
           </a>
           <a class="bp-share-btn" data-channel="messenger" id="bpShareMessenger" target="_blank" rel="noopener">
-            <span class="bp-share-icon">📨</span>
-            <span>Messenger</span>
+            <span class="bp-share-icon">f</span>
+            <span>Facebook</span>
           </a>
           <button type="button" class="bp-share-btn" data-channel="copy" onclick="bpCopyMessage()">
             <span class="bp-share-icon">📋</span>
@@ -1156,7 +1159,15 @@ render();
       $('bpShareWhatsapp').href  = 'https://wa.me/?text=' + enc;
       $('bpShareSms').href       = 'sms:?&body=' + enc;
       $('bpShareEmail').href     = 'mailto:?subject=' + encSubject + '&body=' + enc;
-      $('bpShareMessenger').href = 'https://m.me/';
+
+      // Facebook share — posts to the user's Facebook wall/timeline so their
+      // community (e.g. Connemara Pony World, 9,200+ members) can see it.
+      // sharer.php works without app registration or Live mode — Facebook's
+      // longest-standing public share endpoint.
+      $('bpShareMessenger').href =
+        'https://www.facebook.com/sharer/sharer.php' +
+        '?u=' + encodeURIComponent('https://breedpulse.com') +
+        '&quote=' + enc;
 
       window.__bpMessage = message;
 
@@ -1199,10 +1210,11 @@ render();
       }
     });
 
-    /* Messenger share: auto-copy message to clipboard before opening
-       Messenger so the user just needs to paste. Facebook strips
-       pre-filled message text from m.me links for spam reasons,
-       so this clipboard fallback gives the cleanest UX. */
+    /* Facebook share: auto-copy the full invite message to clipboard
+       before opening Facebook's share dialog. The quote parameter
+       sometimes pre-fills the post text, but Facebook can strip it,
+       so the clipboard fallback ensures the user can always paste
+       the full BreedPulse invite into their Facebook post. */
     document.addEventListener('click', function (e) {
       var link = e.target.closest && e.target.closest('#bpShareMessenger');
       if (!link) return;
@@ -1216,9 +1228,9 @@ render();
       } else {
         legacyCopyMsgr(text);
       }
-      // Show a longer toast explaining what to do
+      // Show a toast explaining what to do
       var t = $('bpToast');
-      t.textContent = 'Message copied — paste into Messenger ✓';
+      t.textContent = 'Message copied — paste into your Facebook post ✓';
       t.classList.add('bp-show');
       setTimeout(function () {
         t.classList.remove('bp-show');
