@@ -315,8 +315,9 @@ footer.site a:hover { text-decoration: underline; }
 
 <header class="site">
   <div class="inner">
-    <a href="/" class="brand">Breed<em>Pulse</em></a>
+    <a href="https://breedpulse.com" class="brand">Breed<em>Pulse</em></a>
     <nav>
+      <a href="https://breedpulse.com">Home</a>
       <a href="/stallion-search.html">Verified Directory</a>
       <a href="/all-stallions.html" class="primary" style="opacity: 1;">The Register</a>
     </nav>
@@ -455,7 +456,7 @@ footer.site a:hover { text-decoration: underline; }
           </a>
           <a class="bp-share-btn" data-channel="messenger" id="bpShareMessenger" target="_blank" rel="noopener">
             <span class="bp-share-icon">📨</span>
-            <span>Messenger</span>
+            <span>Facebook</span>
           </a>
           <button type="button" class="bp-share-btn" data-channel="copy" onclick="bpCopyMessage()">
             <span class="bp-share-icon">📋</span>
@@ -954,9 +955,6 @@ function rowHTML(s, idx) {
   }
 
   const claimUrl = `https://tally.so/r/VLVYKJ?Registered+Name=${encodeURIComponent(s[0])}`;
-  const inviteText = encodeURIComponent(
-    `Hi — I noticed your stallion ${s[0]} isn't yet on BreedPulse, the new free Connemara stallion directory partnered with Connemara Pony World. You can claim a free listing here: https://breedpulse.com/all-stallions.html`
-  );
 
   return `
     <article class="stallion is-pending" style="animation-delay: ${animDelay}s">
@@ -968,7 +966,7 @@ function rowHTML(s, idx) {
       <div class="actions">
         <div class="action-prompt">Are you the owner?</div>
         <a href="${claimUrl}" class="btn btn-primary btn-sm">Claim this listing</a>
-        <a href="https://wa.me/?text=${inviteText}" class="btn btn-secondary btn-sm" target="_blank" rel="noopener">Send invite</a>
+        <button type="button" class="btn btn-secondary btn-sm" data-share-stallion="${escape(s[0])}">Share with owner</button>
       </div>
     </article>`;
 }
@@ -1018,6 +1016,16 @@ $("#suggest-btn").addEventListener("click", e => {
   bpOpenSuggest();
 });
 
+/* Event delegation: any "Share with owner" button on a pending
+   stallion card opens the modal pre-filled with that stallion's name */
+list.addEventListener("click", e => {
+  const btn = e.target.closest("[data-share-stallion]");
+  if (!btn) return;
+  e.preventDefault();
+  const stallionName = btn.getAttribute("data-share-stallion");
+  bpOpenSuggest(stallionName);
+});
+
 render();
 </script>
 
@@ -1030,12 +1038,19 @@ render();
 
     function $(id) { return document.getElementById(id); }
 
-    window.bpOpenSuggest = function () {
+    window.bpOpenSuggest = function (prefilledStallion) {
       $('bpFormStep').classList.remove('bp-hide');
       $('bpShareStep').classList.remove('bp-show');
       $('bpSuggestOverlay').classList.add('bp-open');
       document.body.style.overflow = 'hidden';
-      setTimeout(function () { $('bpStallionName').focus(); }, 80);
+      if (prefilledStallion) {
+        $('bpStallionName').value = prefilledStallion;
+        // If pre-filled, focus the next empty field instead
+        setTimeout(function () { $('bpOwnerContact').focus(); }, 80);
+      } else {
+        $('bpStallionName').value = '';
+        setTimeout(function () { $('bpStallionName').focus(); }, 80);
+      }
     };
 
     window.bpCloseSuggest = function () {
@@ -1087,7 +1102,7 @@ render();
       $('bpShareWhatsapp').href  = 'https://wa.me/?text=' + enc;
       $('bpShareSms').href       = 'sms:?&body=' + enc;
       $('bpShareEmail').href     = 'mailto:?subject=' + encSubject + '&body=' + enc;
-      $('bpShareMessenger').href = 'https://www.facebook.com/dialog/send?app_id=140586622674265&link=' + encodeURIComponent('https://breedpulse.com') + '&redirect_uri=' + encodeURIComponent('https://breedpulse.com');
+      $('bpShareMessenger').href = 'https://www.facebook.com/sharer/sharer.php?u=' + encodeURIComponent('https://breedpulse.com') + '&quote=' + enc;
 
       window.__bpMessage = message;
 
