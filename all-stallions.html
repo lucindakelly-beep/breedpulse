@@ -1,5 +1,4 @@
 
-
 <!DOCTYPE html>
 <html lang="en">
 <head>
@@ -456,7 +455,7 @@ footer.site a:hover { text-decoration: underline; }
           </a>
           <a class="bp-share-btn" data-channel="messenger" id="bpShareMessenger" target="_blank" rel="noopener">
             <span class="bp-share-icon">📨</span>
-            <span>Facebook</span>
+            <span>Messenger</span>
           </a>
           <button type="button" class="bp-share-btn" data-channel="copy" onclick="bpCopyMessage()">
             <span class="bp-share-icon">📋</span>
@@ -1102,7 +1101,7 @@ render();
       $('bpShareWhatsapp').href  = 'https://wa.me/?text=' + enc;
       $('bpShareSms').href       = 'sms:?&body=' + enc;
       $('bpShareEmail').href     = 'mailto:?subject=' + encSubject + '&body=' + enc;
-      $('bpShareMessenger').href = 'https://www.facebook.com/sharer/sharer.php?u=' + encodeURIComponent('https://breedpulse.com') + '&quote=' + enc;
+      $('bpShareMessenger').href = 'https://m.me/';
 
       window.__bpMessage = message;
 
@@ -1144,6 +1143,44 @@ render();
         bpCloseSuggest();
       }
     });
+
+    /* Messenger share: auto-copy message to clipboard before opening
+       Messenger so the user just needs to paste. Facebook strips
+       pre-filled message text from m.me links for spam reasons,
+       so this clipboard fallback gives the cleanest UX. */
+    document.addEventListener('click', function (e) {
+      var link = e.target.closest && e.target.closest('#bpShareMessenger');
+      if (!link) return;
+      var text = window.__bpMessage || $('bpMessagePreview').textContent;
+      if (!text) return;
+      // Auto-copy in the background
+      if (navigator.clipboard && navigator.clipboard.writeText) {
+        navigator.clipboard.writeText(text).catch(function () {
+          legacyCopyMsgr(text);
+        });
+      } else {
+        legacyCopyMsgr(text);
+      }
+      // Show a longer toast explaining what to do
+      var t = $('bpToast');
+      t.textContent = 'Message copied — paste into Messenger ✓';
+      t.classList.add('bp-show');
+      setTimeout(function () {
+        t.classList.remove('bp-show');
+        // Reset toast text after fade so other copy actions still show "Copied to clipboard ✓"
+        setTimeout(function () { t.textContent = 'Copied to clipboard ✓'; }, 300);
+      }, 2800);
+    });
+
+    function legacyCopyMsgr(text) {
+      var ta = document.createElement('textarea');
+      ta.value = text;
+      ta.style.position = 'fixed'; ta.style.opacity = '0';
+      document.body.appendChild(ta);
+      ta.select();
+      try { document.execCommand('copy'); } catch (e) {}
+      document.body.removeChild(ta);
+    }
   })();
 </script>
 
