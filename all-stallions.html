@@ -1157,27 +1157,17 @@ render();
       $('bpShareSms').href       = 'sms:?&body=' + enc;
       $('bpShareEmail').href     = 'mailto:?subject=' + encSubject + '&body=' + enc;
 
-      // Messenger — private message to a specific Facebook contact (e.g. a
-      // stallion owner in the user's CPW community). Routes by device:
-      //   - Mobile: fb-messenger:// app deep link with recipient picker
-      //   - Desktop: Facebook's Send Dialog (requires user logged into Facebook)
-      // Either way, the full BreedPulse invite is auto-copied to clipboard so
-      // the user can paste it into the Messenger conversation.
-      var BP_FB_APP_ID = '842334998295338';
-      var BP_LINK = 'https://breedpulse.com';
-      var isMobile = /Android|iPhone|iPad|iPod/i.test(navigator.userAgent);
-      if (isMobile) {
-        // fb-messenger:// share opens Messenger app with link + recipient picker
-        $('bpShareMessenger').href =
-          'fb-messenger://share?link=' + encodeURIComponent(BP_LINK);
-      } else {
-        // Desktop: Facebook's Send Dialog (private message, not wall post)
-        $('bpShareMessenger').href =
-          'https://www.facebook.com/dialog/send' +
-          '?app_id=' + BP_FB_APP_ID +
-          '&link=' + encodeURIComponent(BP_LINK) +
-          '&redirect_uri=' + encodeURIComponent(BP_LINK);
-      }
+      // Messenger — private DM with recipient picker. Uses Facebook's
+      // Send Dialog with the BreedPulse App ID. The user picks a contact
+      // from their Facebook friends → a breedpulse.com link is sent
+      // privately to that person. The full invite text is auto-copied
+      // to clipboard so the user can paste it into the conversation
+      // alongside the link.
+      $('bpShareMessenger').href =
+        'https://www.facebook.com/dialog/send' +
+        '?app_id=842334998295338' +
+        '&link=' + encodeURIComponent('https://breedpulse.com') +
+        '&redirect_uri=' + encodeURIComponent('https://breedpulse.com');
 
       window.__bpMessage = message;
 
