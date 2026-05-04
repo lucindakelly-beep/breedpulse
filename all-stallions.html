@@ -273,10 +273,7 @@ footer.site a:hover { text-decoration: underline; }
 .bp-share-btn[data-channel="whatsapp"]  .bp-share-icon { background: #25D366; color: #fff; }
 .bp-share-btn[data-channel="sms"]       .bp-share-icon { background: #0A84FF; color: #fff; }
 .bp-share-btn[data-channel="email"]     .bp-share-icon { background: #2D6A4F; color: #fff; }
-.bp-share-btn[data-channel="messenger"] .bp-share-icon {
-  background: #1877F2; color: #fff;
-  font-family: Georgia, serif; font-weight: 700; font-style: italic;
-}
+.bp-share-btn[data-channel="messenger"] .bp-share-icon { background: #0084FF; color: #fff; }
 .bp-share-btn[data-channel="copy"]      .bp-share-icon { background: #142F22; color: #fff; }
 
 .bp-share-back {
@@ -457,8 +454,8 @@ footer.site a:hover { text-decoration: underline; }
             <span>Email</span>
           </a>
           <a class="bp-share-btn" data-channel="messenger" id="bpShareMessenger" target="_blank" rel="noopener">
-            <span class="bp-share-icon">f</span>
-            <span>Facebook</span>
+            <span class="bp-share-icon">📨</span>
+            <span>Messenger</span>
           </a>
           <button type="button" class="bp-share-btn" data-channel="copy" onclick="bpCopyMessage()">
             <span class="bp-share-icon">📋</span>
@@ -1160,14 +1157,27 @@ render();
       $('bpShareSms').href       = 'sms:?&body=' + enc;
       $('bpShareEmail').href     = 'mailto:?subject=' + encSubject + '&body=' + enc;
 
-      // Facebook share — posts to the user's Facebook wall/timeline so their
-      // community (e.g. Connemara Pony World, 9,200+ members) can see it.
-      // sharer.php works without app registration or Live mode — Facebook's
-      // longest-standing public share endpoint.
-      $('bpShareMessenger').href =
-        'https://www.facebook.com/sharer/sharer.php' +
-        '?u=' + encodeURIComponent('https://breedpulse.com') +
-        '&quote=' + enc;
+      // Messenger — private message to a specific Facebook contact (e.g. a
+      // stallion owner in the user's CPW community). Routes by device:
+      //   - Mobile: fb-messenger:// app deep link with recipient picker
+      //   - Desktop: Facebook's Send Dialog (requires user logged into Facebook)
+      // Either way, the full BreedPulse invite is auto-copied to clipboard so
+      // the user can paste it into the Messenger conversation.
+      var BP_FB_APP_ID = '842334998295338';
+      var BP_LINK = 'https://breedpulse.com';
+      var isMobile = /Android|iPhone|iPad|iPod/i.test(navigator.userAgent);
+      if (isMobile) {
+        // fb-messenger:// share opens Messenger app with link + recipient picker
+        $('bpShareMessenger').href =
+          'fb-messenger://share?link=' + encodeURIComponent(BP_LINK);
+      } else {
+        // Desktop: Facebook's Send Dialog (private message, not wall post)
+        $('bpShareMessenger').href =
+          'https://www.facebook.com/dialog/send' +
+          '?app_id=' + BP_FB_APP_ID +
+          '&link=' + encodeURIComponent(BP_LINK) +
+          '&redirect_uri=' + encodeURIComponent(BP_LINK);
+      }
 
       window.__bpMessage = message;
 
@@ -1230,7 +1240,7 @@ render();
       }
       // Show a toast explaining what to do
       var t = $('bpToast');
-      t.textContent = 'Message copied — paste into your Facebook post ✓';
+      t.textContent = 'Message copied — paste into Messenger ✓';
       t.classList.add('bp-show');
       setTimeout(function () {
         t.classList.remove('bp-show');
