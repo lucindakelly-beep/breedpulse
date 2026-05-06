@@ -1016,7 +1016,7 @@ function rowHTML(s, idx) {
           <div class="stallion-name">${name} <span class="verified-label">Listed</span></div>
           <div class="stallion-meta">${meta}</div>
         </div>
-        <a href="/stallion-search.html?stallion=${toSlug(s[0])}" class="view-link">View profile</a>
+        <a href="${toSlug(s[0]) === 'western-boy' ? '/stallions/western-boy/' : '/stallion-search.html?stallion=' + toSlug(s[0])}" class="view-link">View profile</a>
       </article>`;
   }
 
