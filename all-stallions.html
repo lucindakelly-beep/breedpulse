@@ -478,7 +478,101 @@ footer.site a:hover { text-decoration: underline; }
    Schema: name, status, region, country, class, colour, height, year, studbook, source
    Status: 'verified' (claimed/listed by owner) or 'pending' (unclaimed)
    ───────────────────────────────────────────────────────────────────── */
+const SEO_PAGES = new Set([
+  'addrigoole-silver',
+  'ardane-millie',
+  'aughris-rebel',
+  'avalon-outkast',
+  'avonbrae-iceman',
+  'ballinahown-hero',
+  'bantrach-micheal',
+  'barrowby-hero',
+  'belmont-mill-hill',
+  'blackthorn-prince-of-tides',
+  'callaghy-jim',
+  'canal-feilim',
+  'cannon-ball-briovere',
+  'carnane-taylor',
+  'carrowmore-magic-mist',
+  'cashel-oak',
+  'cityview-prince-charming',
+  'clifden-silver',
+  'clonmore-geallog-ban',
+  'clover-hill-sapphire',
+  'cluainte-swift',
+  'copperbeech-franklin',
+  'corner-house-michael',
+  'covid-kid',
+  'currabawn-rambo',
+  'darraheen-fionn',
+  'derryveeney-cruise',
+  'diamond-s-ice-wind-and-rain',
+  'diamond-s-shadow-fix',
+  'diamondczech-full-moon',
+  'disney',
+  'doohulla-dunally',
+  'doyles-massimo-pondi',
+  'dunbeggan-lightning',
+  'eastlands-hollybrae',
+  'edenmist-pride-of-thieves',
+  'ekely-s-turning-leaf',
+  'forest-view-prince',
+  'forty-five',
+  'glencarrig-joe',
+  'glencarrig-marble',
+  'highfield-joey',
+  'ice-and-fire-d-albran',
+  'inverin-danny',
+  'killaspic-ross',
+  'killour-star',
+  'kilmoraun-eden-shadow',
+  'king-bunowen-castle-jeremiah',
+  'kingstown-dantheman',
+  'kit-harington-r-ose',
+  'knockbridge-joey',
+  'knockbridge-over-the-moon',
+  'knockma-cloud',
+  'knockmoy-cassanova',
+  'knockmoy-dexter',
+  'knockmoy-silver-shadow',
+  'lickeen-magnus',
+  'lonsdale-legend',
+  'lor-ruadh-s-galileo',
+  'lough-fadda-rudi',
+  'lough-melvin-gorteen',
+  'moonlight-silver-shadow',
+  'murvey-jackson',
+  'pineview-sweet-mac',
+  'poetic-kelly',
+  'prince-maverick',
+  'rathcline-melvins-boy',
+  'rathkeery-paddy',
+  'rathvaldron-chickatee',
+  'redbuds-blue-moon',
+  'rogaire-na-locha',
+  'rogaire-na-realtai',
+  'rosedale-casper',
+  'silver-shadow',
+  'silvermountain-prince',
+  'skaergardens-wild-to-night',
+  'summer-hill-bobby',
+  'touten-un-du-chapelan',
+  'tra-bhain-ceileog',
+  'tra-bhain-tailors-shadow',
+  'uisneach',
+  'ushuaia-eliza-modesty',
+  'vinura-timmy',
+  'walstead-falcons-crest',
+  'western-boy',
+  'westide-mirah-2'
+]);
 
+function profileHref(name) {
+  const slug = toSlug(name);
+  return SEO_PAGES.has(slug)
+    ? `/stallions/${slug}/`
+    : `/stallion-search.html?stallion=${slug}`;
+}
 const STALLIONS = [
   ["Canal Feilim","verified","","Ireland","Class 1","Grey","143","2003","CPBS","Owner-listed"],
   ["Dunbeggan Lightning","verified","UK — N. Ireland","UK","Class 3","Perlino","152","2015","CPBS","Owner-listed"],
@@ -1016,8 +1110,7 @@ function rowHTML(s, idx) {
           <div class="stallion-name">${name} <span class="verified-label">Listed</span></div>
           <div class="stallion-meta">${meta}</div>
         </div>
-        <a href="${toSlug(s[0]) === 'western-boy' ? '/stallions/western-boy/' : '/stallion-search.html?stallion=' + toSlug(s[0])}" class="view-link">View profile</a>
-      </article>`;
+<a href="${profileHref(s[0])}" class="view-link">View profile</a>      </article>`;
   }
 
   const claimUrl = `https://tally.so/r/VLVYKJ?Registered+Name=${encodeURIComponent(s[0])}`;
