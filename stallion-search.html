@@ -541,7 +541,43 @@ const FILTERS = [
   {id:'f_discipline',label:'Discipline'},{id:'f_covering',label:'Covering'},
   {id:'f_hwsd',label:'HWSD'}
 ];
+const SEO_PAGES = new Set([
+  'addrigoole-silver','ardane-millie','aughris-rebel','avalon-outkast',
+  'bantrach-micheal','barrowby-hero','belmont-mill-hill',
+  'blackthorn-prince-of-tides','callaghy-jim','canal-feilim',
+  'cannon-ball-briovere','carnane-taylor','carrowmore-magic-mist',
+  'cashel-oak','cityview-prince-charming','clifden-silver',
+  'clonmore-geallog-ban','clover-hill-sapphire','cluainte-swift',
+  'copperbeech-franklin','corner-house-michael','covid-kid',
+  'currabawn-rambo','darraheen-fionn','derryveeney-cruise',
+  'diamond-s-ice-wind-and-rain','diamond-s-shadow-fix',
+  'diamondczech-full-moon','disney','doohulla-dunally',
+  'doyles-massimo-pondi','dunbeggan-lightning','eastlands-hollybrae',
+  'edenmist-pride-of-thieves','ekely-s-turning-leaf',
+  'forest-view-prince','forty-five','glencarrig-joe',
+  'glencarrig-marble','highfield-joey','ice-and-fire-d-albran',
+  'inverin-danny','killaspic-ross','killour-star',
+  'kilmoraun-eden-shadow','king-bunowen-castle-jeremiah',
+  'kingstown-dantheman','kit-harington-r-ose','knockbridge-joey',
+  'knockbridge-over-the-moon','knockma-cloud','knockmoy-cassanova',
+  'knockmoy-dexter','knockmoy-silver-shadow','lickeen-magnus',
+  'lonsdale-legend','lor-ruadh-s-galileo','lough-fadda-rudi',
+  'lough-melvin-gorteen','moonlight-silver-shadow','murvey-jackson',
+  'pineview-sweet-mac','poetic-kelly','prince-maverick',
+  'rathcline-melvins-boy','rathkeery-paddy','rathvaldron-chickatee',
+  'redbuds-blue-moon','rogaire-na-locha','rogaire-na-realtai',
+  'rosedale-casper','silver-shadow','silvermountain-prince',
+  'skaergardens-wild-to-night','summer-hill-bobby',
+  'touten-un-du-chapelan','tra-bhain-ceileog',
+  'tra-bhain-tailors-shadow','uisneach','ushuaia-eliza-modesty',
+  'vinura-timmy','walstead-falcons-crest','western-boy',
+  'westide-mirah-2'
+]);
 
+function profileHref(name) {
+  const slug = toSlug(name);
+  return SEO_PAGES.has(slug) ? '/stallions/' + slug + '/' : null;
+}
 let allStallions = [];
 let currentSlide = 0;
 let totalSlides = 0;
@@ -1013,7 +1049,12 @@ function render(items) {
   }
   document.getElementById('grid').innerHTML = items.map(function(s,i){
     const lockedLabel = isMember ? 'Booking unlocked' : 'Stud fee &amp; booking — members only';
-    return '<div class="card" style="animation-delay:'+Math.min(i*.04,.4)+'s" onclick="openModal(\''+s.id+'\')">'+
+    const href = profileHref(s.name);
+    const opener = href
+      ? '<a class="card" href="'+href+'" style="animation-delay:'+Math.min(i*.04,.4)+'s;text-decoration:none;color:inherit">'
+      : '<div class="card" style="animation-delay:'+Math.min(i*.04,.4)+'s" onclick="openModal(\''+s.id+'\')">';
+    const closer = href ? '</a>' : '</div>';
+    return opener +
       '<div class="card-photo">'+
         (s.photoUrl?'<img src="'+esc(s.photoUrl)+'" alt="'+esc(s.name)+'" loading="lazy">':'<div class="no-photo">🐴</div>')+
         '<div class="badges">'+hwsdBadge(s.hwsdStatus)+
@@ -1035,7 +1076,8 @@ function render(items) {
         '</div>'+
         ((s.coveringMethod||[]).length?'<div class="covering">'+(s.coveringMethod||[]).map(function(m){return '<span class="cpill">'+esc(m)+'</span>';}).join('')+'</div>':'')+
         '<div class="locked'+(isMember?' unlocked':'')+'">'+lockedLabel+'</div>'+
-      '</div></div>';
+      '</div>'+
+      closer;
   }).join('');
 }
 
