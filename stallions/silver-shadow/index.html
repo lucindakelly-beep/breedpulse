@@ -191,6 +191,38 @@
   footer { background: var(--green-deep); color: rgba(245,242,237,0.7); padding: 2.5rem 2rem; margin-top: 4rem; text-align: center; font-size: 0.85rem; line-height: 1.7; }
   footer a { color: var(--stone); }
   footer .brand { font-size: 1.2rem; }
+
+  /* Video lightbox */
+  .video-lightbox {
+    display: none;
+    position: fixed; inset: 0; z-index: 9999;
+    align-items: center; justify-content: center;
+    padding: 1.5rem;
+  }
+  .video-lightbox.open { display: flex; }
+  .video-lightbox-backdrop {
+    position: absolute; inset: 0;
+    background: rgba(20,47,34,0.92); backdrop-filter: blur(6px);
+    cursor: pointer;
+  }
+  .video-lightbox-content {
+    position: relative; z-index: 1;
+    width: 100%; max-width: 960px;
+    aspect-ratio: 16 / 9;
+    background: #000;
+    border-radius: var(--radius); overflow: hidden;
+    box-shadow: 0 20px 60px rgba(0,0,0,0.5);
+  }
+  .video-lightbox-frame { width: 100%; height: 100%; }
+  .video-lightbox-frame iframe { width: 100%; height: 100%; border: 0; }
+  .video-lightbox-close {
+    position: absolute; top: -2.5rem; right: 0;
+    background: transparent; border: 0;
+    color: white; font-size: 2.2rem; line-height: 1;
+    cursor: pointer; padding: 0.25rem 0.5rem;
+    font-family: var(--font-body);
+  }
+  .video-lightbox-close:hover { color: var(--copper); }
 </style>
 </head>
 <body>
@@ -229,7 +261,7 @@
             <circle cx="8.5" cy="8.5" r="1.5"/>
             <polyline points="21 15 16 10 5 21"/>
           </svg>
-          <span>4 photos</span>
+          <span>4 photos · 1 video</span>
         </div>
         <div class="view-gallery-cta">
           <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="11" width="18" height="11" rx="2"/><path d="M7 11V7a5 5 0 0 1 10 0v4"/></svg>
@@ -239,19 +271,19 @@
     </div>
 
     <div class="photo-thumbs" role="list">
-      <div class="thumb active" role="listitem">
+      <div class="thumb active" role="listitem" data-photo="https://photos.breedpulse.com/stallions/silver-shadow/primary.jpg">
         <img src="https://photos.breedpulse.com/stallions/silver-shadow/primary.jpg" alt="Silver Shadow primary" onerror="this.style.display='none'">
       </div>
-      <div class="thumb locked" role="listitem" aria-label="Locked photo">
-        <img src="https://photos.breedpulse.com/stallions/silver-shadow/photo-2.jpg" alt="" onerror="this.style.display='none'">
+      <div class="thumb locked" role="listitem" data-photo="https://photos.breedpulse.com/stallions/silver-shadow/photo-2.jpg" aria-label="Photo 2">
+        <img src="https://photos.breedpulse.com/stallions/silver-shadow/photo-2.jpg" alt="" onerror="this.parentElement.style.display='none'">
         <div class="thumb-lock"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="11" width="18" height="11" rx="2"/><path d="M7 11V7a5 5 0 0 1 10 0v4"/></svg></div>
       </div>
-      <div class="thumb locked" role="listitem" aria-label="Locked photo">
-        <img src="https://photos.breedpulse.com/stallions/silver-shadow/photo-3.jpg" alt="" onerror="this.style.display='none'">
+      <div class="thumb locked" role="listitem" data-photo="https://photos.breedpulse.com/stallions/silver-shadow/photo-3.jpg" aria-label="Photo 3">
+        <img src="https://photos.breedpulse.com/stallions/silver-shadow/photo-3.jpg" alt="" onerror="this.parentElement.style.display='none'">
         <div class="thumb-lock"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="11" width="18" height="11" rx="2"/><path d="M7 11V7a5 5 0 0 1 10 0v4"/></svg></div>
       </div>
-      <div class="thumb video locked" role="listitem" aria-label="Locked video">
-        <img src="https://photos.breedpulse.com/stallions/silver-shadow/photo-4.jpg" alt="" onerror="this.style.display='none'">
+      <div class="thumb video locked" role="listitem" data-video="https://www.youtube.com/embed/ggZdi8boFjI" aria-label="Video">
+        <img src="https://photos.breedpulse.com/stallions/silver-shadow/primary.jpg" alt="" onerror="this.style.display='none'">
         <div class="thumb-lock">
           <svg viewBox="0 0 24 24" fill="currentColor"><polygon points="6 4 20 12 6 20 6 4"/></svg>
         </div>
@@ -371,22 +403,6 @@
         <div class="info">Verified pedigree · members only</div>
       </div>
       <div class="ped-row">
-        <div class="label">Sire&#39;s Sire</div>
-        <div class="name">
-          <span class="ped-locked-text">Members Only</span>
-          <span class="ped-real-text">—</span>
-        </div>
-        <div class="info">Verified pedigree · members only</div>
-      </div>
-      <div class="ped-row">
-        <div class="label">Sire&#39;s Dam</div>
-        <div class="name">
-          <span class="ped-locked-text">Members Only</span>
-          <span class="ped-real-text">—</span>
-        </div>
-        <div class="info">Verified pedigree · members only</div>
-      </div>
-      <div class="ped-row">
         <div class="label">Dam</div>
         <div class="name">
           <span class="ped-locked-text">Members Only</span>
@@ -399,38 +415,6 @@
         <div class="name">
           <span class="ped-locked-text">Members Only</span>
           <span class="ped-real-text">Poetic Justice</span>
-        </div>
-        <div class="info">Verified pedigree · members only</div>
-      </div>
-      <div class="ped-row">
-        <div class="label">Dam&#39;s Dam</div>
-        <div class="name">
-          <span class="ped-locked-text">Members Only</span>
-          <span class="ped-real-text">—</span>
-        </div>
-        <div class="info">Verified pedigree · members only</div>
-      </div>
-      <div class="ped-row">
-        <div class="label">Sire&#39;s Sire&#39;s Sire</div>
-        <div class="name">
-          <span class="ped-locked-text">Members Only</span>
-          <span class="ped-real-text">—</span>
-        </div>
-        <div class="info">Verified pedigree · members only</div>
-      </div>
-      <div class="ped-row">
-        <div class="label">Sire&#39;s Sire&#39;s Dam</div>
-        <div class="name">
-          <span class="ped-locked-text">Members Only</span>
-          <span class="ped-real-text">—</span>
-        </div>
-        <div class="info">Verified pedigree · members only</div>
-      </div>
-      <div class="ped-row">
-        <div class="label">Sire&#39;s Dam&#39;s Sire</div>
-        <div class="name">
-          <span class="ped-locked-text">Members Only</span>
-          <span class="ped-real-text">—</span>
         </div>
         <div class="info">Verified pedigree · members only</div>
       </div>
@@ -554,6 +538,15 @@
   </div>
 </section>
 
+<!-- ============ VIDEO LIGHTBOX (members only) ============ -->
+<div id="video-lightbox" class="video-lightbox" role="dialog" aria-label="Video player" aria-hidden="true">
+  <div class="video-lightbox-backdrop" onclick="closeVideoLightbox()"></div>
+  <div class="video-lightbox-content">
+    <button type="button" class="video-lightbox-close" onclick="closeVideoLightbox()" aria-label="Close video">×</button>
+    <div class="video-lightbox-frame" id="video-lightbox-frame"></div>
+  </div>
+</div>
+
 <footer>
   <p><a href="https://breedpulse.com" class="brand">Breed<span class="pulse" style="color:var(--copper)">Pulse</span></a></p>
   <p>The verified Connemara stallion directory · 2026 breeding season<br>
@@ -565,12 +558,72 @@
 (function() {
   const AUTH_API = 'https://breedpulse-auth.lucindakelly.workers.dev';
   const DIRECTORY_URL = 'https://directory.breedpulse.com/stallion-search.html';
+  const STRIPE_URL = 'https://buy.stripe.com/cNi6oI1m8d4Ha654aZ2B200';
 
   function onMemberPillClick(e) {
     e.preventDefault();
     window.location.href = DIRECTORY_URL;
   }
   window.onMemberPillClick = onMemberPillClick;
+
+  // Video lightbox helpers
+  function openVideoLightbox(url) {
+    const lb = document.getElementById('video-lightbox');
+    const frame = document.getElementById('video-lightbox-frame');
+    if (!lb || !frame) return;
+    frame.innerHTML = '<iframe src="' + url + '?autoplay=1" allow="autoplay; encrypted-media; fullscreen" allowfullscreen></iframe>';
+    lb.classList.add('open');
+    lb.setAttribute('aria-hidden', 'false');
+    document.body.style.overflow = 'hidden';
+  }
+  function closeVideoLightbox() {
+    const lb = document.getElementById('video-lightbox');
+    const frame = document.getElementById('video-lightbox-frame');
+    if (!lb || !frame) return;
+    frame.innerHTML = '';
+    lb.classList.remove('open');
+    lb.setAttribute('aria-hidden', 'true');
+    document.body.style.overflow = '';
+  }
+  window.closeVideoLightbox = closeVideoLightbox;
+
+  // ESC closes lightbox
+  document.addEventListener('keydown', function(e) {
+    if (e.key === 'Escape') closeVideoLightbox();
+  });
+
+  // Wire thumb clicks
+  function wireThumbs() {
+    const heroImg = document.getElementById('hero-photo');
+    const thumbs = document.querySelectorAll('.thumb');
+    thumbs.forEach(function(t) {
+      t.addEventListener('click', function() {
+        const isMember = document.body.classList.contains('is-member');
+        const videoUrl = t.getAttribute('data-video');
+        const photoUrl = t.getAttribute('data-photo');
+
+        // Non-members hitting a locked thumb → push them to checkout
+        if (!isMember && t.classList.contains('locked')) {
+          window.location.href = STRIPE_URL;
+          return;
+        }
+
+        // Member click on video thumb → open lightbox
+        if (videoUrl) {
+          openVideoLightbox(videoUrl);
+          return;
+        }
+
+        // Member click on photo thumb → swap hero
+        if (photoUrl && heroImg) {
+          heroImg.src = photoUrl;
+          // Update active state
+          thumbs.forEach(function(x) { x.classList.remove('active'); });
+          t.classList.add('active');
+        }
+      });
+    });
+  }
 
   async function checkMembership() {
     try {
@@ -588,10 +641,15 @@
     } catch (e) { /* fail closed */ }
   }
 
-  if (document.readyState === 'loading') {
-    document.addEventListener('DOMContentLoaded', checkMembership);
-  } else {
+  function init() {
+    wireThumbs();
     checkMembership();
+  }
+
+  if (document.readyState === 'loading') {
+    document.addEventListener('DOMContentLoaded', init);
+  } else {
+    init();
   }
 })();
 </script>
