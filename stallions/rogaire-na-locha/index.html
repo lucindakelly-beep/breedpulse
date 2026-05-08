@@ -118,11 +118,7 @@
   body.is-member .member-only-section { display: block; }
   body.is-member .pedigree-teaser-content { filter: none; opacity: 1; user-select: text; pointer-events: auto; }
   body.is-member .pedigree-teaser-fade { display: none; }
-  body.is-member .ped-locked-text { display: none; }
-  body.is-member .ped-real-text { display: inline; }
   body.is-member .pedigree-cta { display: none; }
-
-  .ped-real-text { display: none; }
 
   .members-only-label { display: inline-flex; align-items: center; gap: 0.35rem; font-size: 0.62rem; font-weight: 500; letter-spacing: 0.05em; text-transform: uppercase; color: var(--white); background: var(--copper); border: none; padding: 0.2rem 0.55rem; border-radius: 20px; white-space: nowrap; flex-shrink: 0; font-style: normal; }
   .members-only-label svg { width: 9px; height: 9px; }
@@ -140,13 +136,64 @@
 
   /* Pedigree teaser */
   .pedigree-teaser { position: relative; background: var(--white); border: 1px solid var(--ash); border-radius: var(--radius); overflow: hidden; }
-  .pedigree-teaser-content { padding: 1.5rem 1.75rem; filter: blur(7px); user-select: none; pointer-events: none; opacity: 0.75; transition: filter 0.3s ease, opacity 0.3s ease; }
-  .ped-row { display: grid; grid-template-columns: 130px 1fr 1fr; gap: 1rem; padding: 0.45rem 0; font-size: 0.85rem; border-bottom: 1px solid var(--linen); }
-  .ped-row:last-child { border: none; }
-  .ped-row .label { font-weight: 500; color: var(--earth); font-size: 0.7rem; text-transform: uppercase; letter-spacing: 0.05em; }
-  .ped-row .name { color: var(--peat); font-weight: 500; }
-  .ped-row .info { color: var(--earth); font-size: 0.78rem; }
+  .pedigree-teaser-content { padding: 1.5rem 1.75rem; filter: blur(7px); user-select: none; pointer-events: none; opacity: 0.75; transition: filter 0.3s ease, opacity 0.3s ease; overflow-x: auto; }
+  body.is-member .pedigree-teaser-content { filter: none; opacity: 1; user-select: text; pointer-events: auto; }
+
+  /* AllBreedPedigree-style 5-gen table */
+  .ped-table {
+    width: 100%; min-width: 720px;
+    border-collapse: separate; border-spacing: 4px;
+    font-size: 0.78rem;
+    table-layout: fixed;
+  }
+  .ped-table td {
+    padding: 0.5rem 0.7rem;
+    border-radius: 4px;
+    vertical-align: middle;
+    border: 1px solid transparent;
+  }
+  .ped-table .anc-name {
+    font-weight: 600; color: var(--green-deep);
+    font-size: 0.82rem; line-height: 1.25;
+    margin-bottom: 0.15rem;
+  }
+  .ped-table .anc-info {
+    font-size: 0.68rem; color: var(--earth);
+    font-weight: 400;
+  }
+  /* Sire-side: graduated forest greens */
+  .ped-table .sire-cell.g1 { background: #C9DDD0; border-color: #B4CCC0; }
+  .ped-table .sire-cell.g2 { background: #D4E5DA; border-color: #C0D6C7; }
+  .ped-table .sire-cell.g3 { background: #DFEDE3; border-color: #CCDFD2; }
+  .ped-table .sire-cell.g4 { background: #EAF3ED; border-color: #D8E7DC; }
+  /* Dam-side: graduated warm stones */
+  .ped-table .dam-cell.g1 { background: #ECDFC9; border-color: #DBC9AA; }
+  .ped-table .dam-cell.g2 { background: #F0E6D3; border-color: #E0D2BA; }
+  .ped-table .dam-cell.g3 { background: #F4ECDF; border-color: #E5DAC8; }
+  .ped-table .dam-cell.g4 { background: #F8F2E8; border-color: #ECE2D2; }
+  /* Empty cells: subtle hatched diagonal */
+  .ped-table .empty {
+    background-image: repeating-linear-gradient(45deg, transparent, transparent 4px, rgba(156,148,140,0.12) 4px, rgba(156,148,140,0.12) 8px);
+    background-color: #FAF7F2;
+  }
+  .ped-table .g1 .anc-name { font-size: 0.92rem; }
+  .ped-table .g2 .anc-name { font-size: 0.85rem; }
+
+  /* Show locked text when visitor; real text when member (for table cells) */
+  .ped-real-text { display: none; }
+  .ped-locked-text { display: inline; }
+  body.is-member .ped-locked-text { display: none; }
+  body.is-member .ped-real-text { display: inline; }
+
+  /* Simple 3-row fallback for stallions without full tree */
+  .pedigree-simple .ped-row { display: grid; grid-template-columns: 130px 1fr 1fr; gap: 1rem; padding: 0.6rem 0; font-size: 0.85rem; border-bottom: 1px solid var(--linen); }
+  .pedigree-simple .ped-row:last-child { border: none; }
+  .pedigree-simple .ped-row .label { font-weight: 500; color: var(--earth); font-size: 0.7rem; text-transform: uppercase; letter-spacing: 0.05em; }
+  .pedigree-simple .ped-row .name { color: var(--peat); font-weight: 500; }
+  .pedigree-simple .ped-row .info { color: var(--earth); font-size: 0.78rem; }
+
   .pedigree-teaser-fade { position: absolute; bottom: 0; left: 0; right: 0; height: 180px; background: linear-gradient(to bottom, rgba(255,255,255,0) 0%, var(--white) 65%); display: flex; align-items: flex-end; justify-content: center; padding-bottom: 1.75rem; }
+  body.is-member .pedigree-teaser-fade { display: none; }
   .pedigree-cta { text-align: center; background: var(--white); padding: 0.5rem 1.5rem; position: relative; z-index: 2; }
   .pedigree-cta-tease { font-family: var(--font-display); font-style: italic; font-size: 1.35rem; color: var(--green-deep); margin-bottom: 0.25rem; }
   .pedigree-cta-meta { color: var(--earth); font-size: 0.85rem; margin-bottom: 0.85rem; }
@@ -391,31 +438,73 @@
 
   <div class="pedigree-teaser">
     <div class="pedigree-teaser-content">
-      
-      <div class="ped-row">
-        <div class="label">Sire</div>
-        <div class="name">
-          <span class="ped-locked-text">Members Only</span>
-          <span class="ped-real-text">Rynn Richard</span>
-        </div>
-        <div class="info">Verified pedigree · members only</div>
-      </div>
-      <div class="ped-row">
-        <div class="label">Dam</div>
-        <div class="name">
-          <span class="ped-locked-text">Members Only</span>
-          <span class="ped-real-text">Ailliocht Na Saoirse</span>
-        </div>
-        <div class="info">Verified pedigree · members only</div>
-      </div>
-      <div class="ped-row">
-        <div class="label">Dam&#39;s Sire</div>
-        <div class="name">
-          <span class="ped-locked-text">Members Only</span>
-          <span class="ped-real-text">Glencarrig Sparrow</span>
-        </div>
-        <div class="info">Verified pedigree · members only</div>
-      </div>
+      <table class="ped-table"><tbody><tr><td class="g1 sire-cell" rowspan="8">
+        <div class="anc-name"><span class="ped-locked-text">Members Only</span><span class="ped-real-text">Rynn Richard</span></div>
+        <div class="anc-info"><span class="ped-locked-text">— — — — — —</span><span class="ped-real-text">gr, 147cm, 1988, CONNEMARA PONY, CSB 904, IHR 38318</span></div>
+      </td><td class="g2 sire-cell" rowspan="4">
+        <div class="anc-name"><span class="ped-locked-text">Members Only</span><span class="ped-real-text">Ardravinna Andy</span></div>
+        <div class="anc-info"><span class="ped-locked-text">— — — — — —</span><span class="ped-real-text">gr, 147cm, 1982, CONNEMARA PONY, CSB 798, IHR 35238</span></div>
+      </td><td class="g3 sire-cell" rowspan="2">
+        <div class="anc-name"><span class="ped-locked-text">Members Only</span><span class="ped-real-text">Glyntown Paddy</span></div>
+        <div class="anc-info"><span class="ped-locked-text">— — — — — —</span><span class="ped-real-text">gr, 142cm, 1963</span></div>
+      </td><td class="g4 sire-cell" rowspan="1">
+        <div class="anc-name"><span class="ped-locked-text">Members Only</span><span class="ped-real-text">Doon Paddy</span></div>
+        <div class="anc-info"><span class="ped-locked-text">— — — — — —</span><span class="ped-real-text">140cm, 1953</span></div>
+      </td></tr><tr><td class="g4 sire-cell" rowspan="1">
+        <div class="anc-name"><span class="ped-locked-text">Members Only</span><span class="ped-real-text">Truska Colleen</span></div>
+        <div class="anc-info"><span class="ped-locked-text">— — — — — —</span><span class="ped-real-text">br, 142cm, 1951</span></div>
+      </td></tr><tr><td class="g3 sire-cell" rowspan="2">
+        <div class="anc-name"><span class="ped-locked-text">Members Only</span><span class="ped-real-text">Fenian Lass</span></div>
+        <div class="anc-info"><span class="ped-locked-text">— — — — — —</span><span class="ped-real-text">b ro, 137cm, 1973</span></div>
+      </td><td class="g4 sire-cell" rowspan="1">
+        <div class="anc-name"><span class="ped-locked-text">Members Only</span><span class="ped-real-text">Carna Dun</span></div>
+        <div class="anc-info"><span class="ped-locked-text">— — — — — —</span><span class="ped-real-text">buck, 140cm, 1948</span></div>
+      </td></tr><tr><td class="g4 sire-cell" rowspan="1">
+        <div class="anc-name"><span class="ped-locked-text">Members Only</span><span class="ped-real-text">Bright Cherry</span></div>
+        <div class="anc-info"><span class="ped-locked-text">— — — — — —</span><span class="ped-real-text">140cm, 1969</span></div>
+      </td></tr><tr><td class="g2 sire-cell" rowspan="4">
+        <div class="anc-name"><span class="ped-locked-text">Members Only</span><span class="ped-real-text">Fuchsia</span></div>
+        <div class="anc-info"><span class="ped-locked-text">— — — — — —</span><span class="ped-real-text">gr, 137cm, 1971, CONNEMARA PONY, CSB 5180</span></div>
+      </td><td class="g3 sire-cell" rowspan="2">
+        <div class="anc-name"><span class="ped-locked-text">Members Only</span><span class="ped-real-text">Rebel Wind</span></div>
+        <div class="anc-info"><span class="ped-locked-text">— — — — — —</span><span class="ped-real-text">gr, 142cm, 1960</span></div>
+      </td><td class="g4 sire-cell" rowspan="1">
+        <div class="anc-name"><span class="ped-locked-text">Members Only</span><span class="ped-real-text">Inver Rebel</span></div>
+        <div class="anc-info"><span class="ped-locked-text">— — — — — —</span><span class="ped-real-text">gr, 139cm, 1950</span></div>
+      </td></tr><tr><td class="g4 sire-cell" rowspan="1">
+        <div class="anc-name"><span class="ped-locked-text">Members Only</span><span class="ped-real-text">Windy</span></div>
+        <div class="anc-info"><span class="ped-locked-text">— — — — — —</span><span class="ped-real-text">149cm, 1940</span></div>
+      </td></tr><tr><td class="g3 sire-cell" rowspan="2">
+        <div class="anc-name"><span class="ped-locked-text">Members Only</span><span class="ped-real-text">Lucky Star</span></div>
+        <div class="anc-info"><span class="ped-locked-text">— — — — — —</span><span class="ped-real-text">b, 132cm, 1966</span></div>
+      </td><td class="g4 sire-cell" rowspan="1">
+        <div class="anc-name"><span class="ped-locked-text">Members Only</span><span class="ped-real-text">Carna Dun</span></div>
+        <div class="anc-info"><span class="ped-locked-text">— — — — — —</span><span class="ped-real-text">buck, 140cm, 1948</span></div>
+      </td></tr><tr><td class="g4 sire-cell" rowspan="1">
+        <div class="anc-name"><span class="ped-locked-text">Members Only</span><span class="ped-real-text">Dolan Star</span></div>
+        <div class="anc-info"><span class="ped-locked-text">— — — — — —</span><span class="ped-real-text">b, 138cm, 1960</span></div>
+      </td></tr><tr><td class="g1 dam-cell" rowspan="8">
+        <div class="anc-name"><span class="ped-locked-text">Members Only</span><span class="ped-real-text">Ailliocht Na Saoirse</span></div>
+        <div class="anc-info"><span class="ped-locked-text">— — — — — —</span><span class="ped-real-text">CONNEMARA PONY</span></div>
+      </td><td class="g2 dam-cell" rowspan="4">
+        <div class="anc-name"><span class="ped-locked-text">Members Only</span><span class="ped-real-text">Glencarrig Sparrow</span></div>
+        <div class="anc-info"><span class="ped-locked-text">— — — — — —</span><span class="ped-real-text">gr, 148cm, 2001, CONNEMARA PONY</span></div>
+      </td><td class="g3 dam-cell" rowspan="2">
+        <div class="anc-name"><span class="ped-locked-text">Members Only</span><span class="ped-real-text">Castlestrange Fionn</span></div>
+        <div class="anc-info"><span class="ped-locked-text">— — — — — —</span><span class="ped-real-text">gr, 146cm, 1993</span></div>
+      </td><td class="g4 dam-cell empty" rowspan="1"></td></tr><tr><td class="g4 dam-cell empty" rowspan="1"></td></tr><tr><td class="g3 dam-cell" rowspan="2">
+        <div class="anc-name"><span class="ped-locked-text">Members Only</span><span class="ped-real-text">April Rose</span></div>
+        <div class="anc-info"><span class="ped-locked-text">— — — — — —</span><span class="ped-real-text">gr, 145cm, 1993</span></div>
+      </td><td class="g4 dam-cell empty" rowspan="1"></td></tr><tr><td class="g4 dam-cell empty" rowspan="1"></td></tr><tr><td class="g2 dam-cell" rowspan="4">
+        <div class="anc-name"><span class="ped-locked-text">Members Only</span><span class="ped-real-text">Saoirse</span></div>
+        <div class="anc-info"><span class="ped-locked-text">— — — — — —</span><span class="ped-real-text">gr, 1996, CONNEMARA PONY</span></div>
+      </td><td class="g3 dam-cell" rowspan="2">
+        <div class="anc-name"><span class="ped-locked-text">Members Only</span><span class="ped-real-text">Moy Johnnys Pride</span></div>
+        <div class="anc-info"><span class="ped-locked-text">— — — — — —</span><span class="ped-real-text">gr, 142cm, 1990</span></div>
+      </td><td class="g4 dam-cell empty" rowspan="1"></td></tr><tr><td class="g4 dam-cell empty" rowspan="1"></td></tr><tr><td class="g3 dam-cell" rowspan="2">
+        <div class="anc-name"><span class="ped-locked-text">Members Only</span><span class="ped-real-text">Little Jennie Grey</span></div>
+        <div class="anc-info"><span class="ped-locked-text">— — — — — —</span><span class="ped-real-text">gr, 137cm, 1978</span></div>
+      </td><td class="g4 dam-cell empty" rowspan="1"></td></tr><tr><td class="g4 dam-cell empty" rowspan="1"></td></tr></tbody></table>
     </div>
 
     <div class="pedigree-teaser-fade">
