@@ -505,9 +505,9 @@ const SEO_PAGES = new Set([
   'currabawn-rambo',
   'darraheen-fionn',
   'derryveeney-cruise',
+  'diamond-s-ice-wind-and-rain',
+  'diamond-s-shadow-fix',
   'diamondczech-full-moon',
-  'diamonds-ice-wind-and-rain',
-  'diamonds-shadow-fix',
   'disney',
   'doohulla-dunally',
   'doyles-massimo-pondi',
@@ -516,20 +516,20 @@ const SEO_PAGES = new Set([
   'dunran-benjamin-button',
   'eastlands-hollybrae',
   'edenmist-pride-of-thieves',
-  'ekelys-turning-leaf',
+  'ekely-s-turning-leaf',
   'forest-view-prince',
   'forty-five',
   'glencarrig-joe',
   'glencarrig-marble',
   'highfield-joey',
-  'ice-and-fire-dalbran',
+  'ice-and-fire-d-albran',
   'inverin-danny',
   'killaspic-ross',
   'killour-star',
   'kilmoraun-eden-shadow',
   'king-bunowen-castle-jeremiah',
   'kingstown-dantheman',
-  'kit-harington-rose',
+  'kit-harington-r-ose',
   'knockbridge-joey',
   'knockbridge-over-the-moon',
   'knockma-cloud',
@@ -555,7 +555,7 @@ const SEO_PAGES = new Set([
   'rosedale-casper',
   'silver-shadow',
   'silvermountain-prince',
-  'skaergardens-wild-to-night',
+  'sk-rgardens-wild-to-night',
   'summer-hill-bobby',
   'touten-un-du-chapelan',
   'tra-bhain-ceileog',
@@ -579,8 +579,20 @@ function toSlug(name) {
     .replace(/^-+|-+$/g, '');
 }
 
+/* Override map for stallions whose photo/video assets in R2
+   were uploaded under a slug that doesn't match toSlug() output.
+   Keep this in sync with the actual R2 folder names. */
+const SLUG_OVERRIDES = {
+  "Diamond's Shadow Fix":          "diamond-s-shadow-fix",
+  "Diamond's Ice, Wind and Rain":  "diamond-s-ice-wind-and-rain",
+  "Kit Harington R'Ose":           "kit-harington-r-ose",
+  "Ice and Fire d’Albran":            "ice-and-fire-d-albran",
+  "Ekely's Turning Leaf":          "ekely-s-turning-leaf",
+  "Skærgårdens Wild to Night":      "sk-rgardens-wild-to-night",
+};
+
 function profileHref(name) {
-  const slug = toSlug(name);
+  const slug = SLUG_OVERRIDES[name] || toSlug(name);
   return SEO_PAGES.has(slug)
     ? `/stallions/${slug}/`
     : `/stallion-search.html?stallion=${slug}`;
