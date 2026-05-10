@@ -12,8 +12,15 @@
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,400;0,500;0,600;1,400;1,500&family=DM+Sans:opsz,wght@9..40,300;9..40,400;9..40,500;9..40,600&display=swap" rel="stylesheet">
 <!--
-  BreedPulse Stallion Directory — v3 (Deep-link support)
-  Last updated: 2026-05-01
+  BreedPulse Stallion Directory — v4 (auth.breedpulse.com migration)
+  Last updated: 2026-05-10
+
+  CHANGES FROM v3:
+   • AUTH_API now points to https://auth.breedpulse.com (custom domain)
+   • This allows the bp_session cookie to be scoped to .breedpulse.com
+     so it works as a first-party cookie shared between auth.* and directory.*
+     subdomains (fixes cross-device sign-in failure on Android Chrome,
+     iOS Safari, and any browser with strict third-party cookie blocking).
 
   CHANGES FROM v2:
    • Added URL parameter support: ?stallion=<slug> auto-opens the matching stallion's modal
@@ -532,7 +539,7 @@
    =================================================================
    Backends:
      - DATA_API:  returns stallion list (existing, unchanged)
-     - AUTH_API:  handles membership state (new)
+     - AUTH_API:  handles membership state (custom domain)
 */
 
 const DATA_API = 'https://summer-river-93fa.lucindakelly.workers.dev';
