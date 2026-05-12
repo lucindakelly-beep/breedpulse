@@ -10,20 +10,19 @@
 <meta name="description" content="3DR Gabha Oir · 2014 foaled · Buckskin / Dun · 148cm · CPBS — Connemara Pony Breeders&#x27; Society registered · Class 2 · standing in Ireland. Verified Connemara stallion directory.">
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-<link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,400;0,500;0,600;1,400;1,500&family=DM+Sans:opsz,wght@9..40,300;9..40,400;9..40,500;9..40,600&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet">
+<link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,400;0,500;0,600;1,400;1,500&family=DM+Sans:opsz,wght@9..40,300;9..40,400;9..40,500;9..40,600&display=swap" rel="stylesheet">
 <style>
   :root {
     --green: #2D6A4F; --green-dark: #1E4D38; --green-deep: #142F22;
     --green-mid: #3D8A67; --green-pale: #D4EAE0; --green-ghost: #EEF7F2;
     --green-wash: #F4FAF7;
     --stone: #F5F2ED; --linen: #FAF7F2; --stone-warm: #EDE8E0; --ash: #E6E1DB;
-    --peat: #2C2825; --earth: #5C5248; --peat-soft: #5C5248;
-    --fog: #9C948C; --whisper: #9C948C; --mist: #C4BCB4;
-    --white: #FFFFFF; --paper: #FFFFFF;
+    --peat: #2C2825; --earth: #5C5248;
+    --fog: #9C948C; --mist: #C4BCB4;
+    --white: #FFFFFF;
     --gold: #B8915C; --copper: #B8915C;
     --font-display: 'Cormorant Garamond', Georgia, serif;
     --font-body: 'DM Sans', sans-serif;
-    --font-mono: 'JetBrains Mono', ui-monospace, 'SFMono-Regular', Menlo, Consolas, monospace;
     --radius: 10px;
     --shadow: 0 2px 12px rgba(44,40,37,0.08), 0 1px 3px rgba(44,40,37,0.04);
   }
@@ -73,11 +72,13 @@
   .thumb img { width: 100%; height: 100%; object-fit: contain; }
   .thumb.active { border-color: var(--copper); }
   .thumb:hover { transform: translateY(-1px); }
+
   .thumb.locked { cursor: default; }
   .thumb.locked img { filter: blur(8px) brightness(0.55) saturate(0.7); transform: scale(1.15); }
   .thumb-lock { position: absolute; inset: 0; display: flex; align-items: center; justify-content: center; background: rgba(20,47,34,0.35); z-index: 1; }
   .thumb-lock svg { width: 22px; height: 22px; color: rgba(255,255,255,0.95); filter: drop-shadow(0 2px 4px rgba(0,0,0,0.5)); }
   .thumb.video.locked .thumb-lock svg { width: 26px; height: 26px; }
+
   body.is-member .thumb.locked img { filter: none; transform: none; }
   body.is-member .thumb.locked .thumb-lock { display: none; }
   body.is-member .thumb.locked { cursor: pointer; }
@@ -95,6 +96,7 @@
   .spec-row:last-child { border-bottom: none; }
   .spec-row dt { font-weight: 500; color: var(--earth); text-transform: uppercase; font-size: 0.66rem; letter-spacing: 0.06em; padding-top: 0.15rem; }
   .spec-row dd { color: var(--peat); font-weight: 400; }
+
   .spec-row.locked-row { background: linear-gradient(to right, var(--green-wash) 0%, transparent 100%); position: relative; }
   .spec-row.locked-row dt { color: var(--green-dark); }
   .spec-row.locked-row dd { display: flex; align-items: center; gap: 0.6rem; }
@@ -125,27 +127,61 @@
   .lock-chip { display: inline-flex; align-items: center; gap: 0.4rem; padding: 0.3rem 0.75rem; border-radius: 20px; font-family: var(--font-body); font-size: 0.7rem; font-weight: 500; letter-spacing: 0.04em; text-transform: uppercase; background: var(--copper); color: var(--white); font-style: normal; cursor: pointer; border: none; transition: background 0.2s ease; text-decoration: none; }
   .lock-chip:hover { background: #b85a32; color: white; }
   .lock-chip svg { width: 11px; height: 11px; }
+
   .unlocked-chip { display: none; align-items: center; gap: 0.4rem; padding: 0.3rem 0.75rem; border-radius: 20px; font-family: var(--font-body); font-size: 0.7rem; font-weight: 600; letter-spacing: 0.05em; text-transform: uppercase; background: var(--green-pale); color: #27500A; border: 1px solid #C0DD97; font-style: normal; }
 
+  /* ============ PEDIGREE TEASER & TABLE ============ */
   .pedigree-teaser { position: relative; background: var(--white); border: 1px solid var(--ash); border-radius: var(--radius); overflow: hidden; }
-  .pedigree-teaser-content { padding: 1.5rem 1.75rem 4rem; filter: blur(7px); user-select: none; pointer-events: none; opacity: 0.75; transition: filter 0.3s ease, opacity 0.3s ease; overflow-x: auto; max-height: 600px; overflow-y: auto; }
-  body.is-member .pedigree-teaser-content { filter: none; opacity: 1; user-select: text; pointer-events: auto; max-height: none; padding-bottom: 1.5rem; }
+  .pedigree-teaser-content { padding: 1.5rem 1.75rem; filter: blur(7px); user-select: none; pointer-events: none; opacity: 0.75; transition: filter 0.3s ease, opacity 0.3s ease; overflow-x: auto; }
+  body.is-member .pedigree-teaser-content { filter: none; opacity: 1; user-select: text; pointer-events: auto; }
 
-  .ped-ascii { font-family: var(--font-mono); font-size: 0.72rem; line-height: 1.45; color: var(--peat); white-space: pre; tab-size: 2; }
-  @media (max-width: 720px) { .ped-ascii { font-size: 0.62rem; line-height: 1.4; } }
+  /* AllBreedPedigree-style 5-gen table */
+  .ped-table {
+    width: 100%; min-width: 720px;
+    border-collapse: separate; border-spacing: 4px;
+    font-size: 0.78rem;
+    table-layout: fixed;
+  }
+  .ped-table td {
+    padding: 0.5rem 0.7rem;
+    border-radius: 4px;
+    vertical-align: middle;
+    border: 1px solid transparent;
+  }
+  .ped-table .anc-name {
+    font-weight: 600; color: var(--green-deep);
+    font-size: 0.82rem; line-height: 1.25;
+    margin-bottom: 0.15rem;
+  }
+  .ped-table .anc-info {
+    font-size: 0.68rem; color: var(--earth);
+    font-weight: 400;
+  }
+  /* Sire-side: graduated forest greens */
+  .ped-table .sire-cell.g1 { background: #C9DDD0; border-color: #B4CCC0; }
+  .ped-table .sire-cell.g2 { background: #D4E5DA; border-color: #C0D6C7; }
+  .ped-table .sire-cell.g3 { background: #DFEDE3; border-color: #CCDFD2; }
+  .ped-table .sire-cell.g4 { background: #EAF3ED; border-color: #D8E7DC; }
+  /* Dam-side: graduated warm stones */
+  .ped-table .dam-cell.g1 { background: #ECDFC9; border-color: #DBC9AA; }
+  .ped-table .dam-cell.g2 { background: #F0E6D3; border-color: #E0D2BA; }
+  .ped-table .dam-cell.g3 { background: #F4ECDF; border-color: #E5DAC8; }
+  .ped-table .dam-cell.g4 { background: #F8F2E8; border-color: #ECE2D2; }
+  /* Empty: hatched diagonal */
+  .ped-table .empty {
+    background-image: repeating-linear-gradient(45deg, transparent, transparent 4px, rgba(156,148,140,0.12) 4px, rgba(156,148,140,0.12) 8px);
+    background-color: #FAF7F2;
+  }
+  .ped-table .g1 .anc-name { font-size: 0.92rem; }
+  .ped-table .g2 .anc-name { font-size: 0.85rem; }
 
-  .pedigree-simple .ped-row { display: grid; grid-template-columns: 130px 1fr 1fr; gap: 1rem; padding: 0.6rem 0; font-size: 0.85rem; border-bottom: 1px solid var(--linen); }
-  .pedigree-simple .ped-row:last-child { border: none; }
-  .pedigree-simple .ped-row .label { font-weight: 500; color: var(--earth); font-size: 0.7rem; text-transform: uppercase; letter-spacing: 0.05em; }
-  .pedigree-simple .ped-row .name { color: var(--peat); font-weight: 500; }
-  .pedigree-simple .ped-row .info { color: var(--earth); font-size: 0.78rem; }
-
+  /* Locked text shown to visitors; real text shown to members */
   .ped-real-text { display: none; }
   .ped-locked-text { display: inline; }
   body.is-member .ped-locked-text { display: none; }
   body.is-member .ped-real-text { display: inline; }
 
-  .pedigree-teaser-fade { position: absolute; bottom: 0; left: 0; right: 0; height: 220px; background: linear-gradient(to bottom, rgba(255,255,255,0) 0%, var(--white) 55%); display: flex; align-items: flex-end; justify-content: center; padding-bottom: 1.75rem; pointer-events: auto; }
+  .pedigree-teaser-fade { position: absolute; bottom: 0; left: 0; right: 0; height: 180px; background: linear-gradient(to bottom, rgba(255,255,255,0) 0%, var(--white) 65%); display: flex; align-items: flex-end; justify-content: center; padding-bottom: 1.75rem; }
   body.is-member .pedigree-teaser-fade { display: none; }
   .pedigree-cta { text-align: center; background: var(--white); padding: 0.5rem 1.5rem; position: relative; z-index: 2; }
   .pedigree-cta-tease { font-family: var(--font-display); font-style: italic; font-size: 1.35rem; color: var(--green-deep); margin-bottom: 0.25rem; }
@@ -153,6 +189,7 @@
   .pedigree-unlock-btn { display: inline-block; background: var(--green-dark); color: var(--white); padding: 0.6rem 1.5rem; border-radius: 30px; font-size: 0.78rem; font-weight: 500; letter-spacing: 0.04em; transition: background 0.2s ease; cursor: pointer; border: none; font-family: var(--font-body); text-decoration: none; }
   .pedigree-unlock-btn:hover { background: var(--green-deep); color: var(--white); }
 
+  /* Performance grid */
   .perf-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(240px, 1fr)); gap: 1rem; background: var(--white); border: 1px solid var(--ash); border-radius: var(--radius); padding: 1.25rem 1.5rem; }
   .perf-row { padding: 0.6rem 0; border-bottom: 1px solid var(--linen); }
   .perf-row:last-child { border-bottom: none; }
@@ -160,6 +197,7 @@
   .perf-locked { display: flex; align-items: center; gap: 0.5rem; }
   .perf-locked .locked-value { flex: 1; }
 
+  /* Booking upsell */
   .booking-upsell { background: linear-gradient(145deg, var(--green-dark) 0%, var(--green-deep) 100%); color: var(--stone); padding: 2.5rem 2rem; border-radius: var(--radius); box-shadow: var(--shadow); position: relative; overflow: hidden; display: grid; grid-template-columns: 1fr auto; gap: 2rem; align-items: center; }
   @media (max-width: 720px) { .booking-upsell { grid-template-columns: 1fr; text-align: center; } }
   .booking-upsell::before { content: ''; position: absolute; inset: 0; background: radial-gradient(ellipse at 100% 0%, rgba(184,145,92,0.18) 0%, transparent 55%); pointer-events: none; }
@@ -189,6 +227,7 @@
   footer a { color: var(--stone); }
   footer .brand { font-size: 1.2rem; }
 
+  /* Video lightbox */
   .video-lightbox { display: none; position: fixed; inset: 0; z-index: 9999; align-items: center; justify-content: center; padding: 1.5rem; }
   .video-lightbox.open { display: flex; }
   .video-lightbox-backdrop { position: absolute; inset: 0; background: rgba(20,47,34,0.92); backdrop-filter: blur(6px); cursor: pointer; }
@@ -257,7 +296,7 @@
     <p class="hero-subtitle">2014 foaled · Buckskin / Dun · 148cm · Ireland</p>
 
     <div class="card-meta">
-      <span class="card-tag studbook">CPBS — Connemara Pony Breeders&#x27; Society</span>
+      <span class="card-tag studbook">CPBS</span>
       <span class="card-tag">148cm</span>
       <span class="card-tag">Buckskin / Dun</span>
       <span class="card-tag country">Ireland</span>
@@ -287,7 +326,7 @@
           <span class="members-only-label"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="11" width="18" height="11" rx="2"/><path d="M7 11V7a5 5 0 0 1 10 0v4"/></svg> Members Only</span>
         </dd>
       </div>
-      <div class="spec-row"><dt>Studbook</dt><dd>CPBS — Connemara Pony Breeders&#x27; Society</dd></div>
+      <div class="spec-row"><dt>Studbook</dt><dd>CPBS</dd></div>
       <div class="spec-row"><dt>Grading</dt><dd>Class 2</dd></div>
       <div class="spec-row"><dt>HWSD</dt><dd>HWSD N/N Clear</dd></div>
       <div class="spec-row"><dt>Country of Base</dt><dd>Ireland</dd></div>
@@ -341,9 +380,10 @@
 
 </section>
 
+<!-- ============ PEDIGREE ============ -->
 <section class="detail">
   <h2>
-    Pedigree — 5 generations
+    Pedigree
     <a href="https://buy.stripe.com/cNi6oI1m8d4Ha654aZ2B200" class="lock-chip" aria-label="Unlock with Season Pass">
       <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="11" width="18" height="11" rx="2"/><path d="M7 11V7a5 5 0 0 1 10 0v4"/></svg> Members Only
     </a>
@@ -352,80 +392,20 @@
 
   <div class="pedigree-teaser">
     <div class="pedigree-teaser-content">
-      <pre class="ped-ascii">3DR GABHA OIR  C, 2014, CONNEMARA PONY
-
-├─ FUNAMBULE II  gr, 148cm, 1993, CONNEMARA PONY
-│   ├─ ABBEYLEIX APOLLO  gr, 148cm, 1971, CONNEMARA PONY, CSB 498
-│   │   ├─ CARNA BOBBY  140cm, 1946, CONNEMARA PONY, CSB 79
-│   │   │   ├─ GIL  pal, 140cm, 1939
-│   │   │   │   ├─ INNISHGOILL LADDIE  gr, 137cm, 1934
-│   │   │   │   └─ GOLDEN GLEAM  buck, 13.3hh, 1932
-│   │   │   └─ CARNA DOLLY  gr, 135cm, 1936
-│   │   │       ├─ BUCKNA  b, 1925
-│   │   │       └─ COLLEEN BAWN  gr, 134cm, 1929
-│   │   └─ BLUE MOON  gr, 137cm, 1962, CONNEMARA PONY, CSB 2542
-│   │       ├─ DOON PADDY  140cm, 1953
-│   │       │   ├─ CARNA DUN  buck, 140cm, 1948
-│   │       │   └─ DOON LILY  gr, 139cm, 1942
-│   │       └─ OLD ADVENTURE  br, 147cm, 1948
-│   │           └─ ADVENTURE  br, 13.1hh, 1925
-│   └─ QUINTETTE III  gr, 145cm, 1982, CONNEMARA PONY
-│       ├─ I DES CARTES  gr, 145cm, 1974, CONNEMARA PONY
-│       │   ├─ ISLAND EARL  gr, 143cm, 1963
-│       │   │   ├─ CARNA DUN  buck, 140cm, 1948
-│       │   │   └─ HELPMATE  gr, 139cm, 1955
-│       │   └─ PILLAGH GREY  gr, 142cm, 1962
-│       │       ├─ MACDARA  buck, 145cm, 1948
-│       │       └─ PILLAGH BEAUTY  gr, 139cm, 1959
-│       └─ FARAH  gr, 136cm, 1969, CONNEMARA PONY, CSB 4959
-│           ├─ LAMBAY FIREBALL  buck, 143cm, 1963
-│           │   ├─ CAMLIN CICADA  b, 134cm, 1959
-│           │   └─ CLONKEEHAN EASTER LILY  buck, 140cm, 1957
-│           └─ PASSPORT  gr, 139cm, 1962
-│               ├─ CARNA BOBBY  140cm, 1946
-│               └─ POLL  gr, 144cm, 1949
-│
-└─ CAILIN SIONNA  buck, 142cm, 2000, CONNEMARA PONY
-    ├─ MAAM HILL  buck, 145cm, 1977, CONNEMARA PONY, CSB 728, IHR 29602
-    │   ├─ DUN AENGUS  buck, 134cm, 1958, CONNEMARA PONY, CSB 120
-    │   │   ├─ DUN LORENZO  buck, 13.2, 1941
-    │   │   │   ├─ DUN HEATH  buck, 13.2, 1936
-    │   │   │   └─ DRAIGHNEANN DONN  br, 137cm, 1930
-    │   │   └─ ROSE OF KILLOLA  ch, 142cm, 1944
-    │   │       ├─ WINTER  gr, 1935
-    │   │       └─ IVY LASS  gr, 137cm, 1939
-    │   └─ BAY LADY  b, 134cm, 1968, CONNEMARA PONY, CSB 3971
-    │       ├─ CLONJOY  gr, 134cm, 1958
-    │       │   ├─ CLONKEEHAN AURATUM  buck, 139cm, 1954
-    │       │   └─ JOYCE GREY  gr, 137cm, 1949
-    │       └─ CALLOWFEENISH BAY  b ro, 137cm, 1948
-    └─ GRAINNE MHAILA  CONNEMARA PONY
-        ├─ SILVER CLOUD  b, 145cm, 1981, CONNEMARA PONY, CSB 811, IHR 33677
-        │   ├─ SKRYNE BRIGHT CLOUD  gr, 142cm, 1974
-        │   │   ├─ CLONKEEHAN NIMBUS  br, 139cm, 1965
-        │   │   └─ AUGHRIS BRIGHT  gr, 130cm, 1959
-        │   └─ WISE CUCKOO  buck, 132cm, 1963
-        │       ├─ CLONKEEHAN AURATUM  buck, 139cm, 1954
-        │       └─ WISE SPARROW  gr, 137cm, 1960
-        └─ LISHMAR BAY  1990, CONNEMARA PONY
-            ├─ GORTEEN BOY  gr, 147cm, 1983
-            │   ├─ SILVER ROCKET  gr, 142cm, 1970
-            │   └─ GLOVES MISTY  gr, 147cm, 1974
-            └─ ATLANTIC MIRANDA  CONNEMARA PONY
-                ├─ ROSENAHARLEY ROWLEY  gr, 140cm, 1979
-                └─ VILLAGE MIRANDA  gr, 135cm, 1974</pre>
+      <table class="ped-table"><tbody><tr><td class="g1 sire-cell" rowspan="8"><div class="anc-name"><span class="ped-locked-text">Members Only</span><span class="ped-real-text">Funambule II</span></div><div class="anc-info"><span class="ped-locked-text">— — — — — —</span><span class="ped-real-text">gr, 1993, 148cm</span></div></td><td class="g2 sire-cell" rowspan="4"><div class="anc-name"><span class="ped-locked-text">Members Only</span><span class="ped-real-text">Abbeyleix Apollo</span></div><div class="anc-info"><span class="ped-locked-text">— — — — — —</span><span class="ped-real-text">gr, 1971, 148cm</span></div></td><td class="g3 sire-cell" rowspan="2"><div class="anc-name"><span class="ped-locked-text">Members Only</span><span class="ped-real-text">Carna Bobby</span></div><div class="anc-info"><span class="ped-locked-text">— — — — — —</span><span class="ped-real-text">1946, 140cm</span></div></td><td class="g4 sire-cell" rowspan="1"><div class="anc-name"><span class="ped-locked-text">Members Only</span><span class="ped-real-text">Gil</span></div><div class="anc-info"><span class="ped-locked-text">— — — — — —</span><span class="ped-real-text">pal, 1939, 140cm</span></div></td></tr><tr><td class="g4 sire-cell" rowspan="1"><div class="anc-name"><span class="ped-locked-text">Members Only</span><span class="ped-real-text">Carna Dolly</span></div><div class="anc-info"><span class="ped-locked-text">— — — — — —</span><span class="ped-real-text">gr, 1936, 135cm</span></div></td></tr><tr><td class="g3 sire-cell" rowspan="2"><div class="anc-name"><span class="ped-locked-text">Members Only</span><span class="ped-real-text">Blue Moon</span></div><div class="anc-info"><span class="ped-locked-text">— — — — — —</span><span class="ped-real-text">gr, 1962, 137cm</span></div></td><td class="g4 sire-cell" rowspan="1"><div class="anc-name"><span class="ped-locked-text">Members Only</span><span class="ped-real-text">Doon Paddy</span></div><div class="anc-info"><span class="ped-locked-text">— — — — — —</span><span class="ped-real-text">1953, 140cm</span></div></td></tr><tr><td class="g4 sire-cell" rowspan="1"><div class="anc-name"><span class="ped-locked-text">Members Only</span><span class="ped-real-text">Old Adventure</span></div><div class="anc-info"><span class="ped-locked-text">— — — — — —</span><span class="ped-real-text">br, 1948, 147cm</span></div></td></tr><tr><td class="g2 sire-cell" rowspan="4"><div class="anc-name"><span class="ped-locked-text">Members Only</span><span class="ped-real-text">Quintette III</span></div><div class="anc-info"><span class="ped-locked-text">— — — — — —</span><span class="ped-real-text">gr, 1982, 145cm</span></div></td><td class="g3 sire-cell" rowspan="2"><div class="anc-name"><span class="ped-locked-text">Members Only</span><span class="ped-real-text">I Des Cartes</span></div><div class="anc-info"><span class="ped-locked-text">— — — — — —</span><span class="ped-real-text">gr, 1974, 145cm</span></div></td><td class="g4 sire-cell" rowspan="1"><div class="anc-name"><span class="ped-locked-text">Members Only</span><span class="ped-real-text">Island Earl</span></div><div class="anc-info"><span class="ped-locked-text">— — — — — —</span><span class="ped-real-text">gr, 1963, 143cm</span></div></td></tr><tr><td class="g4 sire-cell" rowspan="1"><div class="anc-name"><span class="ped-locked-text">Members Only</span><span class="ped-real-text">Pillagh Grey</span></div><div class="anc-info"><span class="ped-locked-text">— — — — — —</span><span class="ped-real-text">gr, 1962, 142cm</span></div></td></tr><tr><td class="g3 sire-cell" rowspan="2"><div class="anc-name"><span class="ped-locked-text">Members Only</span><span class="ped-real-text">Farah</span></div><div class="anc-info"><span class="ped-locked-text">— — — — — —</span><span class="ped-real-text">gr, 1969, 136cm</span></div></td><td class="g4 sire-cell" rowspan="1"><div class="anc-name"><span class="ped-locked-text">Members Only</span><span class="ped-real-text">Lambay Fireball</span></div><div class="anc-info"><span class="ped-locked-text">— — — — — —</span><span class="ped-real-text">buck, 1963, 143cm</span></div></td></tr><tr><td class="g4 sire-cell" rowspan="1"><div class="anc-name"><span class="ped-locked-text">Members Only</span><span class="ped-real-text">Passport</span></div><div class="anc-info"><span class="ped-locked-text">— — — — — —</span><span class="ped-real-text">gr, 1962, 139cm</span></div></td></tr><tr><td class="g1 dam-cell" rowspan="8"><div class="anc-name"><span class="ped-locked-text">Members Only</span><span class="ped-real-text">Cailin Sionna</span></div><div class="anc-info"><span class="ped-locked-text">— — — — — —</span><span class="ped-real-text">buck, 2000, 142cm</span></div></td><td class="g2 dam-cell" rowspan="4"><div class="anc-name"><span class="ped-locked-text">Members Only</span><span class="ped-real-text">Maam Hill</span></div><div class="anc-info"><span class="ped-locked-text">— — — — — —</span><span class="ped-real-text">buck, 1977, 145cm</span></div></td><td class="g3 dam-cell" rowspan="2"><div class="anc-name"><span class="ped-locked-text">Members Only</span><span class="ped-real-text">Dun Aengus</span></div><div class="anc-info"><span class="ped-locked-text">— — — — — —</span><span class="ped-real-text">buck, 1958, 134cm</span></div></td><td class="g4 dam-cell" rowspan="1"><div class="anc-name"><span class="ped-locked-text">Members Only</span><span class="ped-real-text">Dun Lorenzo</span></div><div class="anc-info"><span class="ped-locked-text">— — — — — —</span><span class="ped-real-text">buck, 1941</span></div></td></tr><tr><td class="g4 dam-cell" rowspan="1"><div class="anc-name"><span class="ped-locked-text">Members Only</span><span class="ped-real-text">Rose of Killola</span></div><div class="anc-info"><span class="ped-locked-text">— — — — — —</span><span class="ped-real-text">ch, 1944, 142cm</span></div></td></tr><tr><td class="g3 dam-cell" rowspan="2"><div class="anc-name"><span class="ped-locked-text">Members Only</span><span class="ped-real-text">Bay Lady</span></div><div class="anc-info"><span class="ped-locked-text">— — — — — —</span><span class="ped-real-text">b, 1968, 134cm</span></div></td><td class="g4 dam-cell" rowspan="1"><div class="anc-name"><span class="ped-locked-text">Members Only</span><span class="ped-real-text">Clonjoy</span></div><div class="anc-info"><span class="ped-locked-text">— — — — — —</span><span class="ped-real-text">gr, 1958, 134cm</span></div></td></tr><tr><td class="g4 dam-cell" rowspan="1"><div class="anc-name"><span class="ped-locked-text">Members Only</span><span class="ped-real-text">Callowfeenish Bay</span></div><div class="anc-info"><span class="ped-locked-text">— — — — — —</span><span class="ped-real-text">b ro, 1948, 137cm</span></div></td></tr><tr><td class="g2 dam-cell" rowspan="4"><div class="anc-name"><span class="ped-locked-text">Members Only</span><span class="ped-real-text">Grainne Mhaila</span></div><div class="anc-info"><span class="ped-locked-text">— — — — — —</span><span class="ped-real-text">—</span></div></td><td class="g3 dam-cell" rowspan="2"><div class="anc-name"><span class="ped-locked-text">Members Only</span><span class="ped-real-text">Silver Cloud</span></div><div class="anc-info"><span class="ped-locked-text">— — — — — —</span><span class="ped-real-text">b, 1981, 145cm</span></div></td><td class="g4 dam-cell" rowspan="1"><div class="anc-name"><span class="ped-locked-text">Members Only</span><span class="ped-real-text">Skryne Bright Cloud</span></div><div class="anc-info"><span class="ped-locked-text">— — — — — —</span><span class="ped-real-text">gr, 1974, 142cm</span></div></td></tr><tr><td class="g4 dam-cell" rowspan="1"><div class="anc-name"><span class="ped-locked-text">Members Only</span><span class="ped-real-text">Wise Cuckoo</span></div><div class="anc-info"><span class="ped-locked-text">— — — — — —</span><span class="ped-real-text">buck, 1963, 132cm</span></div></td></tr><tr><td class="g3 dam-cell" rowspan="2"><div class="anc-name"><span class="ped-locked-text">Members Only</span><span class="ped-real-text">Lishmar Bay</span></div><div class="anc-info"><span class="ped-locked-text">— — — — — —</span><span class="ped-real-text">1990</span></div></td><td class="g4 dam-cell" rowspan="1"><div class="anc-name"><span class="ped-locked-text">Members Only</span><span class="ped-real-text">Gorteen Boy</span></div><div class="anc-info"><span class="ped-locked-text">— — — — — —</span><span class="ped-real-text">gr, 1983, 147cm</span></div></td></tr><tr><td class="g4 dam-cell" rowspan="1"><div class="anc-name"><span class="ped-locked-text">Members Only</span><span class="ped-real-text">Atlantic Miranda</span></div><div class="anc-info"><span class="ped-locked-text">— — — — — —</span><span class="ped-real-text">—</span></div></td></tr></tbody></table>
     </div>
 
     <div class="pedigree-teaser-fade">
       <div class="pedigree-cta">
-        <p class="pedigree-cta-tease">Full 5-generation pedigree available to members</p>
-        <p class="pedigree-cta-meta">Verified ancestors · including HWSD-tested lineage</p>
+        <p class="pedigree-cta-tease">Full pedigree available to members</p>
+        <p class="pedigree-cta-meta">Verified ancestors · multiple generations · including HWSD-tested lineage</p>
         <a href="https://buy.stripe.com/cNi6oI1m8d4Ha654aZ2B200" class="pedigree-unlock-btn">Unlock with Season Pass · €9.99</a>
       </div>
     </div>
   </div>
 </section>
 
+<!-- ============ PERFORMANCE & PROGENY ============ -->
 <section class="detail">
   <h2>
     Performance &amp; Progeny
@@ -441,7 +421,7 @@
         <div class="perf-label">Notable Progeny</div>
         <div class="perf-locked">
           <span class="locked-value">xxxxxx xxxxx, xxxxxxxxx xxxxx</span>
-          <span class="real-value">Not yet listed by owner</span>
+          <span class="real-value">Young stallion — building progeny record</span>
           <span class="members-only-label"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="11" width="18" height="11" rx="2"/><path d="M7 11V7a5 5 0 0 1 10 0v4"/></svg> Members Only</span>
         </div>
       </div>
@@ -450,7 +430,7 @@
         <div class="perf-label">Top Show Results</div>
         <div class="perf-locked">
           <span class="locked-value">xxx xxxxx xxxxxxxxx xxxx</span>
-          <span class="real-value">Not yet listed by owner</span>
+          <span class="real-value">Working hunter and ridden performer</span>
           <span class="members-only-label"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="11" width="18" height="11" rx="2"/><path d="M7 11V7a5 5 0 0 1 10 0v4"/></svg> Members Only</span>
         </div>
       </div>
@@ -487,7 +467,7 @@
         <div class="perf-label">Booking Email</div>
         <div class="perf-locked">
           <span class="locked-value">xxxxxxxxxxxx xxxxxxxxxx</span>
-          <span class="real-value">Contact via phone</span>
+          <span class="real-value">Contact owner via phone</span>
           <span class="members-only-label"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="11" width="18" height="11" rx="2"/><path d="M7 11V7a5 5 0 0 1 10 0v4"/></svg> Members Only</span>
         </div>
       </div>
@@ -495,6 +475,7 @@
   </div>
 </section>
 
+<!-- ============ BOOKING UPSELL (visitor only) ============ -->
 <section class="detail">
   <div class="booking-upsell">
     <div class="booking-upsell-text">
@@ -515,6 +496,7 @@
   </div>
 </section>
 
+<!-- ============ MEMBER-ONLY BOOKING CARD ============ -->
 <section class="detail member-only-section">
   <div class="booking-card">
     <h3>Book 3DR Gabha Oir for the 2026 season <span class="ok">✓ Member access</span></h3>
@@ -524,11 +506,12 @@
     <div class="booking-row"><strong>Phone</strong><span class="val">086 8170063</span></div>
     <div class="booking-row"><strong>Season Dates</strong><span class="val">Contact owner</span></div>
     <div class="booking-row"><strong>Mare Requirements</strong><span class="val">Contact owner to discuss</span></div>
-    
-    
+    <div class="booking-row"><strong>Notable Progeny</strong><span class="val">Young stallion — building progeny record</span></div>
+    <div class="booking-row"><strong>Top Results</strong><span class="val">Working hunter and ridden performer</span></div>
   </div>
 </section>
 
+<!-- ============ VIDEO LIGHTBOX ============ -->
 <div id="video-lightbox" class="video-lightbox" role="dialog" aria-label="Video player" aria-hidden="true">
   <div class="video-lightbox-backdrop" onclick="closeVideoLightbox()"></div>
   <div class="video-lightbox-content">
@@ -620,7 +603,7 @@
         const pill = document.getElementById('memberPill');
         if (pill) pill.classList.add('active');
       }
-    } catch (e) { }
+    } catch (e) { /* fail closed */ }
   }
 
   function init() {
