@@ -12,8 +12,19 @@
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,400;0,500;0,600;1,400;1,500&family=DM+Sans:opsz,wght@9..40,300;9..40,400;9..40,500;9..40,600&display=swap" rel="stylesheet">
 <!--
-  BreedPulse Stallion Directory — v4 (auth.breedpulse.com migration)
-  Last updated: 2026-05-10
+  BreedPulse Stallion Directory — v5 (May 12 batch)
+  Last updated: 2026-05-12
+
+  CHANGES FROM v4 (May 12):
+   • Added 8 new slugs to SEO_PAGES:
+       3dr-gabha-oir, moate-echo, rosscon-shadow-moon, springers-caruso,
+       carraig-ajs-shadow, diamonds-ice-and-cool,
+       fenrose-misty-fionn, kilmolara-sunrise
+   • Added SLUG_OVERRIDES map for apostrophe/accent stallions whose
+     auto-generated slug doesn't match their SEO folder name
+   • profileHref() now consults SLUG_OVERRIDES before falling back to toSlug()
+   • Fixes the modal-popup bug: verified stallions with SEO pages now navigate
+     to /stallions/<slug>/ instead of opening the modal lightbox
 
   CHANGES FROM v3:
    • AUTH_API now points to https://auth.breedpulse.com (custom domain)
@@ -583,11 +594,25 @@ const SEO_PAGES = new Set([
   'vinura-timmy','walstead-falcons-crest','western-boy',
   'westide-mirah-2',
   'annaghbay-ted','drumhass-silver-shadow','dunran-benjamin-button',
-  'tulira-darog','cahir-knight'
+  'tulira-darog','cahir-knight',
+  '3dr-gabha-oir','moate-echo','rosscon-shadow-moon',
+  'springers-caruso','carraig-ajs-shadow','diamonds-ice-and-cool',
+  'fenrose-misty-fionn','kilmolara-sunrise'
 ]);
 
+const SLUG_OVERRIDES = {
+  "Diamond's Shadow Fix":          "diamond-s-shadow-fix",
+  "Diamond's Ice, Wind and Rain":  "diamond-s-ice-wind-and-rain",
+  "Diamond's Ice and Cool":        "diamonds-ice-and-cool",
+  "Kit Harington R'Ose":           "kit-harington-r-ose",
+  "Ice and Fire d\u2019Albran":    "ice-and-fire-d-albran",
+  "Ice and Fire d'Albran":         "ice-and-fire-d-albran",
+  "Ekely's Turning Leaf":          "ekely-s-turning-leaf",
+  "Sk\u00e6rg\u00e5rdens Wild to Night": "sk-rgardens-wild-to-night",
+};
+
 function profileHref(name) {
-  const slug = toSlug(name);
+  const slug = SLUG_OVERRIDES[name] || toSlug(name);
   return SEO_PAGES.has(slug) ? '/stallions/' + slug + '/' : null;
 }
 let allStallions = [];
