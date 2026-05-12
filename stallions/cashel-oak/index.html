@@ -7,7 +7,7 @@
 <link rel="icon" type="image/png" href="https://assets.super.so/220d7812-e76f-4b0c-adf8-44a51c497471/uploads/favicon/06b1b3d8-6963-4b16-b569-94dacbef894a.png">
 <link rel="icon" type="image/svg+xml" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 512 512'%3E%3Ccircle cx='256' cy='256' r='256' fill='%23142F22'/%3E%3Ctext x='256' y='356' font-family='Cormorant Garamond, Georgia, serif' font-style='italic' font-weight='500' font-size='320' fill='%23F5F2ED' text-anchor='middle'%3EBP%3C/text%3E%3Ccircle cx='340' cy='380' r='10' fill='%23B8915C' opacity='0.85'/%3E%3C/svg%3E">
 <link rel="apple-touch-icon" href="https://assets.super.so/220d7812-e76f-4b0c-adf8-44a51c497471/uploads/favicon/06b1b3d8-6963-4b16-b569-94dacbef894a.png">
-<meta name="description" content="Cashel Oak · 2022 foaled · Grey · 144cm · CPBS registered · Class 1 · standing in Ireland. Verified Connemara stallion directory.">
+<meta name="description" content="Cashel Oak · 2022 foaled · Grey · 144cm · CPBS — Connemara Pony Breeders&#x27; Society registered · Class 1 · standing in Ireland. Verified Connemara stallion directory.">
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,400;0,500;0,600;1,400;1,500&family=DM+Sans:opsz,wght@9..40,300;9..40,400;9..40,500;9..40,600&display=swap" rel="stylesheet">
@@ -17,9 +17,9 @@
     --green-mid: #3D8A67; --green-pale: #D4EAE0; --green-ghost: #EEF7F2;
     --green-wash: #F4FAF7;
     --stone: #F5F2ED; --linen: #FAF7F2; --stone-warm: #EDE8E0; --ash: #E6E1DB;
-    --peat: #2C2825; --earth: #5C5248; --peat-soft: #5C5248;
-    --fog: #9C948C; --whisper: #9C948C; --mist: #C4BCB4;
-    --white: #FFFFFF; --paper: #FFFFFF;
+    --peat: #2C2825; --earth: #5C5248;
+    --fog: #9C948C; --mist: #C4BCB4;
+    --white: #FFFFFF;
     --gold: #B8915C; --copper: #B8915C;
     --font-display: 'Cormorant Garamond', Georgia, serif;
     --font-body: 'DM Sans', sans-serif;
@@ -39,7 +39,6 @@
   .nav-links a { color: rgba(255,255,255,0.85); }
   .nav-links a:hover { color: var(--white); }
 
-  /* Member status pill (auth) */
   .member-pill { display: inline-flex; align-items: center; gap: 0.4rem; padding: 0.4rem 0.8rem; background: rgba(255,255,255,0.1); border: 1px solid rgba(255,255,255,0.18); border-radius: 999px; font-size: 0.72rem; font-weight: 500; color: rgba(255,255,255,0.9); cursor: pointer; transition: background 0.15s; text-decoration: none; letter-spacing: 0.02em; }
   .member-pill:hover { background: rgba(255,255,255,0.16); color: rgba(255,255,255,1); }
   .member-pill .dot { width: 6px; height: 6px; border-radius: 50%; background: rgba(255,255,255,0.55); }
@@ -68,7 +67,6 @@
   .photo-panel:hover .view-gallery-cta { background: var(--green); }
   .view-gallery-cta svg { width: 14px; height: 14px; }
 
-  /* Thumbnail strip */
   .photo-thumbs { display: grid; grid-template-columns: repeat(4, 1fr); gap: 0.4rem; margin-top: 0.5rem; }
   .thumb { height: 70px; background: linear-gradient(145deg, var(--green-dark), var(--green-deep)); border-radius: 6px; overflow: hidden; display: flex; align-items: center; justify-content: center; cursor: pointer; border: 2px solid transparent; transition: border-color 0.2s ease, transform 0.15s ease; position: relative; }
   .thumb img { width: 100%; height: 100%; object-fit: contain; }
@@ -81,12 +79,10 @@
   .thumb-lock svg { width: 22px; height: 22px; color: rgba(255,255,255,0.95); filter: drop-shadow(0 2px 4px rgba(0,0,0,0.5)); }
   .thumb.video.locked .thumb-lock svg { width: 26px; height: 26px; }
 
-  /* === Member-unlocked: thumbs unblur === */
   body.is-member .thumb.locked img { filter: none; transform: none; }
   body.is-member .thumb.locked .thumb-lock { display: none; }
   body.is-member .thumb.locked { cursor: pointer; }
 
-  /* Hero content */
   .hero-content { padding-top: 0.25rem; }
   .status-pill { display: inline-block; padding: 0.3rem 0.75rem; border-radius: 20px; font-size: 0.68rem; font-weight: 600; letter-spacing: 0.06em; text-transform: uppercase; margin-bottom: 1rem; background: #FAEFD3; color: #856220; border: 1px solid #E8D49C; }
   .hero-content h1 { font-family: var(--font-display); font-size: clamp(2rem, 4.2vw, 3rem); font-weight: 500; font-style: italic; color: var(--green-deep); line-height: 1.1; letter-spacing: -0.02em; margin-bottom: 0.5rem; }
@@ -95,7 +91,6 @@
   .card-tag { padding: 0.25rem 0.7rem; border-radius: 20px; font-size: 0.72rem; font-weight: 500; letter-spacing: 0.03em; background: var(--green-ghost); color: var(--green-dark); border: 1px solid var(--green-pale); }
   .card-tag.country, .card-tag.studbook { background: var(--linen); color: var(--earth); border-color: var(--ash); }
 
-  /* Specs */
   .specs { display: grid; grid-template-columns: 1fr; background: var(--white); border: 1px solid var(--ash); border-radius: var(--radius); overflow: hidden; }
   .spec-row { display: grid; grid-template-columns: 150px 1fr; gap: 1rem; padding: 0.65rem 1rem; font-size: 0.85rem; border-bottom: 1px solid var(--linen); align-items: center; }
   .spec-row:last-child { border-bottom: none; }
@@ -109,7 +104,6 @@
   .locked-value { flex: 1; position: relative; display: inline-block; background: var(--linen); color: var(--green-deep); border-radius: 4px; padding: 0.15rem 0.65rem; overflow: hidden; user-select: none; filter: blur(5px); border: 1px solid var(--ash); font-size: 0.85rem; font-weight: 500; letter-spacing: 0.02em; white-space: nowrap; text-overflow: clip; }
   .real-value { display: none; flex: 1; color: var(--peat); font-weight: 500; }
 
-  /* === Member-unlocked === */
   body.is-member .locked-value { display: none; }
   body.is-member .real-value { display: inline-block; }
   body.is-member .members-only-label { display: none; }
@@ -126,7 +120,6 @@
   .members-only-label { display: inline-flex; align-items: center; gap: 0.35rem; font-size: 0.62rem; font-weight: 500; letter-spacing: 0.05em; text-transform: uppercase; color: var(--white); background: var(--copper); border: none; padding: 0.2rem 0.55rem; border-radius: 20px; white-space: nowrap; flex-shrink: 0; font-style: normal; }
   .members-only-label svg { width: 9px; height: 9px; }
 
-  /* Detail sections */
   section.detail { max-width: 1200px; margin: 2rem auto; padding: 0 2rem; }
   @media (max-width: 880px) { section.detail { padding: 0 1.25rem; } }
   section.detail h2 { font-family: var(--font-display); font-size: 1.8rem; font-style: italic; font-weight: 500; color: var(--green-deep); margin-bottom: 1.25rem; padding-bottom: 0.5rem; border-bottom: 1px solid var(--ash); letter-spacing: -0.01em; display: flex; align-items: center; justify-content: space-between; flex-wrap: wrap; gap: 0.5rem; }
@@ -137,7 +130,7 @@
 
   .unlocked-chip { display: none; align-items: center; gap: 0.4rem; padding: 0.3rem 0.75rem; border-radius: 20px; font-family: var(--font-body); font-size: 0.7rem; font-weight: 600; letter-spacing: 0.05em; text-transform: uppercase; background: var(--green-pale); color: #27500A; border: 1px solid #C0DD97; font-style: normal; }
 
-  /* Pedigree teaser */
+  /* ============ PEDIGREE TEASER & TABLE ============ */
   .pedigree-teaser { position: relative; background: var(--white); border: 1px solid var(--ash); border-radius: var(--radius); overflow: hidden; }
   .pedigree-teaser-content { padding: 1.5rem 1.75rem; filter: blur(7px); user-select: none; pointer-events: none; opacity: 0.75; transition: filter 0.3s ease, opacity 0.3s ease; overflow-x: auto; }
   body.is-member .pedigree-teaser-content { filter: none; opacity: 1; user-select: text; pointer-events: auto; }
@@ -174,7 +167,7 @@
   .ped-table .dam-cell.g2 { background: #F0E6D3; border-color: #E0D2BA; }
   .ped-table .dam-cell.g3 { background: #F4ECDF; border-color: #E5DAC8; }
   .ped-table .dam-cell.g4 { background: #F8F2E8; border-color: #ECE2D2; }
-  /* Empty cells: subtle hatched diagonal */
+  /* Empty: hatched diagonal */
   .ped-table .empty {
     background-image: repeating-linear-gradient(45deg, transparent, transparent 4px, rgba(156,148,140,0.12) 4px, rgba(156,148,140,0.12) 8px);
     background-color: #FAF7F2;
@@ -182,18 +175,11 @@
   .ped-table .g1 .anc-name { font-size: 0.92rem; }
   .ped-table .g2 .anc-name { font-size: 0.85rem; }
 
-  /* Show locked text when visitor; real text when member (for table cells) */
+  /* Locked text shown to visitors; real text shown to members */
   .ped-real-text { display: none; }
   .ped-locked-text { display: inline; }
   body.is-member .ped-locked-text { display: none; }
   body.is-member .ped-real-text { display: inline; }
-
-  /* Simple 3-row fallback for stallions without full tree */
-  .pedigree-simple .ped-row { display: grid; grid-template-columns: 130px 1fr 1fr; gap: 1rem; padding: 0.6rem 0; font-size: 0.85rem; border-bottom: 1px solid var(--linen); }
-  .pedigree-simple .ped-row:last-child { border: none; }
-  .pedigree-simple .ped-row .label { font-weight: 500; color: var(--earth); font-size: 0.7rem; text-transform: uppercase; letter-spacing: 0.05em; }
-  .pedigree-simple .ped-row .name { color: var(--peat); font-weight: 500; }
-  .pedigree-simple .ped-row .info { color: var(--earth); font-size: 0.78rem; }
 
   .pedigree-teaser-fade { position: absolute; bottom: 0; left: 0; right: 0; height: 180px; background: linear-gradient(to bottom, rgba(255,255,255,0) 0%, var(--white) 65%); display: flex; align-items: flex-end; justify-content: center; padding-bottom: 1.75rem; }
   body.is-member .pedigree-teaser-fade { display: none; }
@@ -211,7 +197,7 @@
   .perf-locked { display: flex; align-items: center; gap: 0.5rem; }
   .perf-locked .locked-value { flex: 1; }
 
-  /* Booking upsell card (visitor) */
+  /* Booking upsell */
   .booking-upsell { background: linear-gradient(145deg, var(--green-dark) 0%, var(--green-deep) 100%); color: var(--stone); padding: 2.5rem 2rem; border-radius: var(--radius); box-shadow: var(--shadow); position: relative; overflow: hidden; display: grid; grid-template-columns: 1fr auto; gap: 2rem; align-items: center; }
   @media (max-width: 720px) { .booking-upsell { grid-template-columns: 1fr; text-align: center; } }
   .booking-upsell::before { content: ''; position: absolute; inset: 0; background: radial-gradient(ellipse at 100% 0%, rgba(184,145,92,0.18) 0%, transparent 55%); pointer-events: none; }
@@ -227,7 +213,6 @@
   .booking-upsell-cta-price { color: rgba(245,242,237,0.7); font-size: 0.78rem; letter-spacing: 0.03em; }
   .booking-upsell-cta-price strong { color: var(--white); font-weight: 500; }
 
-  /* Member-only booking card (revealed for members) */
   .member-only-section { display: none; }
   .booking-card { background: var(--green-ghost); border: 1px solid var(--green-pale); border-radius: var(--radius); padding: 1.75rem 2rem; }
   .booking-card h3 { font-family: var(--font-display); font-style: italic; font-size: 1.65rem; color: var(--green-deep); margin-bottom: 1rem; display: flex; align-items: center; gap: 0.6rem; flex-wrap: wrap; }
@@ -243,35 +228,13 @@
   footer .brand { font-size: 1.2rem; }
 
   /* Video lightbox */
-  .video-lightbox {
-    display: none;
-    position: fixed; inset: 0; z-index: 9999;
-    align-items: center; justify-content: center;
-    padding: 1.5rem;
-  }
+  .video-lightbox { display: none; position: fixed; inset: 0; z-index: 9999; align-items: center; justify-content: center; padding: 1.5rem; }
   .video-lightbox.open { display: flex; }
-  .video-lightbox-backdrop {
-    position: absolute; inset: 0;
-    background: rgba(20,47,34,0.92); backdrop-filter: blur(6px);
-    cursor: pointer;
-  }
-  .video-lightbox-content {
-    position: relative; z-index: 1;
-    width: 100%; max-width: 960px;
-    aspect-ratio: 16 / 9;
-    background: #000;
-    border-radius: var(--radius); overflow: hidden;
-    box-shadow: 0 20px 60px rgba(0,0,0,0.5);
-  }
+  .video-lightbox-backdrop { position: absolute; inset: 0; background: rgba(20,47,34,0.92); backdrop-filter: blur(6px); cursor: pointer; }
+  .video-lightbox-content { position: relative; z-index: 1; width: 100%; max-width: 960px; aspect-ratio: 16 / 9; background: #000; border-radius: var(--radius); overflow: hidden; box-shadow: 0 20px 60px rgba(0,0,0,0.5); }
   .video-lightbox-frame { width: 100%; height: 100%; }
   .video-lightbox-frame iframe { width: 100%; height: 100%; border: 0; }
-  .video-lightbox-close {
-    position: absolute; top: -2.5rem; right: 0;
-    background: transparent; border: 0;
-    color: white; font-size: 2.2rem; line-height: 1;
-    cursor: pointer; padding: 0.25rem 0.5rem;
-    font-family: var(--font-body);
-  }
+  .video-lightbox-close { position: absolute; top: -2.5rem; right: 0; background: transparent; border: 0; color: white; font-size: 2.2rem; line-height: 1; cursor: pointer; padding: 0.25rem 0.5rem; font-family: var(--font-body); }
   .video-lightbox-close:hover { color: var(--copper); }
 </style>
 </head>
@@ -311,7 +274,7 @@
             <circle cx="8.5" cy="8.5" r="1.5"/>
             <polyline points="21 15 16 10 5 21"/>
           </svg>
-          <span>4 photos</span>
+          <span>3 photos</span>
         </div>
         <div class="view-gallery-cta">
           <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="11" width="18" height="11" rx="2"/><path d="M7 11V7a5 5 0 0 1 10 0v4"/></svg>
@@ -330,10 +293,6 @@
       </div>
       <div class="thumb locked" role="listitem" data-photo="https://photos.breedpulse.com/stallions/cashel-oak/photo-3.jpg" aria-label="Photo 3">
         <img src="https://photos.breedpulse.com/stallions/cashel-oak/photo-3.jpg" alt="" onerror="this.parentElement.style.display='none'">
-        <div class="thumb-lock"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="11" width="18" height="11" rx="2"/><path d="M7 11V7a5 5 0 0 1 10 0v4"/></svg></div>
-      </div>
-      <div class="thumb locked" role="listitem" data-photo="https://photos.breedpulse.com/stallions/cashel-oak/photo-4.jpg" aria-label="Photo 4">
-        <img src="https://photos.breedpulse.com/stallions/cashel-oak/photo-4.jpg" alt="" onerror="this.parentElement.style.display='none'">
         <div class="thumb-lock"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="11" width="18" height="11" rx="2"/><path d="M7 11V7a5 5 0 0 1 10 0v4"/></svg></div>
       </div>
     </div>
@@ -357,7 +316,7 @@
       <div class="spec-row"><dt>Foaling Year</dt><dd>2022</dd></div>
       <div class="spec-row"><dt>Height</dt><dd>144cm</dd></div>
       <div class="spec-row"><dt>Colour</dt><dd>Grey</dd></div>
-      
+
       <div class="spec-row locked-row">
         <dt>Sire</dt>
         <dd>
@@ -366,12 +325,12 @@
           <span class="members-only-label"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="11" width="18" height="11" rx="2"/><path d="M7 11V7a5 5 0 0 1 10 0v4"/></svg> Members Only</span>
         </dd>
       </div>
-      
+
       <div class="spec-row locked-row">
         <dt>Dam</dt>
         <dd>
           <span class="locked-value">xxxxxxxxx xxxxx</span>
-          <span class="real-value">Rodell&#39;s Hazy Oak</span>
+          <span class="real-value">Rodelle&#x27;s Hazy Oak</span>
           <span class="members-only-label"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="11" width="18" height="11" rx="2"/><path d="M7 11V7a5 5 0 0 1 10 0v4"/></svg> Members Only</span>
         </dd>
       </div>
@@ -379,7 +338,7 @@
       <div class="spec-row"><dt>Grading</dt><dd>Class 1</dd></div>
       <div class="spec-row"><dt>HWSD</dt><dd>HWSD N/N Clear</dd></div>
       <div class="spec-row"><dt>Country of Base</dt><dd>Ireland</dd></div>
-      
+
       <div class="spec-row locked-row">
         <dt>Stud Fee</dt>
         <dd>
@@ -388,7 +347,7 @@
           <span class="members-only-label"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="11" width="18" height="11" rx="2"/><path d="M7 11V7a5 5 0 0 1 10 0v4"/></svg> Members Only</span>
         </dd>
       </div>
-      
+
       <div class="spec-row locked-row">
         <dt>Covering Method</dt>
         <dd>
@@ -397,7 +356,7 @@
           <span class="members-only-label"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="11" width="18" height="11" rx="2"/><path d="M7 11V7a5 5 0 0 1 10 0v4"/></svg> Members Only</span>
         </dd>
       </div>
-      
+
       <div class="spec-row locked-row">
         <dt>Booking Contact</dt>
         <dd>
@@ -406,7 +365,7 @@
           <span class="members-only-label"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="11" width="18" height="11" rx="2"/><path d="M7 11V7a5 5 0 0 1 10 0v4"/></svg> Members Only</span>
         </dd>
       </div>
-      
+
       <div class="spec-row locked-row">
         <dt>Mare Requirements</dt>
         <dd>
@@ -415,7 +374,7 @@
           <span class="members-only-label"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="11" width="18" height="11" rx="2"/><path d="M7 11V7a5 5 0 0 1 10 0v4"/></svg> Members Only</span>
         </dd>
       </div>
-      
+
       <div class="spec-row locked-row">
         <dt>Season Dates</dt>
         <dd>
@@ -441,11 +400,7 @@
 
   <div class="pedigree-teaser">
     <div class="pedigree-teaser-content">
-      <div class="pedigree-simple">
-      <div class="ped-row"><div class="label">Sire</div><div class="name"><span class="ped-locked-text">Members Only</span><span class="ped-real-text">Currachmore Cashel</span></div><div class="info">Verified pedigree · members only</div></div>
-      <div class="ped-row"><div class="label">Dam</div><div class="name"><span class="ped-locked-text">Members Only</span><span class="ped-real-text">Rodell&#39;s Hazy Oak</span></div><div class="info">Verified pedigree · members only</div></div>
-      <div class="ped-row"><div class="label">Dam's Sire</div><div class="name"><span class="ped-locked-text">Members Only</span><span class="ped-real-text">Cornarone Hazy Lad</span></div><div class="info">Verified pedigree · members only</div></div>
-    </div>
+      <table class="ped-table"><tbody><tr><td class="g1 sire-cell" rowspan="8"><div class="anc-name"><span class="ped-locked-text">Members Only</span><span class="ped-real-text">Currachmore Cashel</span></div><div class="anc-info"><span class="ped-locked-text">— — — — — —</span><span class="ped-real-text">gr, 2000, 148cm</span></div></td><td class="g2 sire-cell" rowspan="4"><div class="anc-name"><span class="ped-locked-text">Members Only</span><span class="ped-real-text">Rosenaharley Rowley</span></div><div class="anc-info"><span class="ped-locked-text">— — — — — —</span><span class="ped-real-text">gr, 140cm, 1979</span></div></td><td class="g3 sire-cell" rowspan="2"><div class="anc-name"><span class="ped-locked-text">Members Only</span><span class="ped-real-text">Mylerstown Huckleberry Finn</span></div><div class="anc-info"><span class="ped-locked-text">— — — — — —</span><span class="ped-real-text">gr, 140cm, 1975</span></div></td><td class="g4 sire-cell" rowspan="1"><div class="anc-name"><span class="ped-locked-text">Members Only</span><span class="ped-real-text">Leam Bobby Finn</span></div><div class="anc-info"><span class="ped-locked-text">— — — — — —</span><span class="ped-real-text">gr, 139cm, 1967</span></div></td></tr><tr><td class="g4 sire-cell" rowspan="1"><div class="anc-name"><span class="ped-locked-text">Members Only</span><span class="ped-real-text">Mylerstown Peach</span></div><div class="anc-info"><span class="ped-locked-text">— — — — — —</span><span class="ped-real-text">gr, 142cm, 1969</span></div></td></tr><tr><td class="g3 sire-cell" rowspan="2"><div class="anc-name"><span class="ped-locked-text">Members Only</span><span class="ped-real-text">Rosenaharley Ronamara</span></div><div class="anc-info"><span class="ped-locked-text">— — — — — —</span><span class="ped-real-text">gr, 137cm, 1963</span></div></td><td class="g4 sire-cell" rowspan="1"><div class="anc-name"><span class="ped-locked-text">Members Only</span><span class="ped-real-text">Macnamara</span></div><div class="anc-info"><span class="ped-locked-text">— — — — — —</span><span class="ped-real-text">gr, 139cm, 1960</span></div></td></tr><tr><td class="g4 sire-cell" rowspan="1"><div class="anc-name"><span class="ped-locked-text">Members Only</span><span class="ped-real-text">Rosenaharley May Milis</span></div><div class="anc-info"><span class="ped-locked-text">— — — — — —</span><span class="ped-real-text">gr, 13.2hh, 1950</span></div></td></tr><tr><td class="g2 sire-cell" rowspan="4"><div class="anc-name"><span class="ped-locked-text">Members Only</span><span class="ped-real-text">Tolka Bridge</span></div><div class="anc-info"><span class="ped-locked-text">— — — — — —</span><span class="ped-real-text">gr, 137cm, 1974</span></div></td><td class="g3 sire-cell" rowspan="2"><div class="anc-name"><span class="ped-locked-text">Members Only</span><span class="ped-real-text">Bridge Boy</span></div><div class="anc-info"><span class="ped-locked-text">— — — — — —</span><span class="ped-real-text">gr, 147cm, 1959</span></div></td><td class="g4 sire-cell" rowspan="1"><div class="anc-name"><span class="ped-locked-text">Members Only</span><span class="ped-real-text">Tooreen Ross</span></div><div class="anc-info"><span class="ped-locked-text">— — — — — —</span><span class="ped-real-text">gr, 139cm, 1954</span></div></td></tr><tr><td class="g4 sire-cell" rowspan="1"><div class="anc-name"><span class="ped-locked-text">Members Only</span><span class="ped-real-text">Irene</span></div><div class="anc-info"><span class="ped-locked-text">— — — — — —</span><span class="ped-real-text">gr, 137cm, 1938</span></div></td></tr><tr><td class="g3 sire-cell" rowspan="2"><div class="anc-name"><span class="ped-locked-text">Members Only</span><span class="ped-real-text">Statia</span></div><div class="anc-info"><span class="ped-locked-text">— — — — — —</span><span class="ped-real-text">b, 142cm, 1966</span></div></td><td class="g4 sire-cell" rowspan="1"><div class="anc-name"><span class="ped-locked-text">Members Only</span><span class="ped-real-text">Knockranny Ruby</span></div><div class="anc-info"><span class="ped-locked-text">— — — — — —</span><span class="ped-real-text">buck, 142cm, 1961</span></div></td></tr><tr><td class="g4 sire-cell" rowspan="1"><div class="anc-name"><span class="ped-locked-text">Members Only</span><span class="ped-real-text">Danesfield Girl</span></div><div class="anc-info"><span class="ped-locked-text">— — — — — —</span><span class="ped-real-text">gr, 137cm, 1947</span></div></td></tr><tr><td class="g1 dam-cell" rowspan="8"><div class="anc-name"><span class="ped-locked-text">Members Only</span><span class="ped-real-text">Rodelle&#x27;s Hazy Oak</span></div><div class="anc-info"><span class="ped-locked-text">— — — — — —</span><span class="ped-real-text">2015</span></div></td><td class="g2 dam-cell" rowspan="4"><div class="anc-name"><span class="ped-locked-text">Members Only</span><span class="ped-real-text">Cornarone Hazy Lad</span></div><div class="anc-info"><span class="ped-locked-text">— — — — — —</span><span class="ped-real-text">gr, 148cm, 2006</span></div></td><td class="g3 dam-cell" rowspan="2"><div class="anc-name"><span class="ped-locked-text">Members Only</span><span class="ped-real-text">Frederiksminde Hazy Match</span></div><div class="anc-info"><span class="ped-locked-text">— — — — — —</span><span class="ped-real-text">gr, 147cm, 1991</span></div></td><td class="g4 dam-cell" rowspan="1"><div class="anc-name"><span class="ped-locked-text">Members Only</span><span class="ped-real-text">Hazy Dawn</span></div><div class="anc-info"><span class="ped-locked-text">— — — — — —</span><span class="ped-real-text">gr, 147cm, 1985</span></div></td></tr><tr><td class="g4 dam-cell" rowspan="1"><div class="anc-name"><span class="ped-locked-text">Members Only</span><span class="ped-real-text">Oxenholm Mandy</span></div><div class="anc-info"><span class="ped-locked-text">— — — — — —</span><span class="ped-real-text">gr, 144cm, 1979</span></div></td></tr><tr><td class="g3 dam-cell" rowspan="2"><div class="anc-name"><span class="ped-locked-text">Members Only</span><span class="ped-real-text">Atlantic Collette</span></div><div class="anc-info"><span class="ped-locked-text">— — — — — —</span><span class="ped-real-text">1996</span></div></td><td class="g4 dam-cell" rowspan="1"><div class="anc-name"><span class="ped-locked-text">Members Only</span><span class="ped-real-text">Slisneoir</span></div><div class="anc-info"><span class="ped-locked-text">— — — — — —</span><span class="ped-real-text">gr, 150cm, 1989</span></div></td></tr><tr><td class="g4 dam-cell" rowspan="1"><div class="anc-name"><span class="ped-locked-text">Members Only</span><span class="ped-real-text">Lough Fadda Collette</span></div><div class="anc-info"><span class="ped-locked-text">— — — — — —</span><span class="ped-real-text">1991</span></div></td></tr><tr><td class="g2 dam-cell" rowspan="4"><div class="anc-name"><span class="ped-locked-text">Members Only</span><span class="ped-real-text">Dusty Oak</span></div><div class="anc-info"><span class="ped-locked-text">— — — — — —</span><span class="ped-real-text">2004</span></div></td><td class="g3 dam-cell" rowspan="2"><div class="anc-name"><span class="ped-locked-text">Members Only</span><span class="ped-real-text">Abbeyfort</span></div><div class="anc-info"><span class="ped-locked-text">— — — — — —</span><span class="ped-real-text">gr, 145cm, 1983</span></div></td><td class="g4 dam-cell" rowspan="1"><div class="anc-name"><span class="ped-locked-text">Members Only</span><span class="ped-real-text">Fort Doolin</span></div><div class="anc-info"><span class="ped-locked-text">— — — — — —</span><span class="ped-real-text">b, 147cm, 1977</span></div></td></tr><tr><td class="g4 dam-cell" rowspan="1"><div class="anc-name"><span class="ped-locked-text">Members Only</span><span class="ped-real-text">Abbeyleix Flora</span></div><div class="anc-info"><span class="ped-locked-text">— — — — — —</span><span class="ped-real-text">gr, 146cm, 1979</span></div></td></tr><tr><td class="g3 dam-cell" rowspan="2"><div class="anc-name"><span class="ped-locked-text">Members Only</span><span class="ped-real-text">Barna Dusty</span></div><div class="anc-info"><span class="ped-locked-text">— — — — — —</span><span class="ped-real-text">1995</span></div></td><td class="g4 dam-cell" rowspan="1"><div class="anc-name"><span class="ped-locked-text">Members Only</span><span class="ped-real-text">Rynn Richard</span></div><div class="anc-info"><span class="ped-locked-text">— — — — — —</span><span class="ped-real-text">gr, 147cm, 1988</span></div></td></tr><tr><td class="g4 dam-cell" rowspan="1"><div class="anc-name"><span class="ped-locked-text">Members Only</span><span class="ped-real-text">Fermoyle Heather</span></div><div class="anc-info"><span class="ped-locked-text">— — — — — —</span><span class="ped-real-text">1986</span></div></td></tr></tbody></table>
     </div>
 
     <div class="pedigree-teaser-fade">
@@ -470,25 +425,24 @@
 
   <div class="perf-grid">
     <div>
-      
       <div class="perf-row">
         <div class="perf-label">Notable Progeny</div>
         <div class="perf-locked">
-          <span class="locked-value">xxxxxx xxxxx, xxxxxxxxx xxxxx, xxxxxx xxxx</span>
-          <span class="real-value">Young stallion — first foals expected</span>
+          <span class="locked-value">xxxxxx xxxxx, xxxxxxxxx xxxxx</span>
+          <span class="real-value">Young stallion — building progeny record</span>
           <span class="members-only-label"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="11" width="18" height="11" rx="2"/><path d="M7 11V7a5 5 0 0 1 10 0v4"/></svg> Members Only</span>
         </div>
       </div>
-      
+
       <div class="perf-row">
         <div class="perf-label">Top Show Results</div>
         <div class="perf-locked">
           <span class="locked-value">xxx xxxxx xxxxxxxxx xxxx</span>
-          <span class="real-value">Winner — 3-year-old Colt Class, Connemara Pony Show Clifden 2025</span>
+          <span class="real-value">Connemara Pony Show Clifden 2025 — 3-year-old colt class winner; Junior Champion Maam Cross Pony Show 2025; Supreme Champion West Clare Agricultural Show 2025</span>
           <span class="members-only-label"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="11" width="18" height="11" rx="2"/><path d="M7 11V7a5 5 0 0 1 10 0v4"/></svg> Members Only</span>
         </div>
       </div>
-      
+
       <div class="perf-row">
         <div class="perf-label">Dam&#39;s Sire</div>
         <div class="perf-locked">
@@ -499,7 +453,6 @@
       </div>
     </div>
     <div>
-      
       <div class="perf-row">
         <div class="perf-label">Bone Measurement</div>
         <div class="perf-locked">
@@ -508,7 +461,7 @@
           <span class="members-only-label"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="11" width="18" height="11" rx="2"/><path d="M7 11V7a5 5 0 0 1 10 0v4"/></svg> Members Only</span>
         </div>
       </div>
-      
+
       <div class="perf-row">
         <div class="perf-label">Registration Number</div>
         <div class="perf-locked">
@@ -517,7 +470,7 @@
           <span class="members-only-label"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="11" width="18" height="11" rx="2"/><path d="M7 11V7a5 5 0 0 1 10 0v4"/></svg> Members Only</span>
         </div>
       </div>
-      
+
       <div class="perf-row">
         <div class="perf-label">Booking Email</div>
         <div class="perf-locked">
@@ -551,7 +504,7 @@
   </div>
 </section>
 
-<!-- ============ MEMBER-ONLY BOOKING CARD (revealed for members) ============ -->
+<!-- ============ MEMBER-ONLY BOOKING CARD ============ -->
 <section class="detail member-only-section">
   <div class="booking-card">
     <h3>Book Cashel Oak for the 2026 season <span class="ok">✓ Member access</span></h3>
@@ -561,12 +514,12 @@
     <div class="booking-row"><strong>Phone</strong><span class="val">087 662 6398</span></div>
     <div class="booking-row"><strong>Season Dates</strong><span class="val">March to August 2026</span></div>
     <div class="booking-row"><strong>Mare Requirements</strong><span class="val">Contact owner to discuss</span></div>
-    <div class="booking-row"><strong>Notable Progeny</strong><span class="val">Young stallion — first foals expected</span></div>
-    <div class="booking-row"><strong>Top Results</strong><span class="val">Winner — 3-year-old Colt Class, Connemara Pony Show Clifden 2025</span></div>
+    <div class="booking-row"><strong>Notable Progeny</strong><span class="val">Young stallion — building progeny record</span></div>
+    <div class="booking-row"><strong>Top Results</strong><span class="val">Connemara Pony Show Clifden 2025 — 3-year-old colt class winner; Junior Champion Maam Cross Pony Show 2025; Supreme Champion West Clare Agricultural Show 2025</span></div>
   </div>
 </section>
 
-<!-- ============ VIDEO LIGHTBOX (members only) ============ -->
+<!-- ============ VIDEO LIGHTBOX ============ -->
 <div id="video-lightbox" class="video-lightbox" role="dialog" aria-label="Video player" aria-hidden="true">
   <div class="video-lightbox-backdrop" onclick="closeVideoLightbox()"></div>
   <div class="video-lightbox-content">
@@ -581,7 +534,6 @@
   In partnership with <strong>Connemara Pony World</strong></p>
 </footer>
 
-<!-- ============ AUTH UNLOCK SCRIPT ============ -->
 <script>
 (function() {
   const AUTH_API = 'https://auth.breedpulse.com';
@@ -594,7 +546,6 @@
   }
   window.onMemberPillClick = onMemberPillClick;
 
-  // Video lightbox helpers
   function openVideoLightbox(url) {
     const lb = document.getElementById('video-lightbox');
     const frame = document.getElementById('video-lightbox-frame');
@@ -615,12 +566,10 @@
   }
   window.closeVideoLightbox = closeVideoLightbox;
 
-  // ESC closes lightbox
   document.addEventListener('keydown', function(e) {
     if (e.key === 'Escape') closeVideoLightbox();
   });
 
-  // Wire thumb clicks
   function wireThumbs() {
     const heroImg = document.getElementById('hero-photo');
     const thumbs = document.querySelectorAll('.thumb');
@@ -630,22 +579,18 @@
         const videoUrl = t.getAttribute('data-video');
         const photoUrl = t.getAttribute('data-photo');
 
-        // Non-members hitting a locked thumb → push them to checkout
         if (!isMember && t.classList.contains('locked')) {
           window.location.href = STRIPE_URL;
           return;
         }
 
-        // Member click on video thumb → open lightbox
         if (videoUrl) {
           openVideoLightbox(videoUrl);
           return;
         }
 
-        // Member click on photo thumb → swap hero
         if (photoUrl && heroImg) {
           heroImg.src = photoUrl;
-          // Update active state
           thumbs.forEach(function(x) { x.classList.remove('active'); });
           t.classList.add('active');
         }
