@@ -3,11 +3,11 @@
 <head>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
-<title>Diamond&#x27;s Ice and Cool — Connemara Stallion at Stud, 2021 | BreedPulse</title>
+<title>Diamond&#39;s Ice and Cool — Connemara Stallion at Stud, 2021 | BreedPulse</title>
 <link rel="icon" type="image/png" href="https://assets.super.so/220d7812-e76f-4b0c-adf8-44a51c497471/uploads/favicon/06b1b3d8-6963-4b16-b569-94dacbef894a.png">
 <link rel="icon" type="image/svg+xml" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 512 512'%3E%3Ccircle cx='256' cy='256' r='256' fill='%23142F22'/%3E%3Ctext x='256' y='356' font-family='Cormorant Garamond, Georgia, serif' font-style='italic' font-weight='500' font-size='320' fill='%23F5F2ED' text-anchor='middle'%3EBP%3C/text%3E%3Ccircle cx='340' cy='380' r='10' fill='%23B8915C' opacity='0.85'/%3E%3C/svg%3E">
 <link rel="apple-touch-icon" href="https://assets.super.so/220d7812-e76f-4b0c-adf8-44a51c497471/uploads/favicon/06b1b3d8-6963-4b16-b569-94dacbef894a.png">
-<meta name="description" content="Diamond&#x27;s Ice and Cool · 2021 foaled · Grey · 150cm · CPBS — Connemara Pony Breeders&#x27; Society registered · Class 1 · standing in Ireland. Verified Connemara stallion directory.">
+<meta name="description" content="Diamond&#39;s Ice and Cool · 2021 foaled · Grey · 150cm · CPBS registered · Class 1 · standing in Ireland. Verified Connemara stallion directory.">
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,400;0,500;0,600;1,400;1,500&family=DM+Sans:opsz,wght@9..40,300;9..40,400;9..40,500;9..40,600&display=swap" rel="stylesheet">
@@ -17,9 +17,9 @@
     --green-mid: #3D8A67; --green-pale: #D4EAE0; --green-ghost: #EEF7F2;
     --green-wash: #F4FAF7;
     --stone: #F5F2ED; --linen: #FAF7F2; --stone-warm: #EDE8E0; --ash: #E6E1DB;
-    --peat: #2C2825; --earth: #5C5248;
-    --fog: #9C948C; --mist: #C4BCB4;
-    --white: #FFFFFF;
+    --peat: #2C2825; --earth: #5C5248; --peat-soft: #5C5248;
+    --fog: #9C948C; --whisper: #9C948C; --mist: #C4BCB4;
+    --white: #FFFFFF; --paper: #FFFFFF;
     --gold: #B8915C; --copper: #B8915C;
     --font-display: 'Cormorant Garamond', Georgia, serif;
     --font-body: 'DM Sans', sans-serif;
@@ -130,56 +130,36 @@
 
   .unlocked-chip { display: none; align-items: center; gap: 0.4rem; padding: 0.3rem 0.75rem; border-radius: 20px; font-family: var(--font-body); font-size: 0.7rem; font-weight: 600; letter-spacing: 0.05em; text-transform: uppercase; background: var(--green-pale); color: #27500A; border: 1px solid #C0DD97; font-style: normal; }
 
-  /* ============ PEDIGREE TEASER & TABLE ============ */
   .pedigree-teaser { position: relative; background: var(--white); border: 1px solid var(--ash); border-radius: var(--radius); overflow: hidden; }
   .pedigree-teaser-content { padding: 1.5rem 1.75rem; filter: blur(7px); user-select: none; pointer-events: none; opacity: 0.75; transition: filter 0.3s ease, opacity 0.3s ease; overflow-x: auto; }
   body.is-member .pedigree-teaser-content { filter: none; opacity: 1; user-select: text; pointer-events: auto; }
 
-  /* AllBreedPedigree-style 5-gen table */
-  .ped-table {
-    width: 100%; min-width: 720px;
-    border-collapse: separate; border-spacing: 4px;
-    font-size: 0.78rem;
-    table-layout: fixed;
-  }
-  .ped-table td {
-    padding: 0.5rem 0.7rem;
-    border-radius: 4px;
-    vertical-align: middle;
-    border: 1px solid transparent;
-  }
-  .ped-table .anc-name {
-    font-weight: 600; color: var(--green-deep);
-    font-size: 0.82rem; line-height: 1.25;
-    margin-bottom: 0.15rem;
-  }
-  .ped-table .anc-info {
-    font-size: 0.68rem; color: var(--earth);
-    font-weight: 400;
-  }
-  /* Sire-side: graduated forest greens */
+  .ped-table { width: 100%; min-width: 720px; border-collapse: separate; border-spacing: 4px; font-size: 0.78rem; table-layout: fixed; }
+  .ped-table td { padding: 0.5rem 0.7rem; border-radius: 4px; vertical-align: middle; border: 1px solid transparent; }
+  .ped-table .anc-name { font-weight: 600; color: var(--green-deep); font-size: 0.82rem; line-height: 1.25; margin-bottom: 0.15rem; }
+  .ped-table .anc-info { font-size: 0.68rem; color: var(--earth); font-weight: 400; }
   .ped-table .sire-cell.g1 { background: #C9DDD0; border-color: #B4CCC0; }
   .ped-table .sire-cell.g2 { background: #D4E5DA; border-color: #C0D6C7; }
   .ped-table .sire-cell.g3 { background: #DFEDE3; border-color: #CCDFD2; }
   .ped-table .sire-cell.g4 { background: #EAF3ED; border-color: #D8E7DC; }
-  /* Dam-side: graduated warm stones */
   .ped-table .dam-cell.g1 { background: #ECDFC9; border-color: #DBC9AA; }
   .ped-table .dam-cell.g2 { background: #F0E6D3; border-color: #E0D2BA; }
   .ped-table .dam-cell.g3 { background: #F4ECDF; border-color: #E5DAC8; }
   .ped-table .dam-cell.g4 { background: #F8F2E8; border-color: #ECE2D2; }
-  /* Empty: hatched diagonal */
-  .ped-table .empty {
-    background-image: repeating-linear-gradient(45deg, transparent, transparent 4px, rgba(156,148,140,0.12) 4px, rgba(156,148,140,0.12) 8px);
-    background-color: #FAF7F2;
-  }
+  .ped-table .empty { background-image: repeating-linear-gradient(45deg, transparent, transparent 4px, rgba(156,148,140,0.12) 4px, rgba(156,148,140,0.12) 8px); background-color: #FAF7F2; }
   .ped-table .g1 .anc-name { font-size: 0.92rem; }
   .ped-table .g2 .anc-name { font-size: 0.85rem; }
 
-  /* Locked text shown to visitors; real text shown to members */
   .ped-real-text { display: none; }
   .ped-locked-text { display: inline; }
   body.is-member .ped-locked-text { display: none; }
   body.is-member .ped-real-text { display: inline; }
+
+  .pedigree-simple .ped-row { display: grid; grid-template-columns: 130px 1fr 1fr; gap: 1rem; padding: 0.6rem 0; font-size: 0.85rem; border-bottom: 1px solid var(--linen); }
+  .pedigree-simple .ped-row:last-child { border: none; }
+  .pedigree-simple .ped-row .label { font-weight: 500; color: var(--earth); font-size: 0.7rem; text-transform: uppercase; letter-spacing: 0.05em; }
+  .pedigree-simple .ped-row .name { color: var(--peat); font-weight: 500; }
+  .pedigree-simple .ped-row .info { color: var(--earth); font-size: 0.78rem; }
 
   .pedigree-teaser-fade { position: absolute; bottom: 0; left: 0; right: 0; height: 180px; background: linear-gradient(to bottom, rgba(255,255,255,0) 0%, var(--white) 65%); display: flex; align-items: flex-end; justify-content: center; padding-bottom: 1.75rem; }
   body.is-member .pedigree-teaser-fade { display: none; }
@@ -189,7 +169,6 @@
   .pedigree-unlock-btn { display: inline-block; background: var(--green-dark); color: var(--white); padding: 0.6rem 1.5rem; border-radius: 30px; font-size: 0.78rem; font-weight: 500; letter-spacing: 0.04em; transition: background 0.2s ease; cursor: pointer; border: none; font-family: var(--font-body); text-decoration: none; }
   .pedigree-unlock-btn:hover { background: var(--green-deep); color: var(--white); }
 
-  /* Performance grid */
   .perf-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(240px, 1fr)); gap: 1rem; background: var(--white); border: 1px solid var(--ash); border-radius: var(--radius); padding: 1.25rem 1.5rem; }
   .perf-row { padding: 0.6rem 0; border-bottom: 1px solid var(--linen); }
   .perf-row:last-child { border-bottom: none; }
@@ -197,7 +176,6 @@
   .perf-locked { display: flex; align-items: center; gap: 0.5rem; }
   .perf-locked .locked-value { flex: 1; }
 
-  /* Booking upsell */
   .booking-upsell { background: linear-gradient(145deg, var(--green-dark) 0%, var(--green-deep) 100%); color: var(--stone); padding: 2.5rem 2rem; border-radius: var(--radius); box-shadow: var(--shadow); position: relative; overflow: hidden; display: grid; grid-template-columns: 1fr auto; gap: 2rem; align-items: center; }
   @media (max-width: 720px) { .booking-upsell { grid-template-columns: 1fr; text-align: center; } }
   .booking-upsell::before { content: ''; position: absolute; inset: 0; background: radial-gradient(ellipse at 100% 0%, rgba(184,145,92,0.18) 0%, transparent 55%); pointer-events: none; }
@@ -227,7 +205,6 @@
   footer a { color: var(--stone); }
   footer .brand { font-size: 1.2rem; }
 
-  /* Video lightbox */
   .video-lightbox { display: none; position: fixed; inset: 0; z-index: 9999; align-items: center; justify-content: center; padding: 1.5rem; }
   .video-lightbox.open { display: flex; }
   .video-lightbox-backdrop { position: absolute; inset: 0; background: rgba(20,47,34,0.92); backdrop-filter: blur(6px); cursor: pointer; }
@@ -257,7 +234,7 @@
 <nav class="breadcrumb" aria-label="Breadcrumb">
   <a href="https://breedpulse.com">Home</a><span class="sep">›</span>
   <a href="https://directory.breedpulse.com">Stallion Directory</a><span class="sep">›</span>
-  <span>Diamond&#x27;s Ice and Cool</span>
+  <span>Diamond&#39;s Ice and Cool</span>
 </nav>
 
 <section class="hero">
@@ -265,7 +242,7 @@
   <div>
     <div class="photo-panel" role="button" tabindex="0" aria-label="View primary photo">
       <div class="photo-main">
-        <img id="hero-photo" src="https://photos.breedpulse.com/stallions/diamonds-ice-and-cool/primary.jpg" alt="Diamond&#x27;s Ice and Cool — Connemara stallion, 150cm, Grey, standing in Ireland"
+        <img id="hero-photo" src="https://photos.breedpulse.com/stallions/diamonds-ice-and-cool/primary.jpg" alt="Diamond&#39;s Ice and Cool — Connemara stallion, 150cm, Grey, standing in Ireland"
           onerror="if(!this.dataset.fallback){this.dataset.fallback=1;this.src='https://photos.breedpulse.com/stallions/diamonds-ice-and-cool/primary.png';}else{this.style.display='none';}">
         <div class="hwsd-badge">HWSD N/N Clear</div>
         <div class="photo-count" aria-hidden="true">
@@ -274,7 +251,7 @@
             <circle cx="8.5" cy="8.5" r="1.5"/>
             <polyline points="21 15 16 10 5 21"/>
           </svg>
-          <span>4 photos · 1 video</span>
+          <span>5 photos</span>
         </div>
         <div class="view-gallery-cta">
           <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="11" width="18" height="11" rx="2"/><path d="M7 11V7a5 5 0 0 1 10 0v4"/></svg>
@@ -285,7 +262,7 @@
 
     <div class="photo-thumbs" role="list">
       <div class="thumb active" role="listitem" data-photo="https://photos.breedpulse.com/stallions/diamonds-ice-and-cool/primary.jpg">
-        <img src="https://photos.breedpulse.com/stallions/diamonds-ice-and-cool/primary.jpg" alt="Diamond&#x27;s Ice and Cool primary" onerror="this.style.display='none'">
+        <img src="https://photos.breedpulse.com/stallions/diamonds-ice-and-cool/primary.jpg" alt="Diamond&#39;s Ice and Cool primary" onerror="this.style.display='none'">
       </div>
       <div class="thumb locked" role="listitem" data-photo="https://photos.breedpulse.com/stallions/diamonds-ice-and-cool/photo-2.jpg" aria-label="Photo 2">
         <img src="https://photos.breedpulse.com/stallions/diamonds-ice-and-cool/photo-2.jpg" alt="" onerror="this.parentElement.style.display='none'">
@@ -300,15 +277,15 @@
         <div class="thumb-lock"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="11" width="18" height="11" rx="2"/><path d="M7 11V7a5 5 0 0 1 10 0v4"/></svg></div>
       </div>
       <div class="thumb video locked" role="listitem" data-video="https://www.youtube.com/embed/MerMmfBUB94" aria-label="Video">
-        <img src="https://photos.breedpulse.com/stallions/diamonds-ice-and-cool/primary.jpg" alt="" onerror="this.style.display='none'">
-        <div class="thumb-lock"><svg viewBox="0 0 24 24" fill="currentColor"><polygon points="6 4 20 12 6 20 6 4"/></svg></div>
+        <div style="background:linear-gradient(145deg,var(--green-dark),var(--green-deep));width:100%;height:100%;display:flex;align-items:center;justify-content:center;color:rgba(255,255,255,0.85);"><svg viewBox="0 0 24 24" width="22" height="22" fill="currentColor"><path d="M8 5v14l11-7z"/></svg></div>
+        <div class="thumb-lock"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="11" width="18" height="11" rx="2"/><path d="M7 11V7a5 5 0 0 1 10 0v4"/></svg></div>
       </div>
     </div>
   </div>
 
   <div class="hero-content">
     <span class="status-pill">Verified</span>
-    <h1>Diamond&#x27;s Ice and Cool</h1>
+    <h1>Diamond&#39;s Ice and Cool</h1>
     <p class="hero-subtitle">2021 foaled · Grey · 150cm · Ireland</p>
 
     <div class="card-meta">
@@ -320,24 +297,23 @@
     </div>
 
     <dl class="specs">
-      <div class="spec-row"><dt>Registered Name</dt><dd>Diamond&#x27;s Ice and Cool</dd></div>
+      <div class="spec-row"><dt>Registered Name</dt><dd>Diamond&#39;s Ice and Cool</dd></div>
       <div class="spec-row"><dt>Foaling Year</dt><dd>2021</dd></div>
       <div class="spec-row"><dt>Height</dt><dd>150cm</dd></div>
       <div class="spec-row"><dt>Colour</dt><dd>Grey</dd></div>
 
-      <div class="spec-row locked-row">
+            <div class="spec-row locked-row">
         <dt>Sire</dt>
         <dd>
-          <span class="locked-value">xxxxxxx xxxxxxx</span>
-          <span class="real-value">Ice and Fire d&#x27;Albran</span>
+          <span class="locked-value">xxx xxx xxxx xxxxxxxx</span>
+          <span class="real-value">Ice and Fire d'Albran</span>
           <span class="members-only-label"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="11" width="18" height="11" rx="2"/><path d="M7 11V7a5 5 0 0 1 10 0v4"/></svg> Members Only</span>
         </dd>
       </div>
-
-      <div class="spec-row locked-row">
+            <div class="spec-row locked-row">
         <dt>Dam</dt>
         <dd>
-          <span class="locked-value">xxxxxxxxx xxxxx</span>
+          <span class="locked-value">xxxx xxx xxxxxx</span>
           <span class="real-value">Cool Roe Smarty</span>
           <span class="members-only-label"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="11" width="18" height="11" rx="2"/><path d="M7 11V7a5 5 0 0 1 10 0v4"/></svg> Members Only</span>
         </dd>
@@ -347,7 +323,7 @@
       <div class="spec-row"><dt>HWSD</dt><dd>HWSD N/N Clear</dd></div>
       <div class="spec-row"><dt>Country of Base</dt><dd>Ireland</dd></div>
 
-      <div class="spec-row locked-row">
+            <div class="spec-row locked-row">
         <dt>Stud Fee</dt>
         <dd>
           <span class="locked-value">€xxx plus xxxxx</span>
@@ -355,42 +331,24 @@
           <span class="members-only-label"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="11" width="18" height="11" rx="2"/><path d="M7 11V7a5 5 0 0 1 10 0v4"/></svg> Members Only</span>
         </dd>
       </div>
-
-      <div class="spec-row locked-row">
+            <div class="spec-row locked-row">
         <dt>Covering Method</dt>
         <dd>
-          <span class="locked-value">xxxxxxx xxxxx, xxxxxxxx xx</span>
+          <span class="locked-value">xxxxxxx xx</span>
           <span class="real-value">Chilled AI</span>
           <span class="members-only-label"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="11" width="18" height="11" rx="2"/><path d="M7 11V7a5 5 0 0 1 10 0v4"/></svg> Members Only</span>
         </dd>
       </div>
-
-      <div class="spec-row locked-row">
+            <div class="spec-row locked-row">
         <dt>Booking Contact</dt>
         <dd>
           <span class="locked-value">xxxx xxxxx · xxx xxx xxxx</span>
-          <span class="real-value"><a href="mailto:Info@diamondsofrenvyle.com">Info@diamondsofrenvyle.com</a> · 086 324 4077</span>
+          <span class="real-value"><a href="mailto:Info@diamondsofrenvyle.com">Info@diamondsofrenvyle.com</a> · 086-3244077</span>
           <span class="members-only-label"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="11" width="18" height="11" rx="2"/><path d="M7 11V7a5 5 0 0 1 10 0v4"/></svg> Members Only</span>
         </dd>
       </div>
-
-      <div class="spec-row locked-row">
-        <dt>Mare Requirements</dt>
-        <dd>
-          <span class="locked-value">xxxxx xxxxxxxxxxx xxxxxx xx xxxx</span>
-          <span class="real-value">Contact owner to discuss</span>
-          <span class="members-only-label"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="11" width="18" height="11" rx="2"/><path d="M7 11V7a5 5 0 0 1 10 0v4"/></svg> Members Only</span>
-        </dd>
-      </div>
-
-      <div class="spec-row locked-row">
-        <dt>Season Dates</dt>
-        <dd>
-          <span class="locked-value">xx xxx – xx xxx 2026</span>
-          <span class="real-value">Contact owner</span>
-          <span class="members-only-label"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="11" width="18" height="11" rx="2"/><path d="M7 11V7a5 5 0 0 1 10 0v4"/></svg> Members Only</span>
-        </dd>
-      </div>
+      
+      
     </dl>
   </div>
 
@@ -399,7 +357,7 @@
 <!-- ============ PEDIGREE ============ -->
 <section class="detail">
   <h2>
-    Pedigree
+    Pedigree — 5 generations
     <a href="https://buy.stripe.com/cNi6oI1m8d4Ha654aZ2B200" class="lock-chip" aria-label="Unlock with Season Pass">
       <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="11" width="18" height="11" rx="2"/><path d="M7 11V7a5 5 0 0 1 10 0v4"/></svg> Members Only
     </a>
@@ -407,9 +365,97 @@
   </h2>
 
   <div class="pedigree-teaser">
-    <div class="pedigree-teaser-content">
-      <table class="ped-table"><tbody><tr><td class="g1 sire-cell" rowspan="8"><div class="anc-name"><span class="ped-locked-text">Members Only</span><span class="ped-real-text">Ice and Fire d&#x27;Albran</span></div><div class="anc-info"><span class="ped-locked-text">— — — — — —</span><span class="ped-real-text">gr, 1996, 148cm</span></div></td><td class="g2 sire-cell" rowspan="4"><div class="anc-name"><span class="ped-locked-text">Members Only</span><span class="ped-real-text">Dexter Leam Pondi</span></div><div class="anc-info"><span class="ped-locked-text">— — — — — —</span><span class="ped-real-text">gr, 1991, 1.48m</span></div></td><td class="g3 sire-cell" rowspan="2"><div class="anc-name"><span class="ped-locked-text">Members Only</span><span class="ped-real-text">Leam Finnigan</span></div><div class="anc-info"><span class="ped-locked-text">— — — — — —</span><span class="ped-real-text">gr, 1974, 139cm</span></div></td><td class="g4 sire-cell" rowspan="1"><div class="anc-name"><span class="ped-locked-text">Members Only</span><span class="ped-real-text">Leam Bobby Finn</span></div><div class="anc-info"><span class="ped-locked-text">— — — — — —</span><span class="ped-real-text">gr, 1967, 139cm</span></div></td></tr><tr><td class="g4 sire-cell" rowspan="1"><div class="anc-name"><span class="ped-locked-text">Members Only</span><span class="ped-real-text">Cloonisle Judy</span></div><div class="anc-info"><span class="ped-locked-text">— — — — — —</span><span class="ped-real-text">buck, 1966, 144cm</span></div></td></tr><tr><td class="g3 sire-cell" rowspan="2"><div class="anc-name"><span class="ped-locked-text">Members Only</span><span class="ped-real-text">White Granite</span></div><div class="anc-info"><span class="ped-locked-text">— — — — — —</span><span class="ped-real-text">gr, 1974, 1.41m</span></div></td><td class="g4 sire-cell" rowspan="1"><div class="anc-name"><span class="ped-locked-text">Members Only</span><span class="ped-real-text">Marble</span></div><div class="anc-info"><span class="ped-locked-text">— — — — — —</span><span class="ped-real-text">gr, 1966, 1.42m</span></div></td></tr><tr><td class="g4 sire-cell" rowspan="1"><div class="anc-name"><span class="ped-locked-text">Members Only</span><span class="ped-real-text">Ganty Jane II</span></div><div class="anc-info"><span class="ped-locked-text">— — — — — —</span><span class="ped-real-text">gr, 1970, 1.39m</span></div></td></tr><tr><td class="g2 sire-cell" rowspan="4"><div class="anc-name"><span class="ped-locked-text">Members Only</span><span class="ped-real-text">Underline of Laps</span></div><div class="anc-info"><span class="ped-locked-text">— — — — — —</span><span class="ped-real-text">gr, 1986</span></div></td><td class="g3 sire-cell" rowspan="2"><div class="anc-name"><span class="ped-locked-text">Members Only</span><span class="ped-real-text">Fort Doolin</span></div><div class="anc-info"><span class="ped-locked-text">— — — — — —</span><span class="ped-real-text">b, 1977, 147cm</span></div></td><td class="g4 sire-cell" rowspan="1"><div class="anc-name"><span class="ped-locked-text">Members Only</span><span class="ped-real-text">Rory Ruadh</span></div><div class="anc-info"><span class="ped-locked-text">— — — — — —</span><span class="ped-real-text">b, 1971, 146cm</span></div></td></tr><tr><td class="g4 sire-cell" rowspan="1"><div class="anc-name"><span class="ped-locked-text">Members Only</span><span class="ped-real-text">Fort Lady</span></div><div class="anc-info"><span class="ped-locked-text">— — — — — —</span><span class="ped-real-text">gr, 1963, 139cm</span></div></td></tr><tr><td class="g3 sire-cell" rowspan="2"><div class="anc-name"><span class="ped-locked-text">Members Only</span><span class="ped-real-text">Westside Little Madam</span></div><div class="anc-info"><span class="ped-locked-text">— — — — — —</span><span class="ped-real-text">gr, 1980, 140cm</span></div></td><td class="g4 sire-cell" rowspan="1"><div class="anc-name"><span class="ped-locked-text">Members Only</span><span class="ped-real-text">Sticky</span></div><div class="anc-info"><span class="ped-locked-text">— — — — — —</span><span class="ped-real-text">gr, 1968, 145cm</span></div></td></tr><tr><td class="g4 sire-cell" rowspan="1"><div class="anc-name"><span class="ped-locked-text">Members Only</span><span class="ped-real-text">Lady Grey</span></div><div class="anc-info"><span class="ped-locked-text">— — — — — —</span><span class="ped-real-text">gr, 1973, 140cm</span></div></td></tr><tr><td class="g1 dam-cell" rowspan="8"><div class="anc-name"><span class="ped-locked-text">Members Only</span><span class="ped-real-text">Cool Roe Smarty</span></div><div class="anc-info"><span class="ped-locked-text">— — — — — —</span><span class="ped-real-text">2010</span></div></td><td class="g2 dam-cell" rowspan="4"><div class="anc-name"><span class="ped-locked-text">Members Only</span><span class="ped-real-text">Tulira Robuck</span></div><div class="anc-info"><span class="ped-locked-text">— — — — — —</span><span class="ped-real-text">gr, 1995, 148cm</span></div></td><td class="g3 dam-cell" rowspan="2"><div class="anc-name"><span class="ped-locked-text">Members Only</span><span class="ped-real-text">Earl of Castlefrench</span></div><div class="anc-info"><span class="ped-locked-text">— — — — — —</span><span class="ped-real-text">1989, 148cm</span></div></td><td class="g4 dam-cell" rowspan="1"><div class="anc-name"><span class="ped-locked-text">Members Only</span><span class="ped-real-text">New Emperor</span></div><div class="anc-info"><span class="ped-locked-text">— — — — — —</span><span class="ped-real-text">gr, 1985, 147cm</span></div></td></tr><tr><td class="g4 dam-cell" rowspan="1"><div class="anc-name"><span class="ped-locked-text">Members Only</span><span class="ped-real-text">Loch an Chumair</span></div><div class="anc-info"><span class="ped-locked-text">— — — — — —</span><span class="ped-real-text">gr, 1984, 137cm</span></div></td></tr><tr><td class="g3 dam-cell" rowspan="2"><div class="anc-name"><span class="ped-locked-text">Members Only</span><span class="ped-real-text">Tulira Heather</span></div><div class="anc-info"><span class="ped-locked-text">— — — — — —</span><span class="ped-real-text">gr, 1970, 134cm</span></div></td><td class="g4 dam-cell" rowspan="1"><div class="anc-name"><span class="ped-locked-text">Members Only</span><span class="ped-real-text">Carna Bobby</span></div><div class="anc-info"><span class="ped-locked-text">— — — — — —</span><span class="ped-real-text">1946, 140cm</span></div></td></tr><tr><td class="g4 dam-cell" rowspan="1"><div class="anc-name"><span class="ped-locked-text">Members Only</span><span class="ped-real-text">Glencaugh Star</span></div><div class="anc-info"><span class="ped-locked-text">— — — — — —</span><span class="ped-real-text">b ro, 1963, 132cm</span></div></td></tr><tr><td class="g2 dam-cell" rowspan="4"><div class="anc-name"><span class="ped-locked-text">Members Only</span><span class="ped-real-text">Cool Rose</span></div><div class="anc-info"><span class="ped-locked-text">— — — — — —</span><span class="ped-real-text">1993</span></div></td><td class="g3 dam-cell" rowspan="2"><div class="anc-name"><span class="ped-locked-text">Members Only</span><span class="ped-real-text">Ashfield Jovial Joker</span></div><div class="anc-info"><span class="ped-locked-text">— — — — — —</span><span class="ped-real-text">gr/r, 1987, 147cm</span></div></td><td class="g4 dam-cell" rowspan="1"><div class="anc-name"><span class="ped-locked-text">Members Only</span><span class="ped-real-text">Granard Storm</span></div><div class="anc-info"><span class="ped-locked-text">— — — — — —</span><span class="ped-real-text">buck, 1978, 137cm</span></div></td></tr><tr><td class="g4 dam-cell" rowspan="1"><div class="anc-name"><span class="ped-locked-text">Members Only</span><span class="ped-real-text">Roundmount</span></div><div class="anc-info"><span class="ped-locked-text">— — — — — —</span><span class="ped-real-text">gr, 1966, 137cm</span></div></td></tr><tr><td class="g3 dam-cell" rowspan="2"><div class="anc-name"><span class="ped-locked-text">Members Only</span><span class="ped-real-text">Lissard Lady</span></div><div class="anc-info"><span class="ped-locked-text">— — — — — —</span><span class="ped-real-text">1989</span></div></td><td class="g4 dam-cell" rowspan="1"><div class="anc-name"><span class="ped-locked-text">Members Only</span><span class="ped-real-text">Seafield Silver Rogue</span></div><div class="anc-info"><span class="ped-locked-text">— — — — — —</span><span class="ped-real-text">gr, 1982, 145cm</span></div></td></tr><tr><td class="g4 dam-cell" rowspan="1"><div class="anc-name"><span class="ped-locked-text">Members Only</span><span class="ped-real-text">Tiernea Playmate</span></div><div class="anc-info"><span class="ped-locked-text">— — — — — —</span><span class="ped-real-text">b ro, 1973, 127cm</span></div></td></tr></tbody></table>
-    </div>
+    <div class="pedigree-teaser-content"><table class="ped-table"><tbody><tr><td class="g1 sire-cell" rowspan="8">
+        <div class="anc-name"><span class="ped-locked-text">Members Only</span><span class="ped-real-text">Ice And Fire D&#39;Albran</span></div>
+        <div class="anc-info"><span class="ped-locked-text">— — — — — —</span><span class="ped-real-text">gr, 148cm, 1996, CONNEMARA PONY  Class 1; HWSD N/N</span></div>
+      </td><td class="g2 sire-cell" rowspan="4">
+        <div class="anc-name"><span class="ped-locked-text">Members Only</span><span class="ped-real-text">Dexter Leam Pondi</span></div>
+        <div class="anc-info"><span class="ped-locked-text">— — — — — —</span><span class="ped-real-text">gr, 1.48m, 1991, CONNEMARA PONY, FRA00191404161A</span></div>
+      </td><td class="g3 sire-cell" rowspan="2">
+        <div class="anc-name"><span class="ped-locked-text">Members Only</span><span class="ped-real-text">Leam Finnigan</span></div>
+        <div class="anc-info"><span class="ped-locked-text">— — — — — —</span><span class="ped-real-text">gr, 139cm, 1974, CONNEMARA PONY, NPS C255</span></div>
+      </td><td class="g4 sire-cell" rowspan="1">
+        <div class="anc-name"><span class="ped-locked-text">Members Only</span><span class="ped-real-text">Leam Bobby Finn</span></div>
+        <div class="anc-info"><span class="ped-locked-text">— — — — — —</span><span class="ped-real-text">gr, 139cm, 1967</span></div>
+      </td></tr><tr><td class="g4 sire-cell" rowspan="1">
+        <div class="anc-name"><span class="ped-locked-text">Members Only</span><span class="ped-real-text">Cloonisle Judy</span></div>
+        <div class="anc-info"><span class="ped-locked-text">— — — — — —</span><span class="ped-real-text">buck, 144cm, 1966</span></div>
+      </td></tr><tr><td class="g3 sire-cell" rowspan="2">
+        <div class="anc-name"><span class="ped-locked-text">Members Only</span><span class="ped-real-text">White Granite</span></div>
+        <div class="anc-info"><span class="ped-locked-text">— — — — — —</span><span class="ped-real-text">gr, 1.41m, 1974, CONNEMARA PONY, CSB 6424</span></div>
+      </td><td class="g4 sire-cell" rowspan="1">
+        <div class="anc-name"><span class="ped-locked-text">Members Only</span><span class="ped-real-text">Marble</span></div>
+        <div class="anc-info"><span class="ped-locked-text">— — — — — —</span><span class="ped-real-text">gr, 1.42m, 1966</span></div>
+      </td></tr><tr><td class="g4 sire-cell" rowspan="1">
+        <div class="anc-name"><span class="ped-locked-text">Members Only</span><span class="ped-real-text">Ganty Jane II</span></div>
+        <div class="anc-info"><span class="ped-locked-text">— — — — — —</span><span class="ped-real-text">gr, 1.39m, 1970</span></div>
+      </td></tr><tr><td class="g2 sire-cell" rowspan="4">
+        <div class="anc-name"><span class="ped-locked-text">Members Only</span><span class="ped-real-text">Underline Of Laps</span></div>
+        <div class="anc-info"><span class="ped-locked-text">— — — — — —</span><span class="ped-real-text">gr, 1986, CONNEMARA PONY  25000186209546W</span></div>
+      </td><td class="g3 sire-cell" rowspan="2">
+        <div class="anc-name"><span class="ped-locked-text">Members Only</span><span class="ped-real-text">Fort Doolin</span></div>
+        <div class="anc-info"><span class="ped-locked-text">— — — — — —</span><span class="ped-real-text">b, 147cm, 1977, CONNEMARA PONY, CSB 719</span></div>
+      </td><td class="g4 sire-cell" rowspan="1">
+        <div class="anc-name"><span class="ped-locked-text">Members Only</span><span class="ped-real-text">Rory Ruadh</span></div>
+        <div class="anc-info"><span class="ped-locked-text">— — — — — —</span><span class="ped-real-text">b, 146cm, 1971</span></div>
+      </td></tr><tr><td class="g4 sire-cell" rowspan="1">
+        <div class="anc-name"><span class="ped-locked-text">Members Only</span><span class="ped-real-text">Fort Lady</span></div>
+        <div class="anc-info"><span class="ped-locked-text">— — — — — —</span><span class="ped-real-text">gr, 139cm, 1963</span></div>
+      </td></tr><tr><td class="g3 sire-cell" rowspan="2">
+        <div class="anc-name"><span class="ped-locked-text">Members Only</span><span class="ped-real-text">Westside Little Madam</span></div>
+        <div class="anc-info"><span class="ped-locked-text">— — — — — —</span><span class="ped-real-text">gr, 140cm, 1980, CONNEMARA PONY, CSB 7746</span></div>
+      </td><td class="g4 sire-cell" rowspan="1">
+        <div class="anc-name"><span class="ped-locked-text">Members Only</span><span class="ped-real-text">Sticky</span></div>
+        <div class="anc-info"><span class="ped-locked-text">— — — — — —</span><span class="ped-real-text">gr, 145cm, 1968</span></div>
+      </td></tr><tr><td class="g4 sire-cell" rowspan="1">
+        <div class="anc-name"><span class="ped-locked-text">Members Only</span><span class="ped-real-text">Lady Grey</span></div>
+        <div class="anc-info"><span class="ped-locked-text">— — — — — —</span><span class="ped-real-text">gr, 140cm, 1973</span></div>
+      </td></tr><tr><td class="g1 dam-cell" rowspan="8">
+        <div class="anc-name"><span class="ped-locked-text">Members Only</span><span class="ped-real-text">Cool Roe Smarty</span></div>
+        <div class="anc-info"><span class="ped-locked-text">— — — — — —</span><span class="ped-real-text">2010, CONNEMARA PONY</span></div>
+      </td><td class="g2 dam-cell" rowspan="4">
+        <div class="anc-name"><span class="ped-locked-text">Members Only</span><span class="ped-real-text">Tulira Robuck</span></div>
+        <div class="anc-info"><span class="ped-locked-text">— — — — — —</span><span class="ped-real-text">gr, 148cm, 1995, CONNEMARA PONY, CSB 1041</span></div>
+      </td><td class="g3 dam-cell" rowspan="2">
+        <div class="anc-name"><span class="ped-locked-text">Members Only</span><span class="ped-real-text">Earl Of Castlefrench</span></div>
+        <div class="anc-info"><span class="ped-locked-text">— — — — — —</span><span class="ped-real-text">148cm, 1989, CONNEMARA PONY, CSB 918, IHR 38784</span></div>
+      </td><td class="g4 dam-cell" rowspan="1">
+        <div class="anc-name"><span class="ped-locked-text">Members Only</span><span class="ped-real-text">New Emperor</span></div>
+        <div class="anc-info"><span class="ped-locked-text">— — — — — —</span><span class="ped-real-text">gr, 147cm, 1985</span></div>
+      </td></tr><tr><td class="g4 dam-cell" rowspan="1">
+        <div class="anc-name"><span class="ped-locked-text">Members Only</span><span class="ped-real-text">Loch An Chumair</span></div>
+        <div class="anc-info"><span class="ped-locked-text">— — — — — —</span><span class="ped-real-text">gr, 137cm, 1984</span></div>
+      </td></tr><tr><td class="g3 dam-cell" rowspan="2">
+        <div class="anc-name"><span class="ped-locked-text">Members Only</span><span class="ped-real-text">Tulira Heather</span></div>
+        <div class="anc-info"><span class="ped-locked-text">— — — — — —</span><span class="ped-real-text">gr, 134cm, 1970, CONNEMARA PONY, CSB 4851</span></div>
+      </td><td class="g4 dam-cell" rowspan="1">
+        <div class="anc-name"><span class="ped-locked-text">Members Only</span><span class="ped-real-text">Carna Bobby</span></div>
+        <div class="anc-info"><span class="ped-locked-text">— — — — — —</span><span class="ped-real-text">140cm, 1946</span></div>
+      </td></tr><tr><td class="g4 dam-cell" rowspan="1">
+        <div class="anc-name"><span class="ped-locked-text">Members Only</span><span class="ped-real-text">Glencaugh Star</span></div>
+        <div class="anc-info"><span class="ped-locked-text">— — — — — —</span><span class="ped-real-text">b ro, 132cm, 1963</span></div>
+      </td></tr><tr><td class="g2 dam-cell" rowspan="4">
+        <div class="anc-name"><span class="ped-locked-text">Members Only</span><span class="ped-real-text">Cool Rose</span></div>
+        <div class="anc-info"><span class="ped-locked-text">— — — — — —</span><span class="ped-real-text">1993, CONNEMARA PONY</span></div>
+      </td><td class="g3 dam-cell" rowspan="2">
+        <div class="anc-name"><span class="ped-locked-text">Members Only</span><span class="ped-real-text">Ashfield Jovial Joker</span></div>
+        <div class="anc-info"><span class="ped-locked-text">— — — — — —</span><span class="ped-real-text">gr/r, 147cm, 1987, CONNEMARA PONY, CSB S-886, IHR 38733</span></div>
+      </td><td class="g4 dam-cell" rowspan="1">
+        <div class="anc-name"><span class="ped-locked-text">Members Only</span><span class="ped-real-text">Granard Storm</span></div>
+        <div class="anc-info"><span class="ped-locked-text">— — — — — —</span><span class="ped-real-text">buck, 137cm, 1978</span></div>
+      </td></tr><tr><td class="g4 dam-cell" rowspan="1">
+        <div class="anc-name"><span class="ped-locked-text">Members Only</span><span class="ped-real-text">Roundmount</span></div>
+        <div class="anc-info"><span class="ped-locked-text">— — — — — —</span><span class="ped-real-text">gr, 137cm, 1966</span></div>
+      </td></tr><tr><td class="g3 dam-cell" rowspan="2">
+        <div class="anc-name"><span class="ped-locked-text">Members Only</span><span class="ped-real-text">Lissard Lady</span></div>
+        <div class="anc-info"><span class="ped-locked-text">— — — — — —</span><span class="ped-real-text">1989, CONNEMARA PONY</span></div>
+      </td><td class="g4 dam-cell" rowspan="1">
+        <div class="anc-name"><span class="ped-locked-text">Members Only</span><span class="ped-real-text">Seafield Silver Rogue</span></div>
+        <div class="anc-info"><span class="ped-locked-text">— — — — — —</span><span class="ped-real-text">gr, 145cm, 1982</span></div>
+      </td></tr><tr><td class="g4 dam-cell" rowspan="1">
+        <div class="anc-name"><span class="ped-locked-text">Members Only</span><span class="ped-real-text">Tiernea Playmate</span></div>
+        <div class="anc-info"><span class="ped-locked-text">— — — — — —</span><span class="ped-real-text">b ro, 127cm, 1973</span></div>
+      </td></tr></tbody></table></div>
 
     <div class="pedigree-teaser-fade">
       <div class="pedigree-cta">
@@ -420,6 +466,7 @@
     </div>
   </div>
 </section>
+
 
 <!-- ============ PERFORMANCE & PROGENY ============ -->
 <section class="detail">
@@ -433,56 +480,31 @@
 
   <div class="perf-grid">
     <div>
-      <div class="perf-row">
-        <div class="perf-label">Notable Progeny</div>
-        <div class="perf-locked">
-          <span class="locked-value">xxxxxx xxxxx, xxxxxxxxx xxxxx</span>
-          <span class="real-value">Young stallion — building progeny record</span>
-          <span class="members-only-label"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="11" width="18" height="11" rx="2"/><path d="M7 11V7a5 5 0 0 1 10 0v4"/></svg> Members Only</span>
-        </div>
-      </div>
-
-      <div class="perf-row">
-        <div class="perf-label">Top Show Results</div>
-        <div class="perf-locked">
-          <span class="locked-value">xxx xxxxx xxxxxxxxx xxxx</span>
-          <span class="real-value">Young stallion — building show record</span>
-          <span class="members-only-label"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="11" width="18" height="11" rx="2"/><path d="M7 11V7a5 5 0 0 1 10 0v4"/></svg> Members Only</span>
-        </div>
-      </div>
-
-      <div class="perf-row">
+      
+      
+            <div class="perf-row">
         <div class="perf-label">Dam&#39;s Sire</div>
         <div class="perf-locked">
-          <span class="locked-value">xxxxx xxxx xxxxxxx</span>
+          <span class="locked-value">xxxxxx xxxxxx</span>
           <span class="real-value">Tulira Robuck</span>
           <span class="members-only-label"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="11" width="18" height="11" rx="2"/><path d="M7 11V7a5 5 0 0 1 10 0v4"/></svg> Members Only</span>
         </div>
       </div>
     </div>
     <div>
-      <div class="perf-row">
-        <div class="perf-label">Bone Measurement</div>
-        <div class="perf-locked">
-          <span class="locked-value">x.x xxxxxx</span>
-          <span class="real-value">Not measured</span>
-          <span class="members-only-label"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="11" width="18" height="11" rx="2"/><path d="M7 11V7a5 5 0 0 1 10 0v4"/></svg> Members Only</span>
-        </div>
-      </div>
-
-      <div class="perf-row">
+      
+            <div class="perf-row">
         <div class="perf-label">Registration Number</div>
         <div class="perf-locked">
-          <span class="locked-value">xxxxxxxxxxxx</span>
+          <span class="locked-value">xxxxxxxxxxxxxxx</span>
           <span class="real-value">372004000119118</span>
           <span class="members-only-label"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="11" width="18" height="11" rx="2"/><path d="M7 11V7a5 5 0 0 1 10 0v4"/></svg> Members Only</span>
         </div>
       </div>
-
-      <div class="perf-row">
+            <div class="perf-row">
         <div class="perf-label">Booking Email</div>
         <div class="perf-locked">
-          <span class="locked-value">xxxxxxxxxxxx xxxxxxxxxx</span>
+          <span class="locked-value">xxxxxxxxxxxxxxxxxxxxxxxxxx</span>
           <span class="real-value"><a href="mailto:Info@diamondsofrenvyle.com">Info@diamondsofrenvyle.com</a></span>
           <span class="members-only-label"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="11" width="18" height="11" rx="2"/><path d="M7 11V7a5 5 0 0 1 10 0v4"/></svg> Members Only</span>
         </div>
@@ -495,7 +517,7 @@
 <section class="detail">
   <div class="booking-upsell">
     <div class="booking-upsell-text">
-      <h3>Book Diamond&#x27;s Ice and Cool for the 2026 season</h3>
+      <h3>Book Diamond&#39;s Ice and Cool for the 2026 season</h3>
       <ul class="booking-upsell-list">
         <li>Stud fee &amp; payment terms</li>
         <li>Owner contact &amp; mobile</li>
@@ -512,22 +534,22 @@
   </div>
 </section>
 
-<!-- ============ MEMBER-ONLY BOOKING CARD ============ -->
+<!-- ============ MEMBER-ONLY BOOKING CARD (revealed for members) ============ -->
 <section class="detail member-only-section">
   <div class="booking-card">
-    <h3>Book Diamond&#x27;s Ice and Cool for the 2026 season <span class="ok">✓ Member access</span></h3>
+    <h3>Book Diamond&#39;s Ice and Cool for the 2026 season <span class="ok">✓ Member access</span></h3>
     <div class="booking-row"><strong>Stud Fee</strong><span class="val">POA</span></div>
     <div class="booking-row"><strong>Covering Method</strong><span class="val">Chilled AI</span></div>
     <div class="booking-row"><strong>Email</strong><span class="val"><a href="mailto:Info@diamondsofrenvyle.com">Info@diamondsofrenvyle.com</a></span></div>
-    <div class="booking-row"><strong>Phone</strong><span class="val">086 324 4077</span></div>
-    <div class="booking-row"><strong>Season Dates</strong><span class="val">Contact owner</span></div>
-    <div class="booking-row"><strong>Mare Requirements</strong><span class="val">Contact owner to discuss</span></div>
-    <div class="booking-row"><strong>Notable Progeny</strong><span class="val">Young stallion — building progeny record</span></div>
-    <div class="booking-row"><strong>Top Results</strong><span class="val">Young stallion — building show record</span></div>
+    <div class="booking-row"><strong>Phone</strong><span class="val">086-3244077</span></div>
+    
+    
+    
+    
   </div>
 </section>
 
-<!-- ============ VIDEO LIGHTBOX ============ -->
+<!-- ============ VIDEO LIGHTBOX (members only) ============ -->
 <div id="video-lightbox" class="video-lightbox" role="dialog" aria-label="Video player" aria-hidden="true">
   <div class="video-lightbox-backdrop" onclick="closeVideoLightbox()"></div>
   <div class="video-lightbox-content">
@@ -542,6 +564,7 @@
   In partnership with <strong>Connemara Pony World</strong></p>
 </footer>
 
+<!-- ============ AUTH UNLOCK SCRIPT ============ -->
 <script>
 (function() {
   const AUTH_API = 'https://auth.breedpulse.com';
