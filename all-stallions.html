@@ -83,7 +83,15 @@ header.site nav a:hover { opacity: 1; }
 .corrections a { color: var(--green-deep); text-decoration: underline; text-decoration-color: var(--gold); text-underline-offset: 3px; text-decoration-thickness: 1px; font-weight: 500; transition: color 0.2s; }
 .corrections a:hover { color: var(--green); }
 
-.filters { max-width: 1180px; margin: 0 auto; padding: 2.5rem 1.5rem 1.25rem; display: flex; flex-wrap: wrap; gap: 0.75rem; align-items: center; }
+/* Pre-filter note — warm, community-led tone */
+.register-note { max-width: 1180px; margin: 2.5rem auto 0; padding: 0 1.5rem; }
+.register-note .inner { background: var(--paper); border: 1px solid var(--stone-warm); border-left: 3px solid var(--gold); border-radius: 2px; padding: 1.1rem 1.4rem; }
+.register-note p { font-size: 0.9rem; line-height: 1.65; color: var(--peat-soft); margin: 0; }
+.register-note strong { color: var(--green-deep); font-weight: 600; }
+.register-note a { color: var(--green-deep); text-decoration: underline; text-decoration-color: var(--gold); text-underline-offset: 3px; text-decoration-thickness: 1px; font-weight: 500; transition: color 0.2s; }
+.register-note a:hover { color: var(--green); }
+
+.filters { max-width: 1180px; margin: 0 auto; padding: 1.5rem 1.5rem 1.25rem; display: flex; flex-wrap: wrap; gap: 0.75rem; align-items: center; }
 .filters label { font-size: 0.75rem; letter-spacing: 0.12em; text-transform: uppercase; color: var(--whisper); font-weight: 500; margin-right: 0.5rem; }
 .filters select, .filters input[type="search"] { appearance: none; -webkit-appearance: none; background: var(--paper); border: 1px solid var(--stone-warm); border-radius: 2px; padding: 0.625rem 2.25rem 0.625rem 0.875rem; font-family: 'DM Sans', sans-serif; font-size: 0.875rem; color: var(--peat); cursor: pointer; background-image: url("data:image/svg+xml,%3Csvg width='10' height='6' viewBox='0 0 10 6' fill='none' xmlns='http://www.w3.org/2000/svg'%3E%3Cpath d='M1 1L5 5L9 1' stroke='%232C2825' stroke-width='1.5' stroke-linecap='round'/%3E%3C/svg%3E"); background-repeat: no-repeat; background-position: right 0.875rem center; }
 .filters input[type="search"] { background-image: none; padding-right: 0.875rem; min-width: 220px; }
@@ -352,6 +360,15 @@ footer.site a:hover { text-decoration: underline; }
       We've built this register from public records and breed society directories, so there will inevitably be small details that need correcting &mdash; wrong year, wrong height, sold to a new owner, retired from stud. We'd rather hear it than have it slip. Email
       <a href="mailto:hello@breedpulse.com">hello@breedpulse.com</a>
       and we'll fix it.
+    </p>
+  </div>
+</section>
+
+<section class="register-note">
+  <div class="inner">
+    <p>
+      <strong>A note on this list.</strong>
+      Entries marked <strong>Listed</strong> have been submitted and verified directly with the owner. Everything else is drawn from public records, breed society directories and community knowledge &mdash; so details may be incomplete, out of date, or in a few cases inaccurate. If you see something that doesn't look right, or a pony you'd like removed, drop us a line at <a href="mailto:hello@breedpulse.com">hello@breedpulse.com</a> and we'll put it right.
     </p>
   </div>
 </section>
@@ -1009,7 +1026,6 @@ const STALLIONS = [
   ['Springers Charleston','pending','','Sweden','Class 1 (Godkänd)','','','','Other','CPCS Sweden Hingstlista 2026'],
   ['Sternbergs Most Wanted','pending','','Sweden','Class 1 (Godkänd)','','','','Other','CPCS Sweden Hingstlista 2026'],
   ['Zander\'s Orlando','pending','','Sweden','Class 1 (Godkänd)','','','','Other','CPCS Sweden Hingstlista 2026'],
-  ['Bjennesby Whoosh','pending','','Netherlands','Class 1','','','','Other','CPCN Netherlands'],
   ['Renvyle Cashel','pending','','Netherlands','Class 1','','','','Other','CPCN Netherlands'],
   ['Coosheen Cool Tom','pending','','Netherlands','Class 1','','','','Other','CPCN Netherlands'],
   ['Rickamore Surf Sparrow (DK)','pending','','Denmark','Class 1','','148','2017','Other','Stutteri Skærgården, Egtved'],
@@ -1024,7 +1040,6 @@ const STALLIONS = [
   ['Mørkhøjs Meteor','pending','','Denmark','Class 1','','','','Other','Mørkhøj Connemara'],
   ['Bech\'s Prince Tomaltach','pending','','Denmark','Class 1','','','','Other','DCPS Denmark'],
   ['Knightsbridge Rebel','pending','','Denmark','Class 1','','','','Other','DCPS Denmark'],
-  ['Bjennesby Kevin','pending','','Denmark','Class 1','','','','Other','DCPS Denmark'],
   ['Inis Sle\' Quattroporte','pending','','Denmark','Class 1','','','','Other','DCPS Denmark'],
   ['Skærgårdens Dark Night','pending','','Denmark','Class 1','','','','Other','Stutteri Skærgården, Egtved'],
   ['Eden Park d\'Argan','pending','','Denmark','Class 1','','','','Other','DCPS Denmark'],
