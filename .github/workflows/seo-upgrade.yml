@@ -1,0 +1,386 @@
+#!/usr/bin/env node
+/**
+ * BreedPulse SEO v13 — upgrade script
+ *
+ * What it does:
+ *   1. Reads stallions.json (your existing seo-build data file)
+ *   2. For every stallion with `Status: Verified`, rewrites stallions/<slug>/index.html
+ *      injecting:
+ *        - GA4 tracking snippet
+ *        - Enriched JSON-LD schema (Animal + BreadcrumbList)
+ *        - Related stallions block (3 sires/dams from same studbook)
+ *        - Proper canonical, og:image, twitter:card
+ *   3. Rebuilds sitemap.xml at the directory root
+ *   4. Rebuilds robots.txt pointing at the sitemap
+ *
+ * How to run:
+ *   1. Drop this file into your local seo-build/ folder
+ *      (the one that already has stallions.json + your SEO generator)
+ *   2. cd into that folder
+ *   3. node upgrade-seo-pages.mjs
+ *   4. git add -A && git commit -m "SEO v13: GA4 + sitemap + enriched schema"
+ *   5. git push  (Cloudflare cache auto-purges on push)
+ */
+
+import { promises as fs } from 'node:fs';
+import path from 'node:path';
+
+// ---------- CONFIG ----------
+const GA4_MEASUREMENT_ID = 'G-DE787X6F6L'; // Lucinda's real GA4 ID
+const SITE_ORIGIN = 'https://directory.breedpulse.com';
+const MAIN_SITE = 'https://breedpulse.com';
+const STALLIONS_JSON = './stallions.json';
+const STALLIONS_DIR = './stallions';
+const SITEMAP_PATH = './sitemap.xml';
+const ROBOTS_PATH = './robots.txt';
+
+// ---------- HELPERS ----------
+const escapeHtml = (s) =>
+  String(s ?? '')
+    .replace(/&/g, '&amp;')
+    .replace(/</g, '&lt;')
+    .replace(/>/g, '&gt;')
+    .replace(/"/g, '&quot;')
+    .replace(/'/g, '&#39;');
+
+const slugify = (s) =>
+  String(s ?? '')
+    .toLowerCase()
+    .normalize('NFD')
+    .replace(/[\u0300-\u036f]/g, '')
+    .replace(/[^a-z0-9]+/g, '-')
+    .replace(/(^-|-$)/g, '');
+
+// ---------- GA4 SNIPPET ----------
+const ga4Snippet = () => `
+<!-- Google Analytics 4 -->
+<script async src="https://www.googletagmanager.com/gtag/js?id=${GA4_MEASUREMENT_ID}"></script>
+<script>
+  window.dataLayer = window.dataLayer || [];
+  function gtag(){dataLayer.push(arguments);}
+  gtag('js', new Date());
+  gtag('config', '${GA4_MEASUREMENT_ID}', {
+    page_title: document.title,
+    page_location: window.location.href,
+    send_page_view: true
+  });
+</script>`;
+
+// ---------- JSON-LD ENRICHED SCHEMA ----------
+const jsonLdBlock = (stallion) => {
+  const slug = stallion.slug || slugify(stallion.name);
+  const url = `${SITE_ORIGIN}/stallions/${slug}/`;
+  const photoUrl =
+    stallion.photo ||
+    `https://photos.breedpulse.com/stallions/${slug}/primary.jpg`;
+
+  const animalSchema = {
+    '@context': 'https://schema.org',
+    '@type': 'Product',
+    name: stallion.name,
+    description:
+      stallion.description ||
+      `${stallion.name} — verified Connemara stallion${stallion.studbook ? ` (${stallion.studbook})` : ''}${stallion.country ? `, standing in ${stallion.country}` : ''}.`,
+    image: photoUrl,
+    url,
+    category: 'Connemara Stallion',
+    brand: { '@type': 'Brand', name: 'BreedPulse' },
+    additionalProperty: [
+      stallion.studbook && {
+        '@type': 'PropertyValue',
+        name: 'Studbook',
+        value: stallion.studbook,
+      },
+      stallion.country && {
+        '@type': 'PropertyValue',
+        name: 'Country',
+        value: stallion.country,
+      },
+      stallion.colour && {
+        '@type': 'PropertyValue',
+        name: 'Colour',
+        value: stallion.colour,
+      },
+      stallion.heightCm && {
+        '@type': 'PropertyValue',
+        name: 'Height',
+        value: `${stallion.heightCm} cm`,
+      },
+      stallion.foaled && {
+        '@type': 'PropertyValue',
+        name: 'Year Foaled',
+        value: String(stallion.foaled),
+      },
+      stallion.hwsd && {
+        '@type': 'PropertyValue',
+        name: 'HWSD Status',
+        value: stallion.hwsd,
+      },
+    ].filter(Boolean),
+  };
+
+  const breadcrumbSchema = {
+    '@context': 'https://schema.org',
+    '@type': 'BreadcrumbList',
+    itemListElement: [
+      { '@type': 'ListItem', position: 1, name: 'BreedPulse', item: MAIN_SITE },
+      {
+        '@type': 'ListItem',
+        position: 2,
+        name: 'Stallion Directory',
+        item: `${SITE_ORIGIN}/all-stallions.html`,
+      },
+      { '@type': 'ListItem', position: 3, name: stallion.name, item: url },
+    ],
+  };
+
+  return `
+<script type="application/ld+json">${JSON.stringify(animalSchema)}</script>
+<script type="application/ld+json">${JSON.stringify(breadcrumbSchema)}</script>`;
+};
+
+// ---------- RELATED STALLIONS ----------
+const relatedStallionsHtml = (current, allVerified) => {
+  // Same studbook, not self, max 3, prefer same country
+  const related = allVerified
+    .filter((s) => s.slug !== current.slug && s.studbook === current.studbook)
+    .sort((a, b) => {
+      if (a.country === current.country && b.country !== current.country) return -1;
+      if (b.country === current.country && a.country !== current.country) return 1;
+      return 0;
+    })
+    .slice(0, 3);
+
+  if (related.length === 0) return '';
+
+  const cards = related
+    .map((s) => {
+      const slug = s.slug || slugify(s.name);
+      const photo = `https://photos.breedpulse.com/stallions/${slug}/primary.jpg`;
+      return `
+        <a class="related-card" href="${SITE_ORIGIN}/stallions/${slug}/">
+          <div class="related-photo" style="background-image:url('${photo}');"></div>
+          <div class="related-body">
+            <div class="related-name">${escapeHtml(s.name)}</div>
+            <div class="related-meta">${escapeHtml(s.studbook || '')} ${s.country ? '· ' + escapeHtml(s.country) : ''}</div>
+          </div>
+        </a>`;
+    })
+    .join('\n');
+
+  return `
+<section class="related-section">
+  <h2 class="related-heading">More verified ${escapeHtml(current.studbook || 'Connemara')} stallions</h2>
+  <div class="related-grid">${cards}
+  </div>
+</section>`;
+};
+
+// ---------- META TAGS ----------
+const metaBlock = (stallion) => {
+  const slug = stallion.slug || slugify(stallion.name);
+  const url = `${SITE_ORIGIN}/stallions/${slug}/`;
+  const photoUrl =
+    stallion.photo ||
+    `https://photos.breedpulse.com/stallions/${slug}/primary.jpg`;
+  const title = `${stallion.name} — Connemara Stallion ${stallion.studbook ? `(${stallion.studbook})` : ''} | BreedPulse`;
+  const desc = `${stallion.name} — verified Connemara stallion${stallion.studbook ? ` (${stallion.studbook})` : ''}${stallion.country ? `, standing in ${stallion.country}` : ''}. View pedigree, photos, and stud fee on BreedPulse.`;
+
+  return `
+<title>${escapeHtml(title)}</title>
+<meta name="description" content="${escapeHtml(desc)}">
+<link rel="canonical" href="${url}">
+<meta property="og:type" content="article">
+<meta property="og:url" content="${url}">
+<meta property="og:title" content="${escapeHtml(title)}">
+<meta property="og:description" content="${escapeHtml(desc)}">
+<meta property="og:image" content="${photoUrl}">
+<meta property="og:site_name" content="BreedPulse">
+<meta name="twitter:card" content="summary_large_image">
+<meta name="twitter:title" content="${escapeHtml(title)}">
+<meta name="twitter:description" content="${escapeHtml(desc)}">
+<meta name="twitter:image" content="${photoUrl}">`;
+};
+
+// ---------- INJECT INTO EXISTING PAGE ----------
+async function upgradePage(pagePath, stallion, allVerified) {
+  let html;
+  try {
+    html = await fs.readFile(pagePath, 'utf8');
+  } catch {
+    console.warn(`   ⚠ skipping ${stallion.name} — page not found at ${pagePath}`);
+    return false;
+  }
+
+  // 1. Inject GA4 just before </head> (or at end of head if no closing)
+  if (!html.includes(`gtag/js?id=${GA4_MEASUREMENT_ID}`)) {
+    if (html.includes('</head>')) {
+      html = html.replace('</head>', `${ga4Snippet()}\n</head>`);
+    }
+  }
+
+  // 2. Replace or inject JSON-LD blocks
+  // Strip any existing JSON-LD scripts first
+  html = html.replace(
+    /<script type="application\/ld\+json">[\s\S]*?<\/script>/g,
+    ''
+  );
+  if (html.includes('</head>')) {
+    html = html.replace('</head>', `${jsonLdBlock(stallion)}\n</head>`);
+  }
+
+  // 3. Replace or inject meta block — strip existing title/description/og/twitter/canonical
+  html = html.replace(/<title>[\s\S]*?<\/title>/g, '');
+  html = html.replace(/<meta name="description"[^>]*>/g, '');
+  html = html.replace(/<link rel="canonical"[^>]*>/g, '');
+  html = html.replace(/<meta property="og:[^"]*"[^>]*>/g, '');
+  html = html.replace(/<meta name="twitter:[^"]*"[^>]*>/g, '');
+  if (html.includes('<meta charset')) {
+    html = html.replace(
+      /(<meta charset[^>]*>)/,
+      `$1${metaBlock(stallion)}`
+    );
+  } else if (html.includes('<head>')) {
+    html = html.replace('<head>', `<head>${metaBlock(stallion)}`);
+  }
+
+  // 4. Inject related stallions section before </main> or </body>
+  const relatedHtml = relatedStallionsHtml(stallion, allVerified);
+  if (relatedHtml) {
+    // Remove any existing related section first
+    html = html.replace(
+      /<section class="related-section">[\s\S]*?<\/section>/g,
+      ''
+    );
+    // Inject CSS for related cards if not already present
+    if (!html.includes('.related-section')) {
+      const relatedCss = `
+<style>
+.related-section{max-width:1100px;margin:64px auto 48px;padding:0 24px;}
+.related-heading{font-family:'Cormorant Garamond',serif;font-weight:500;font-size:1.75rem;color:#142F22;margin-bottom:24px;text-align:center;}
+.related-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(260px,1fr));gap:20px;}
+.related-card{display:block;text-decoration:none;color:inherit;background:#fff;border:1px solid #E5DDD0;border-radius:8px;overflow:hidden;transition:transform .2s,box-shadow .2s;}
+.related-card:hover{transform:translateY(-2px);box-shadow:0 6px 20px rgba(20,47,34,.08);}
+.related-photo{aspect-ratio:4/3;background-size:cover;background-position:center;background-color:#F5F2ED;}
+.related-body{padding:14px 16px;}
+.related-name{font-family:'Cormorant Garamond',serif;font-weight:500;font-size:1.2rem;color:#142F22;}
+.related-meta{font-family:'DM Sans',sans-serif;font-weight:300;font-size:0.85rem;color:#5A6B62;margin-top:4px;}
+</style>`;
+      if (html.includes('</head>')) {
+        html = html.replace('</head>', `${relatedCss}\n</head>`);
+      }
+    }
+    if (html.includes('</main>')) {
+      html = html.replace('</main>', `${relatedHtml}\n</main>`);
+    } else if (html.includes('</body>')) {
+      html = html.replace('</body>', `${relatedHtml}\n</body>`);
+    }
+  }
+
+  await fs.writeFile(pagePath, html, 'utf8');
+  return true;
+}
+
+// ---------- SITEMAP BUILDER ----------
+function buildSitemap(verifiedStallions) {
+  const today = new Date().toISOString().split('T')[0];
+  const staticUrls = [
+    { loc: `${SITE_ORIGIN}/all-stallions.html`, priority: '0.9', changefreq: 'weekly' },
+    { loc: `${SITE_ORIGIN}/stallion-search.html`, priority: '0.8', changefreq: 'weekly' },
+    { loc: MAIN_SITE + '/', priority: '1.0', changefreq: 'weekly' },
+    { loc: MAIN_SITE + '/how-it-works', priority: '0.6', changefreq: 'monthly' },
+    { loc: MAIN_SITE + '/pricing', priority: '0.7', changefreq: 'monthly' },
+    { loc: MAIN_SITE + '/submit-your-stallion', priority: '0.7', changefreq: 'monthly' },
+  ];
+  const stallionUrls = verifiedStallions.map((s) => ({
+    loc: `${SITE_ORIGIN}/stallions/${s.slug || slugify(s.name)}/`,
+    priority: '0.8',
+    changefreq: 'monthly',
+  }));
+
+  const urlEntries = [...staticUrls, ...stallionUrls]
+    .map(
+      (u) =>
+        `  <url>\n    <loc>${u.loc}</loc>\n    <lastmod>${today}</lastmod>\n    <changefreq>${u.changefreq}</changefreq>\n    <priority>${u.priority}</priority>\n  </url>`
+    )
+    .join('\n');
+
+  return `<?xml version="1.0" encoding="UTF-8"?>
+<urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">
+${urlEntries}
+</urlset>`;
+}
+
+function buildRobots() {
+  return `User-agent: *
+Allow: /
+
+Sitemap: ${SITE_ORIGIN}/sitemap.xml
+`;
+}
+
+// ---------- MAIN ----------
+async function main() {
+  console.log('🐎 BreedPulse SEO v13 upgrade starting…\n');
+
+  // Load stallions data
+  let raw;
+  try {
+    raw = await fs.readFile(STALLIONS_JSON, 'utf8');
+  } catch (err) {
+    console.error(`❌ Cannot read ${STALLIONS_JSON}`);
+    console.error(`   Make sure you're running this from inside your seo-build/ folder.`);
+    process.exit(1);
+  }
+
+  const stallions = JSON.parse(raw);
+  // Normalise: tolerate either array of stallions or {stallions:[...]} shape
+  const list = Array.isArray(stallions) ? stallions : stallions.stallions || [];
+
+  // Filter to verified only — try both "Verified" and "Listed" status values
+  const verified = list.filter((s) => {
+    const status = String(s.status || s.Status || '').toLowerCase();
+    return status === 'verified' || status === 'listed';
+  });
+
+  console.log(`   Found ${list.length} total stallions, ${verified.length} verified\n`);
+
+  // Add slug to each if missing
+  verified.forEach((s) => {
+    if (!s.slug) s.slug = slugify(s.name);
+  });
+
+  // Upgrade each page
+  let upgraded = 0;
+  let skipped = 0;
+  for (const s of verified) {
+    const pagePath = path.join(STALLIONS_DIR, s.slug, 'index.html');
+    const ok = await upgradePage(pagePath, s, verified);
+    if (ok) {
+      upgraded++;
+      console.log(`   ✓ ${s.name}`);
+    } else {
+      skipped++;
+    }
+  }
+
+  // Build sitemap
+  await fs.writeFile(SITEMAP_PATH, buildSitemap(verified), 'utf8');
+  console.log(`\n   ✓ sitemap.xml — ${verified.length + 6} URLs`);
+
+  // Build robots.txt
+  await fs.writeFile(ROBOTS_PATH, buildRobots(), 'utf8');
+  console.log(`   ✓ robots.txt`);
+
+  console.log(`\n✅ Done. ${upgraded} pages upgraded, ${skipped} skipped (no file found).`);
+  console.log(`\nNext:`);
+  console.log(`   1. cd into your repo, git add -A`);
+  console.log(`   2. git commit -m "SEO v13: GA4 + enriched schema + sitemap"`);
+  console.log(`   3. git push   (Cloudflare cache will purge automatically)`);
+  console.log(`   4. Then verify GSC and submit ${SITE_ORIGIN}/sitemap.xml`);
+}
+
+main().catch((err) => {
+  console.error('❌ Failed:', err);
+  process.exit(1);
+});
