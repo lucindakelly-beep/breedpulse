@@ -2,16 +2,10 @@ name: SEO Auto-Upgrade
 
 on:
   push:
-    branches: [main]
     paths:
       - 'stallions/**'
-      - 'all-stallions.html'
-      - 'index.html'
-      - 'pricing.html'
-      - 'how-it-works.html'
-      - 'submit-your-stallion.html'
-      - '.github/workflows/seo-upgrade.yml'
       - 'scripts/seo-upgrade.mjs'
+      - 'scripts/foal-namer-snippet.mjs'
   workflow_dispatch:
 
 permissions:
@@ -37,11 +31,28 @@ jobs:
       - name: Commit and push changes
         run: |
           git config user.name "github-actions[bot]"
-          git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+          git config user.email "github-actions[bot]@users.noreply.github.com"
+
+          # Stage everything modified by the script
           git add -A
+
+          # Skip if no changes
           if git diff --staged --quiet; then
-            echo "No SEO changes to commit."
-          else
-            git commit -m "Auto: SEO upgrade (GA4 + sitemap + schema) [skip ci]"
-            git push
+            echo "No changes to commit."
+            exit 0
           fi
+
+          git commit -m "Auto: SEO upgrade (GA4 + sitemap + schema) [skip ci]"
+
+          # Retry push up to 3 times in case the branch moved while we worked
+          for i in 1 2 3; do
+            if git push origin HEAD:main; then
+              echo "Push succeeded on attempt $i"
+              exit 0
+            fi
+            echo "Push failed on attempt $i, rebasing and retrying..."
+            git pull --rebase origin main
+          done
+
+          echo "Push failed after 3 attempts"
+          exit 1
