@@ -172,6 +172,7 @@ export function foalNamerSection({ stallionName, stallionSlug, seasonPassUrl }) 
 .foal-namer .fn-name-save svg { width: 12px; height: 12px; }
 .foal-namer .fn-name-save:disabled { opacity: 0.6; cursor: wait; }
 .foal-namer .fn-prefix-note { margin-top: 1rem; padding: 0.75rem 1rem; background: #FAEFD3; border: 1px solid #E8D49C; border-radius: 6px; font-size: 0.82rem; color: #856220; display: flex; gap: 0.55rem; align-items: flex-start; line-height: 1.45; }
+.foal-namer .fn-prefix-note[hidden] { display: none; }
 .foal-namer .fn-prefix-note svg { flex-shrink: 0; margin-top: 2px; }
 .foal-namer .fn-upsell { margin-top: 1.75rem; background: var(--green-ghost); border: 1px solid var(--green-pale); border-radius: var(--radius); padding: 1.5rem 1.75rem; }
 @media (max-width: 560px) { .foal-namer .fn-upsell { padding: 1.25rem; } }
@@ -189,6 +190,7 @@ export function foalNamerSection({ stallionName, stallionSlug, seasonPassUrl }) 
 .fn-toast { position: fixed; bottom: 1.5rem; left: 50%; transform: translateX(-50%); background: var(--green-deep); color: var(--white); padding: 0.85rem 1.4rem; border-radius: 30px; font-family: var(--font-body); font-size: 0.88rem; font-weight: 500; z-index: 9999; box-shadow: 0 8px 24px rgba(0,0,0,0.18); opacity: 0; transition: opacity 0.25s, transform 0.25s; pointer-events: none; }
 .fn-toast.show { opacity: 1; transform: translateX(-50%) translateY(-4px); }
 .fn-share-popover { position: fixed; inset: 0; background: rgba(20,47,34,0.55); z-index: 10000; display: flex; align-items: center; justify-content: center; padding: 1rem; animation: fnFadeIn 0.18s ease; }
+.fn-share-popover[hidden] { display: none; }
 .fn-share-pop-inner { background: #FFFFFF; border-radius: 12px; padding: 1.5rem; max-width: 380px; width: 100%; box-shadow: 0 20px 50px rgba(0,0,0,0.25); }
 .fn-share-pop-head { font-family: var(--font-display); font-style: italic; font-size: 1.15rem; color: var(--green-deep); margin-bottom: 1.1rem; }
 .fn-share-pop-name { font-weight: 500; }
