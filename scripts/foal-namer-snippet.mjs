@@ -1,5 +1,5 @@
-// foal-namer-snippet.mjs — v2
-// Smarter patterns + style chips + colour dropdown + IP-safe prefix handling.
+// foal-namer-snippet.mjs — v3
+// v2 features + native Web Share API + html2canvas for reliable image render.
 
 function escapeHtml(s) {
   return String(s ?? '').replace(/[&<>"']/g, c => ({
@@ -18,7 +18,7 @@ export function foalNamerSection({ stallionName, stallionSlug, seasonPassUrl }) 
     Imagine your foal
     <span class="fn-pill">New &mdash; free tool</span>
   </h2>
-  <p class="fn-sub">A traditional Connemara foal name, generated from your mare&rsquo;s name and ${sireEsc}. Share the result, picture the future.</p>
+  <p class="fn-sub">A Connemara-inspired foal name, generated from your mare&rsquo;s name and ${sireEsc}. Pick a style, share the result, picture the future.</p>
 
   <div class="fn-card">
     <form class="fn-form" onsubmit="return false;">
@@ -106,7 +106,21 @@ export function foalNamerSection({ stallionName, stallionSlug, seasonPassUrl }) 
   </div>
 </section>
 
-<div id="fn-card-stage" aria-hidden="true" style="position:fixed;left:-9999px;top:-9999px;width:600px;height:600px;"></div>
+<div id="fn-share-popover" class="fn-share-popover" hidden>
+  <div class="fn-share-pop-inner">
+    <div class="fn-share-pop-head">Share <span class="fn-share-pop-name" id="fn-share-pop-name"></span></div>
+    <div class="fn-share-pop-grid">
+      <a href="#" class="fn-share-btn" data-network="facebook"><svg viewBox="0 0 24 24" fill="currentColor" width="20" height="20"><path d="M22 12a10 10 0 1 0-11.6 9.9v-7H8v-2.9h2.4V9.8c0-2.4 1.4-3.7 3.6-3.7 1 0 2.1.2 2.1.2v2.3h-1.2c-1.2 0-1.5.7-1.5 1.5v1.8h2.6l-.4 2.9h-2.2v7A10 10 0 0 0 22 12z"/></svg>Facebook</a>
+      <a href="#" class="fn-share-btn" data-network="whatsapp"><svg viewBox="0 0 24 24" fill="currentColor" width="20" height="20"><path d="M17.5 14.4c-.3-.1-1.7-.9-2-1s-.5-.1-.7.1-.8 1-.9 1.2-.3.2-.6 0c-.3-.1-1.2-.5-2.3-1.4-.8-.7-1.4-1.6-1.6-1.9s0-.4.1-.5l.5-.5c.1-.2.2-.3.3-.5s.1-.3 0-.5-.7-1.6-1-2.2c-.2-.5-.5-.5-.7-.5h-.6c-.2 0-.5.1-.8.4s-1 1-1 2.4 1.1 2.8 1.2 3 2.1 3.3 5.2 4.6c.7.3 1.3.5 1.7.6.7.2 1.4.2 1.9.1.6-.1 1.7-.7 2-1.4.2-.7.2-1.2.2-1.4s-.3-.2-.6-.3zM12 2a10 10 0 0 0-8.5 15.3L2 22l4.8-1.3A10 10 0 1 0 12 2zm0 18a8 8 0 0 1-4.1-1.1l-.3-.2-3 .8.8-2.9-.2-.3A8 8 0 1 1 12 20z"/></svg>WhatsApp</a>
+      <a href="#" class="fn-share-btn" data-network="messenger"><svg viewBox="0 0 24 24" fill="currentColor" width="20" height="20"><path d="M12 2C6.5 2 2 6.1 2 11.1c0 2.8 1.4 5.3 3.6 7v3.4l3.3-1.8c.9.3 1.9.4 3 .4 5.5 0 10-4.1 10-9.1S17.5 2 12 2zm1 12.3l-2.5-2.7-5 2.7 5.5-5.8 2.6 2.7 4.9-2.7L13 14.3z"/></svg>Messenger</a>
+      <a href="#" class="fn-share-btn" data-network="twitter"><svg viewBox="0 0 24 24" fill="currentColor" width="20" height="20"><path d="M18.9 2H22l-7.3 8.3L23.3 22h-6.7l-5.2-6.8L5.2 22H2l7.8-8.9L1.7 2h6.9l4.7 6.2L18.9 2zm-1.2 18h1.8L6.5 3.9H4.6L17.7 20z"/></svg>X (Twitter)</a>
+      <a href="#" class="fn-share-btn" data-network="copy"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" width="20" height="20"><rect x="9" y="9" width="13" height="13" rx="2"/><path d="M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1"/></svg>Copy link</a>
+    </div>
+    <button type="button" class="fn-share-pop-close" id="fn-share-pop-close">Close</button>
+  </div>
+</div>
+
+<div id="fn-card-stage" aria-hidden="true" style="position:fixed;left:-9999px;top:-9999px;width:600px;height:600px;pointer-events:none;"></div>
 
 <style>
 .foal-namer h2 { font-family: var(--font-display); font-size: 1.8rem; font-style: italic; font-weight: 500; color: var(--green-deep); margin-bottom: 0.5rem; padding-bottom: 0.5rem; border-bottom: 1px solid var(--ash); letter-spacing: -0.01em; display: flex; align-items: center; justify-content: space-between; flex-wrap: wrap; gap: 0.5rem; }
@@ -148,9 +162,14 @@ export function foalNamerSection({ stallionName, stallionSlug, seasonPassUrl }) 
 .foal-namer .fn-name-card:hover { border-color: var(--gold); transform: translateY(-2px); box-shadow: 0 8px 20px rgba(184,145,92,0.12); }
 .foal-namer .fn-name-value { font-family: var(--font-display); font-style: italic; font-weight: 500; font-size: 1.45rem; color: var(--green-deep); line-height: 1.15; letter-spacing: -0.005em; }
 .foal-namer .fn-name-meta { font-family: var(--font-body); font-size: 0.7rem; color: var(--fog); letter-spacing: 0.04em; font-weight: 400; font-style: italic; }
-.foal-namer .fn-name-save { display: inline-flex; align-items: center; justify-content: center; gap: 0.4rem; background: var(--gold); color: var(--green-deep); padding: 0.55rem 0.9rem; border-radius: 20px; font-family: var(--font-body); font-size: 0.78rem; font-weight: 600; cursor: pointer; border: none; transition: all 0.15s; margin-top: auto; }
-.foal-namer .fn-name-save:hover { background: #C9A06B; }
-.foal-namer .fn-name-save svg { width: 13px; height: 13px; }
+.foal-namer .fn-name-actions { display: flex; flex-direction: column; gap: 0.45rem; margin-top: auto; }
+.foal-namer .fn-name-share { display: inline-flex; align-items: center; justify-content: center; gap: 0.45rem; background: var(--gold); color: var(--green-deep); padding: 0.7rem 0.9rem; border-radius: 24px; font-family: var(--font-body); font-size: 0.85rem; font-weight: 600; cursor: pointer; border: none; transition: all 0.15s; }
+.foal-namer .fn-name-share:hover { background: #C9A06B; transform: translateY(-1px); box-shadow: 0 4px 12px rgba(184,145,92,0.25); }
+.foal-namer .fn-name-share svg { width: 14px; height: 14px; }
+.foal-namer .fn-name-share:disabled { opacity: 0.6; cursor: wait; }
+.foal-namer .fn-name-save { display: inline-flex; align-items: center; justify-content: center; gap: 0.35rem; background: transparent; color: var(--earth); padding: 0.4rem 0.7rem; border-radius: 20px; font-family: var(--font-body); font-size: 0.72rem; font-weight: 500; cursor: pointer; border: 1px solid var(--ash); transition: all 0.15s; }
+.foal-namer .fn-name-save:hover { border-color: var(--gold); color: var(--green-deep); background: var(--linen); }
+.foal-namer .fn-name-save svg { width: 12px; height: 12px; }
 .foal-namer .fn-name-save:disabled { opacity: 0.6; cursor: wait; }
 .foal-namer .fn-prefix-note { margin-top: 1rem; padding: 0.75rem 1rem; background: #FAEFD3; border: 1px solid #E8D49C; border-radius: 6px; font-size: 0.82rem; color: #856220; display: flex; gap: 0.55rem; align-items: flex-start; line-height: 1.45; }
 .foal-namer .fn-prefix-note svg { flex-shrink: 0; margin-top: 2px; }
@@ -169,15 +188,30 @@ export function foalNamerSection({ stallionName, stallionSlug, seasonPassUrl }) 
 .foal-namer .fn-upsell-meta { font-size: 0.82rem; color: var(--earth); }
 .fn-toast { position: fixed; bottom: 1.5rem; left: 50%; transform: translateX(-50%); background: var(--green-deep); color: var(--white); padding: 0.85rem 1.4rem; border-radius: 30px; font-family: var(--font-body); font-size: 0.88rem; font-weight: 500; z-index: 9999; box-shadow: 0 8px 24px rgba(0,0,0,0.18); opacity: 0; transition: opacity 0.25s, transform 0.25s; pointer-events: none; }
 .fn-toast.show { opacity: 1; transform: translateX(-50%) translateY(-4px); }
+.fn-share-popover { position: fixed; inset: 0; background: rgba(20,47,34,0.55); z-index: 10000; display: flex; align-items: center; justify-content: center; padding: 1rem; animation: fnFadeIn 0.18s ease; }
+.fn-share-pop-inner { background: #FFFFFF; border-radius: 12px; padding: 1.5rem; max-width: 380px; width: 100%; box-shadow: 0 20px 50px rgba(0,0,0,0.25); }
+.fn-share-pop-head { font-family: var(--font-display); font-style: italic; font-size: 1.15rem; color: var(--green-deep); margin-bottom: 1.1rem; }
+.fn-share-pop-name { font-weight: 500; }
+.fn-share-pop-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 0.5rem; margin-bottom: 1rem; }
+.fn-share-btn { display: flex; align-items: center; gap: 0.6rem; padding: 0.75rem 0.9rem; border: 1px solid var(--ash); border-radius: 8px; font-family: var(--font-body); font-size: 0.88rem; font-weight: 500; color: var(--peat); text-decoration: none; transition: all 0.15s; background: var(--white); cursor: pointer; }
+.fn-share-btn:hover { border-color: var(--gold); background: var(--linen); color: var(--green-deep); }
+.fn-share-btn[data-network="facebook"] svg { color: #1877F2; }
+.fn-share-btn[data-network="whatsapp"] svg { color: #25D366; }
+.fn-share-btn[data-network="messenger"] svg { color: #0084FF; }
+.fn-share-btn[data-network="twitter"] svg { color: #000000; }
+.fn-share-btn[data-network="copy"] svg { color: var(--earth); }
+.fn-share-pop-close { width: 100%; padding: 0.65rem; background: transparent; border: 1px solid var(--ash); border-radius: 8px; font-family: var(--font-body); font-size: 0.85rem; font-weight: 500; color: var(--earth); cursor: pointer; transition: all 0.15s; }
+.fn-share-pop-close:hover { border-color: var(--gold); color: var(--green-deep); background: var(--linen); }
 </style>
 
-<script src="https://cdnjs.cloudflare.com/ajax/libs/dom-to-image/2.6.0/dom-to-image.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/html2canvas/1.4.1/html2canvas.min.js"></script>
 <script>
 (function(){
 const SECTION=document.getElementById('foal-namer');if(!SECTION)return;
 const SIRE=SECTION.dataset.sire||'this stallion';
 const STALLION_SLUG=SECTION.dataset.stallionSlug||'';
 const STRIPE_URL=SECTION.dataset.stripe||'https://buy.stripe.com/cNi6oI1m8d4Ha654aZ2B200';
+const PAGE_URL='https://directory.breedpulse.com/stallions/'+STALLION_SLUG+'/';
 
 const EVOCATIVE=['Reckless','Mischief','Whisper','Spitfire','Saunter','Renegade','Maverick','Daydream','Heartbeat','Mayhem','Tempest','Twilight','Eclipse','Quicksilver','Lightning','Thunder','Wildcard','Trouble','Rumour','Promise','Memory','Echo','Whirlwind','Rascal','Dauntless','Aurora'];
 const PHRASES=['Last Light','Once Upon','Tonight Tonight','So It Goes','Born Lucky','Just Because','Fair Warning','Take It Slow','Best Laid Plans','Out of the Blue','In Good Time','Tell Me Why','Word of Mouth','Cross My Heart','Going Steady','All At Once','Quietly Furious','Lost the Plot','Off the Record','Plain Sailing'];
@@ -197,70 +231,50 @@ function r(a){return a[Math.floor(Math.random()*a.length)];}
 function gTilt(g){if(g==='colt')return QM;if(g==='filly')return QF;return QF.concat(QM);}
 
 function patternsForStyle(style,ctx){
-const px=ctx.prefix;
-const useP=s=>px?px+' '+s:s;
-const col=ctx.colour?COLOUR_MAP[ctx.colour]:null;
-const tilt=gTilt(ctx.gender);
-
-if(style==='traditional'){return[
+const px=ctx.prefix;const useP=s=>px?px+' '+s:s;const col=ctx.colour?COLOUR_MAP[ctx.colour]:null;const tilt=gTilt(ctx.gender);
+if(style==='traditional')return[
 ()=>{const i=r(IRISH);return{name:useP(r(PLACES)+' '+i.w),meta:i.w+' means '+i.m+' in Irish'};},
 ()=>{const i=r(IRISH);const q=r(tilt);return{name:useP(i.w+' '+q),meta:i.w+' means '+i.m+' in Irish'};},
 ()=>{const i1=r(IRISH);return{name:useP(i1.w+' '+r(PLACES)),meta:i1.w+' ('+i1.m+'), a Connemara place'};},
 ()=>col?{name:useP(col.w+' '+r(tilt)),meta:'Colour: '+col.w+' ('+col.m+')'}:null,
 ()=>{const i=r(IRISH);const i2=r(IRISH);if(i.w===i2.w)return null;return{name:useP(i.w+' '+i2.w),meta:i.w+' ('+i.m+') and '+i2.w+' ('+i2.m+')'};},
-];}
-
-if(style==='modern'){return[
+];
+if(style==='modern')return[
 ()=>{const w=r(MODERN_Q);return{name:useP(w),meta:'A modern signature name'};},
 ()=>{const w=r(EVOCATIVE);return{name:useP(w),meta:'Single-word, evocative'};},
 ()=>{const w=r(MODERN_Q);const q=r(tilt);return{name:useP(w+' '+q),meta:'Modern composed name'};},
 ()=>{if(!ctx.dWord)return null;return{name:useP(ctx.dWord+"'s "+r(MODERN_Q)),meta:"Carries the dam's name"};},
 ()=>{const p=r(PHRASES);return{name:useP(p),meta:'A phrase that travels'};},
-];}
-
-if(style==='pastoral'){return[
+];
+if(style==='pastoral')return[
 ()=>{const w=r(PASTORAL);return{name:useP(w),meta:'A pastoral, single-word name'};},
 ()=>{const w=r(PASTORAL);const q=r(tilt);return{name:useP(w+' '+q),meta:'Pastoral with a gendered touch'};},
 ()=>{const w1=r(PASTORAL);const w2=r(PASTORAL);if(w1===w2)return null;return{name:useP(w1+' '+w2),meta:'A landscape in two words'};},
 ()=>{const p=r(PASTORAL);const i=r(IRISH);return{name:useP(p+' '+i.w),meta:'Landscape with '+i.w.toLowerCase()+' ('+i.m+')'};},
 ()=>{const v=r(VERBS);const p=r(PASTORAL);return{name:useP(v+' through '+p),meta:'A moving landscape'};},
-];}
-
-if(style==='mythological'){return[
+];
+if(style==='mythological')return[
 ()=>{const m=r(MYTHO);return{name:useP(m.w),meta:m.m};},
 ()=>{const m=r(MYTHO);const p=r(PLACES);return{name:useP(m.w+' of '+p),meta:m.m+' \u00b7 named for '+p};},
 ()=>{const m=r(MYTHO);const w=r(EVOCATIVE);return{name:useP(m.w+"'s "+w),meta:m.m};},
 ()=>{const m=r(MYTHO);const v=r(VERBS);return{name:useP(m.w+' '+v+' Home'),meta:m.m+', returning'};},
 ()=>{const i=r(IRISH);const m=r(MYTHO);return{name:useP(i.w+' '+m.w),meta:i.w+' ('+i.m+') of '+m.m};},
-];}
-
-if(style==='place'){return[
+];
+if(style==='place')return[
 ()=>{const p=r(PLACES);return{name:useP(p),meta:'A pure Connemara place name'};},
 ()=>{const p=r(PLACES);const v=r(VERBS);return{name:useP(p+' '+v+' Home'),meta:'Coming home to '+p};},
 ()=>{const p=r(PLACES);const w=r(EVOCATIVE);return{name:useP(p+' '+w),meta:'Of '+p};},
 ()=>{const p1=r(PLACES);const p2=r(PLACES);if(p1===p2)return null;return{name:useP(p1+' to '+p2),meta:'A Connemara journey'};},
 ()=>{const v=r(VERBS);const p=r(PLACES);return{name:useP(v+' from '+p),meta:'Out of '+p};},
-];}
-
+];
 return[patternsForStyle('traditional',ctx),patternsForStyle('modern',ctx),patternsForStyle('pastoral',ctx),patternsForStyle('mythological',ctx),patternsForStyle('place',ctx)].flat();
 }
 
 function gen(inp){
-const dWord=dword(inp.dam)||'';
-const px=inp.prefix?cap(inp.prefix):'';
+const dWord=dword(inp.dam)||'';const px=inp.prefix?cap(inp.prefix):'';
 const ctx={prefix:px,dam:inp.dam,dWord,gender:inp.gender,colour:inp.colour};
-const pats=patternsForStyle(inp.style,ctx);
-const seen=new Set();const out=[];let att=0;
-while(out.length<3&&att<60){
-att++;const fn=r(pats);const result=fn();
-if(!result||!result.name)continue;
-result.name=result.name.replace(/\s+/g,' ').trim();
-const key=result.name.toLowerCase();
-if(seen.has(key))continue;
-if(key.length>42)continue;
-if(!result.name.includes(' ')&&!px)continue;
-seen.add(key);out.push(result);
-}
+const pats=patternsForStyle(inp.style,ctx);const seen=new Set();const out=[];let att=0;
+while(out.length<3&&att<60){att++;const fn=r(pats);const result=fn();if(!result||!result.name)continue;result.name=result.name.replace(/\s+/g,' ').trim();const key=result.name.toLowerCase();if(seen.has(key))continue;if(key.length>42)continue;if(!result.name.includes(' ')&&!px)continue;seen.add(key);out.push(result);}
 return out;
 }
 
@@ -287,43 +301,142 @@ const sc=SECTION.querySelector('[data-group="style"] .fn-chip.active');
 return{sire:SIRE,dam:m,prefix:p,gender:gc?gc.dataset.gender:'either',style:sc?sc.dataset.style:'any',colour:c};
 }
 
+// === SHARE CARD BUILDER ===
+// Uses inline styles only (no external fonts) so html2canvas captures it reliably.
+// Font stack: Georgia (always available on Mac/Win/iOS/Android) instead of Cormorant Garamond.
 function buildCard(fn,inp){
 const ff=inp.gender==='filly';const cc=inp.gender==='colt';
 const tag=ff?"a filly that doesn't exist yet.":cc?"a colt that doesn't exist yet.":"a foal that doesn't exist yet.";
-const ns=fn.length>26?44:fn.length>20?52:58;
-return '<div style="width:600px;height:600px;background:#FAF7F2;font-family:Cormorant Garamond,Georgia,serif;color:#2C2825;display:flex;flex-direction:column;">'+
-'<div style="background:#142F22;padding:18px 32px;display:flex;justify-content:space-between;align-items:center;">'+
-'<div style="font-family:Cormorant Garamond,Georgia,serif;font-style:italic;font-size:26px;color:#FFFFFF;letter-spacing:0.01em;">Breed<span style="color:#B8915C;">Pulse</span></div>'+
-'<div style="font-family:DM Sans,sans-serif;font-size:11px;color:#B8915C;letter-spacing:0.18em;text-transform:uppercase;font-weight:500;">Foal name idea</div>'+
-'</div>'+
-'<div style="flex:1;padding:50px 36px 32px;text-align:center;display:flex;flex-direction:column;justify-content:center;">'+
-'<div style="font-family:DM Sans,sans-serif;font-size:13px;color:#5C5248;letter-spacing:0.22em;text-transform:uppercase;margin-bottom:22px;font-weight:500;">Meet</div>'+
-'<div style="font-family:Cormorant Garamond,Georgia,serif;font-style:italic;font-weight:500;font-size:'+ns+'px;color:#142F22;line-height:1.02;letter-spacing:-0.01em;margin-bottom:18px;">'+esc(fn)+'</div>'+
-'<div style="font-family:Cormorant Garamond,Georgia,serif;font-style:italic;font-size:18px;color:#85562C;font-weight:400;margin-bottom:34px;">'+esc(tag)+'</div>'+
-'<div style="background:#FFFFFF;border:1px solid #E6E1DB;border-radius:8px;padding:20px 26px;margin:0 auto;max-width:460px;width:100%;box-sizing:border-box;">'+
-'<div style="display:flex;justify-content:space-between;align-items:center;gap:16px;">'+
-'<div style="text-align:left;flex:1;"><div style="font-family:DM Sans,sans-serif;font-size:9px;color:#5C5248;letter-spacing:0.12em;text-transform:uppercase;margin-bottom:5px;font-weight:500;">Sire</div><div style="font-family:Cormorant Garamond,Georgia,serif;font-style:italic;font-size:18px;color:#142F22;font-weight:500;">'+esc(inp.sire)+'</div></div>'+
-'<div style="font-family:Cormorant Garamond,Georgia,serif;font-style:italic;font-size:22px;color:#B8915C;font-weight:400;">\u00d7</div>'+
-'<div style="text-align:right;flex:1;"><div style="font-family:DM Sans,sans-serif;font-size:9px;color:#5C5248;letter-spacing:0.12em;text-transform:uppercase;margin-bottom:5px;font-weight:500;">Dam</div><div style="font-family:Cormorant Garamond,Georgia,serif;font-style:italic;font-size:18px;color:#142F22;font-weight:500;">'+esc(inp.dam||'Your mare')+'</div></div>'+
-'</div></div></div>'+
-'<div style="background:#1E4D38;padding:16px 32px;display:flex;justify-content:space-between;align-items:center;">'+
-'<div style="font-family:DM Sans,sans-serif;font-size:12px;color:rgba(255,255,255,0.78);letter-spacing:0.02em;font-weight:300;">Verified Connemara stallion directory</div>'+
-'<div style="font-family:DM Sans,sans-serif;font-size:13px;color:#B8915C;letter-spacing:0.03em;font-weight:500;">breedpulse.com</div>'+
-'</div></div>';
+// Smarter font sizing
+let ns=58;if(fn.length>32)ns=36;else if(fn.length>26)ns=44;else if(fn.length>20)ns=52;
+const serif="Georgia,'Times New Roman',serif";
+const sans="-apple-system,BlinkMacSystemFont,'Segoe UI',Roboto,sans-serif";
+return ''+
+'<div style="width:600px;height:600px;background:#FAF7F2;color:#2C2825;display:flex;flex-direction:column;box-sizing:border-box;font-family:'+sans+';">'+
+  // Header
+  '<div style="background:#142F22;padding:20px 32px;display:flex;justify-content:space-between;align-items:center;flex-shrink:0;">'+
+    '<div style="font-family:'+serif+';font-style:italic;font-size:28px;color:#FFFFFF;letter-spacing:0.01em;line-height:1;">Breed<span style="color:#B8915C;">Pulse</span></div>'+
+    '<div style="font-family:'+sans+';font-size:10px;color:#B8915C;letter-spacing:0.2em;text-transform:uppercase;font-weight:600;">Foal name idea</div>'+
+  '</div>'+
+  // Centre block
+  '<div style="flex:1;padding:48px 40px 36px;text-align:center;display:flex;flex-direction:column;justify-content:center;">'+
+    '<div style="font-family:'+sans+';font-size:12px;color:#5C5248;letter-spacing:0.24em;text-transform:uppercase;margin-bottom:24px;font-weight:600;">Meet</div>'+
+    '<div style="font-family:'+serif+';font-style:italic;font-weight:400;font-size:'+ns+'px;color:#142F22;line-height:1.05;letter-spacing:-0.01em;margin-bottom:20px;padding:0 8px;">'+esc(fn)+'</div>'+
+    '<div style="font-family:'+serif+';font-style:italic;font-size:19px;color:#85562C;font-weight:400;margin-bottom:32px;line-height:1.3;">'+esc(tag)+'</div>'+
+    // Sire × Dam card
+    '<div style="background:#FFFFFF;border:1px solid #E6E1DB;border-radius:8px;padding:18px 24px;margin:0 auto;max-width:480px;width:100%;box-sizing:border-box;">'+
+      '<div style="display:flex;justify-content:space-between;align-items:center;gap:12px;">'+
+        '<div style="text-align:left;flex:1;min-width:0;">'+
+          '<div style="font-family:'+sans+';font-size:9px;color:#5C5248;letter-spacing:0.14em;text-transform:uppercase;margin-bottom:4px;font-weight:600;">Sire</div>'+
+          '<div style="font-family:'+serif+';font-style:italic;font-size:17px;color:#142F22;font-weight:400;line-height:1.2;word-wrap:break-word;">'+esc(inp.sire)+'</div>'+
+        '</div>'+
+        '<div style="font-family:'+serif+';font-size:24px;color:#B8915C;font-weight:300;line-height:1;flex-shrink:0;">\u00d7</div>'+
+        '<div style="text-align:right;flex:1;min-width:0;">'+
+          '<div style="font-family:'+sans+';font-size:9px;color:#5C5248;letter-spacing:0.14em;text-transform:uppercase;margin-bottom:4px;font-weight:600;">Dam</div>'+
+          '<div style="font-family:'+serif+';font-style:italic;font-size:17px;color:#142F22;font-weight:400;line-height:1.2;word-wrap:break-word;">'+esc(inp.dam||'Your mare')+'</div>'+
+        '</div>'+
+      '</div>'+
+    '</div>'+
+  '</div>'+
+  // Footer
+  '<div style="background:#1E4D38;padding:16px 32px;display:flex;justify-content:space-between;align-items:center;flex-shrink:0;">'+
+    '<div style="font-family:'+sans+';font-size:11px;color:rgba(255,255,255,0.8);letter-spacing:0.04em;font-weight:400;">Generated on BreedPulse</div>'+
+    '<div style="font-family:'+sans+';font-size:13px;color:#B8915C;letter-spacing:0.04em;font-weight:600;">breedpulse.com</div>'+
+  '</div>'+
+'</div>';
 }
 
-function save(fn,inp,btn){
-const st=document.getElementById('fn-card-stage');st.innerHTML=buildCard(fn,inp);const el=st.firstChild;
-btn.disabled=true;const o=btn.innerHTML;btn.innerHTML='Rendering...';
-domtoimage.toBlob(el,{width:600,height:600,bgcolor:'#FAF7F2'}).then(b=>{
+// === RENDER TO BLOB ===
+function renderCardToBlob(fn,inp){
+const st=document.getElementById('fn-card-stage');
+st.innerHTML=buildCard(fn,inp);
+const el=st.firstChild;
+return html2canvas(el,{width:600,height:600,backgroundColor:'#FAF7F2',scale:2,logging:false,useCORS:true}).then(canvas=>{
+return new Promise((res,rej)=>{canvas.toBlob(b=>{st.innerHTML='';b?res(b):rej(new Error('blob failed'));},'image/png',0.95);});
+});
+}
+
+// === SHARE FLOW ===
+function shareText(fn,inp){
+return 'Meet '+fn+' \u2014 a '+(inp.gender==='colt'?'colt':inp.gender==='filly'?'filly':'foal')+" that doesn't exist yet.\n\nGenerated on BreedPulse, the verified Connemara stallion directory.\n\nTry it: "+PAGE_URL;
+}
+
+async function shareName(fn,inp,btn){
+const original=btn.innerHTML;btn.disabled=true;btn.innerHTML='Preparing\u2026';
+try{
+const blob=await renderCardToBlob(fn,inp);
+const file=new File([blob],'foal-name-'+fn.toLowerCase().replace(/[^a-z0-9]+/g,'-')+'.png',{type:'image/png'});
+const shareData={title:fn+' \u2014 BreedPulse',text:shareText(fn,inp),files:[file]};
+// Try native Web Share with files (mobile)
+if(navigator.share&&navigator.canShare&&navigator.canShare({files:[file]})){
+await navigator.share(shareData);
+toast('Shared!');
+if(window.gtag)gtag('event','foal_name_share',{stallion:inp.sire,stallion_slug:STALLION_SLUG,foal_name:fn,style:inp.style,method:'native'});
+}else if(navigator.share){
+// Native share without files (some browsers)
+await navigator.share({title:shareData.title,text:shareData.text,url:PAGE_URL});
+toast('Shared!');
+if(window.gtag)gtag('event','foal_name_share',{stallion:inp.sire,stallion_slug:STALLION_SLUG,foal_name:fn,style:inp.style,method:'native_no_files'});
+}else{
+// Desktop fallback \u2014 show popover + auto-copy image to clipboard
+showSharePopover(fn,inp,blob);
+}
+}catch(err){
+if(err&&err.name==='AbortError'){/* user cancelled, no-op */}
+else{toast("Couldn't share. Try Save image instead.");}
+}finally{btn.disabled=false;btn.innerHTML=original;}
+}
+
+function showSharePopover(fn,inp,blob){
+const pop=document.getElementById('fn-share-popover');
+document.getElementById('fn-share-pop-name').textContent=fn;
+const text=shareText(fn,inp);
+const encText=encodeURIComponent(text);
+const encUrl=encodeURIComponent(PAGE_URL);
+// Wire networks
+pop.querySelectorAll('.fn-share-btn').forEach(b=>{
+const net=b.dataset.network;
+b.onclick=(e)=>{
+e.preventDefault();
+let url='';
+if(net==='facebook')url='https://www.facebook.com/sharer/sharer.php?u='+encUrl+'&quote='+encText;
+else if(net==='whatsapp')url='https://wa.me/?text='+encText;
+else if(net==='messenger')url='https://www.facebook.com/dialog/send?app_id=842334998295338&link='+encUrl+'&redirect_uri='+encUrl;
+else if(net==='twitter')url='https://twitter.com/intent/tweet?text='+encText;
+else if(net==='copy'){
+navigator.clipboard.writeText(text+'\n'+PAGE_URL).then(()=>{toast('Copied to clipboard');hideSharePopover();});
+if(window.gtag)gtag('event','foal_name_share',{stallion:inp.sire,stallion_slug:STALLION_SLUG,foal_name:fn,style:inp.style,method:'copy'});
+return;
+}
+if(url){window.open(url,'_blank','width=600,height=550,noopener');hideSharePopover();
+if(window.gtag)gtag('event','foal_name_share',{stallion:inp.sire,stallion_slug:STALLION_SLUG,foal_name:fn,style:inp.style,method:net});
+}};
+});
+// Also try to copy image to clipboard for paste-into-post workflows
+try{if(navigator.clipboard&&navigator.clipboard.write&&window.ClipboardItem){
+navigator.clipboard.write([new ClipboardItem({'image/png':blob})]).catch(()=>{});
+}}catch(e){}
+pop.hidden=false;
+}
+
+function hideSharePopover(){document.getElementById('fn-share-popover').hidden=true;}
+document.getElementById('fn-share-pop-close').addEventListener('click',hideSharePopover);
+document.getElementById('fn-share-popover').addEventListener('click',e=>{if(e.target.id==='fn-share-popover')hideSharePopover();});
+
+// === SAVE IMAGE (secondary) ===
+async function saveName(fn,inp,btn){
+const original=btn.innerHTML;btn.disabled=true;btn.innerHTML='Rendering\u2026';
+try{
+const blob=await renderCardToBlob(fn,inp);
 const s=fn.toLowerCase().replace(/[^a-z0-9]+/g,'-').replace(/(^-|-$)/g,'');
-const f='foal-name-'+s+'.png';const u=URL.createObjectURL(b);
+const f='foal-name-'+s+'.png';const u=URL.createObjectURL(blob);
 const a=document.createElement('a');a.href=u;a.download=f;
 document.body.appendChild(a);a.click();document.body.removeChild(a);
 setTimeout(()=>URL.revokeObjectURL(u),500);
-toast('Image saved \u2014 share it anywhere');
+toast('Image saved');
 if(window.gtag)gtag('event','foal_name_download',{stallion:inp.sire,stallion_slug:STALLION_SLUG,foal_name:fn,style:inp.style});
-}).catch(()=>toast("Couldn't render image. Try again?")).finally(()=>{btn.disabled=false;btn.innerHTML=o;st.innerHTML='';});
+}catch(err){toast("Couldn't render image. Try again?");}
+finally{btn.disabled=false;btn.innerHTML=original;}
 }
 
 function toast(m){let t=document.querySelector('.fn-toast');if(!t){t=document.createElement('div');t.className='fn-toast';document.body.appendChild(t);}t.textContent=m;t.classList.add('show');setTimeout(()=>t.classList.remove('show'),2500);}
@@ -331,9 +444,14 @@ function toast(m){let t=document.querySelector('.fn-toast');if(!t){t=document.cr
 function render(ns,inp){
 const g=document.getElementById('fn-name-grid');g.innerHTML='';
 ns.forEach(n=>{const c=document.createElement('div');c.className='fn-name-card';
-c.innerHTML='<div class="fn-name-value">'+esc(n.name)+'</div><div class="fn-name-meta">'+esc(n.meta)+'</div><button type="button" class="fn-name-save" data-name="'+esc(n.name)+'"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/><polyline points="7 10 12 15 17 10"/><line x1="12" y1="15" x2="12" y2="3"/></svg>Save as image</button>';
+c.innerHTML='<div class="fn-name-value">'+esc(n.name)+'</div><div class="fn-name-meta">'+esc(n.meta)+'</div>'+
+'<div class="fn-name-actions">'+
+'<button type="button" class="fn-name-share" data-name="'+esc(n.name)+'"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"><circle cx="18" cy="5" r="3"/><circle cx="6" cy="12" r="3"/><circle cx="18" cy="19" r="3"/><line x1="8.59" y1="13.51" x2="15.42" y2="17.49"/><line x1="15.41" y1="6.51" x2="8.59" y2="10.49"/></svg>Share this name</button>'+
+'<button type="button" class="fn-name-save" data-name="'+esc(n.name)+'"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/><polyline points="7 10 12 15 17 10"/><line x1="12" y1="15" x2="12" y2="3"/></svg>Save image</button>'+
+'</div>';
 g.appendChild(c);});
-g.querySelectorAll('.fn-name-save').forEach(b=>b.addEventListener('click',()=>save(b.dataset.name,inp,b)));
+g.querySelectorAll('.fn-name-share').forEach(b=>b.addEventListener('click',()=>shareName(b.dataset.name,inp,b)));
+g.querySelectorAll('.fn-name-save').forEach(b=>b.addEventListener('click',()=>saveName(b.dataset.name,inp,b)));
 document.getElementById('fn-prefix-note').hidden=!!inp.prefix;
 document.getElementById('fn-results').hidden=false;
 document.getElementById('fn-upsell').hidden=false;
