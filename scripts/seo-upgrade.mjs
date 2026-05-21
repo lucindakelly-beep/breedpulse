@@ -1,14 +1,13 @@
 #!/usr/bin/env node
 /**
- * BreedPulse SEO Auto-Upgrade — v14 (now with Foal Namer)
+ * BreedPulse SEO Auto-Upgrade — v15 (Foal Namer strip-and-inject fixed)
  *
  * Runs in GitHub Actions on every push. Does:
  *   1. Scans /stallions/ folder for all subfolders containing index.html
  *   2. Injects GA4 tracking + JSON-LD schema + meta tags
- *   3. Injects the Foal Namer section between Performance & Booking Upsell
+ *   3. NUKES every existing foal-namer artefact (section, popover, stage,
+ *      style block, all related scripts) before injecting a fresh copy
  *   4. Rebuilds sitemap.xml and robots.txt at repo root
- *
- * No stallions.json needed — uses folder structure as source of truth.
  */
 
 import { promises as fs } from 'node:fs';
@@ -108,6 +107,43 @@ function jsonLdBlock(stallion) {
 <script type="application/ld+json">${JSON.stringify(breadcrumbSchema)}</script>`;
 }
 
+// ---------- NUKE ALL FOAL NAMER ARTEFACTS ----------
+// Removes every element that the foal-namer snippet might leave behind,
+// regardless of order, position, or how many copies exist.
+function stripAllFoalNamer(html) {
+  let out = html;
+  let lastLen;
+
+  // Loop until no more matches are found (handles multiple stacked copies)
+  do {
+    lastLen = out.length;
+
+    // 1. The main foal-namer section
+    out = out.replace(/<section[^>]*\bclass="[^"]*\bfoal-namer\b[^"]*"[^>]*>[\s\S]*?<\/section>\s*/g, '');
+
+    // 2. The share popover div (greedy match of outer + nested inner div)
+    out = out.replace(/<div\s+id="fn-share-popover"[\s\S]*?<button[^>]*id="fn-share-pop-close"[^>]*>[\s\S]*?<\/button>\s*<\/div>\s*<\/div>\s*/g, '');
+    // Fallback: simpler less-greedy match if structure is partial/broken
+    out = out.replace(/<div\s+id="fn-share-popover"[\s\S]{0,3000}?<\/div>\s*<\/div>\s*/g, '');
+
+    // 3. The hidden card stage div (self-closing on outer)
+    out = out.replace(/<div\s+id="fn-card-stage"[\s\S]*?<\/div>\s*/g, '');
+
+    // 4. Any <style> block whose content references foal-namer or fn- classes
+    out = out.replace(/<style>[^<]*(?:foal-namer|\.fn-)[\s\S]*?<\/style>\s*/g, '');
+
+    // 5. html2canvas / dom-to-image library tags
+    out = out.replace(/<script\s+src="https:\/\/cdnjs\.cloudflare\.com\/ajax\/libs\/html2canvas[^"]*"[^>]*><\/script>\s*/g, '');
+    out = out.replace(/<script\s+src="https:\/\/cdnjs\.cloudflare\.com\/ajax\/libs\/dom-to-image[^"]*"[^>]*><\/script>\s*/g, '');
+
+    // 6. Any inline <script> block whose body references foal-namer ids/funcs
+    out = out.replace(/<script>\s*\(function\(\)\s*\{\s*const\s+SECTION\s*=\s*document\.getElementById\(\s*'foal-namer'\s*\)[\s\S]*?<\/script>\s*/g, '');
+
+  } while (out.length !== lastLen);
+
+  return out;
+}
+
 // ---------- UPGRADE ONE PAGE ----------
 async function upgradePage(stallion) {
   const pagePath = path.join(STALLIONS_DIR, stallion.slug, 'index.html');
@@ -143,10 +179,8 @@ async function upgradePage(stallion) {
     updated = updated.replace('<head>', `<head>${newMeta}`);
   }
 
-  // 4. Foal Namer — remove existing instance (if any), then inject before Booking Upsell
-  // Strip any previous foal-namer block (section + stage + scripts)
-  updated = updated.replace(/<section class="detail foal-namer"[\s\S]*?<\/section>\s*<div id="fn-card-stage"[\s\S]*?<\/script>\s*/g, '');
-  updated = updated.replace(/<section class="detail foal-namer"[\s\S]*?<\/section>\s*/g, '');
+  // 4. Foal Namer — NUKE every trace, then inject ONE fresh copy
+  updated = stripAllFoalNamer(updated);
 
   const foalSection = foalNamerSection({
     stallionName: stallion.name,
@@ -154,17 +188,17 @@ async function upgradePage(stallion) {
     seasonPassUrl: SEASON_PASS_URL,
   });
 
-  // Find the booking-upsell section. Try multiple anchors in order of specificity:
+  // Inject before the booking upsell section
   let injected = false;
 
-  // Anchor 1: HTML comment marker (preferred — exists in clean v12 templates)
+  // Anchor 1: HTML comment marker
   const commentMatch = updated.match(/<!--\s*=+\s*BOOKING UPSELL[\s\S]*?-->/i);
   if (commentMatch) {
     updated = updated.replace(commentMatch[0], foalSection + '\n\n' + commentMatch[0]);
     injected = true;
   }
 
-  // Anchor 2: <section class="detail"> directly wrapping <div class="booking-upsell">
+  // Anchor 2: <section> directly wrapping booking-upsell
   if (!injected) {
     const m = updated.match(/(<section[^>]*class="[^"]*\bdetail\b[^"]*"[^>]*>\s*<div\s+class="booking-upsell")/);
     if (m) {
@@ -173,11 +207,10 @@ async function upgradePage(stallion) {
     }
   }
 
-  // Anchor 3: any element with class booking-upsell — walk back to its wrapping section
+  // Anchor 3: walk back from booking-upsell class
   if (!injected) {
     const idx = updated.indexOf('class="booking-upsell"');
     if (idx > -1) {
-      // Walk back to find the most recent <section before this point
       const sectionIdx = updated.lastIndexOf('<section', idx);
       if (sectionIdx > -1) {
         updated = updated.slice(0, sectionIdx) + foalSection + '\n\n' + updated.slice(sectionIdx);
@@ -186,7 +219,7 @@ async function upgradePage(stallion) {
     }
   }
 
-  // Anchor 4: fallback — inject before footer
+  // Anchor 4: fallback — before footer
   if (!injected && updated.includes('<footer>')) {
     updated = updated.replace('<footer>', foalSection + '\n\n<footer>');
     injected = true;
@@ -238,7 +271,7 @@ Sitemap: ${SITE_ORIGIN}/sitemap.xml
 
 // ---------- MAIN ----------
 async function main() {
-  console.log('🐎 BreedPulse SEO auto-upgrade (with Foal Namer) starting…\n');
+  console.log('🐎 BreedPulse SEO auto-upgrade v15 (Foal Namer hard-reset) starting…\n');
 
   let entries;
   try { entries = await fs.readdir(STALLIONS_DIR, { withFileTypes: true }); }
