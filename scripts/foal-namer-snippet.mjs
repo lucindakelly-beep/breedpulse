@@ -360,7 +360,8 @@ return new Promise((res,rej)=>{canvas.toBlob(b=>{st.innerHTML='';b?res(b):rej(ne
 
 // === SHARE FLOW ===
 function shareText(fn,inp){
-return 'Meet '+fn+' \u2014 a '+(inp.gender==='colt'?'colt':inp.gender==='filly'?'filly':'foal')+" that doesn't exist yet.\n\nGenerated on BreedPulse, the verified Connemara stallion directory.\n\nTry it: "+PAGE_URL;
+var NL=String.fromCharCode(10);
+return 'Meet '+fn+' \u2014 a '+(inp.gender==='colt'?'colt':inp.gender==='filly'?'filly':'foal')+" that doesn't exist yet."+NL+NL+'Generated on BreedPulse, the verified Connemara stallion directory.'+NL+NL+'Try it: '+PAGE_URL;
 }
 
 async function shareName(fn,inp,btn){
@@ -406,7 +407,7 @@ else if(net==='whatsapp')url='https://wa.me/?text='+encText;
 else if(net==='messenger')url='https://www.facebook.com/dialog/send?app_id=842334998295338&link='+encUrl+'&redirect_uri='+encUrl;
 else if(net==='twitter')url='https://twitter.com/intent/tweet?text='+encText;
 else if(net==='copy'){
-navigator.clipboard.writeText(text+'\n'+PAGE_URL).then(()=>{toast('Copied to clipboard');hideSharePopover();});
+navigator.clipboard.writeText(text+String.fromCharCode(10)+PAGE_URL).then(()=>{toast('Copied to clipboard');hideSharePopover();});
 if(window.gtag)gtag('event','foal_name_share',{stallion:inp.sire,stallion_slug:STALLION_SLUG,foal_name:fn,style:inp.style,method:'copy'});
 return;
 }
