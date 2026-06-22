@@ -327,6 +327,132 @@ footer.site a:hover { text-decoration: underline; }
 .owner-cta-text h3 { font-family: 'Cormorant Garamond', serif; font-weight: 500; font-size: 1.2rem; color: var(--green-deep); margin-bottom: 0.35rem; }
 .owner-cta-text p { font-size: 0.9rem; line-height: 1.65; color: var(--peat-soft); margin: 0; }
 .owner-cta-text strong { color: var(--green-deep); font-weight: 600; }
+
+/* ============================================================ */
+/* CLAIM MODAL v2 — three-path journey                          */
+/* ============================================================ */
+.cm-overlay {
+  position: fixed; inset: 0; z-index: 9999;
+  background: rgba(20,47,34,0.6);
+  backdrop-filter: blur(5px); -webkit-backdrop-filter: blur(5px);
+  display: none; align-items: center; justify-content: center; padding: 1rem;
+}
+.cm-overlay.cm-open { display: flex; }
+.cm-modal {
+  background: #fff; border-radius: 16px;
+  width: 100%; max-width: 520px; max-height: 92vh; overflow-y: auto;
+  box-shadow: 0 32px 80px rgba(20,47,34,.38), 0 8px 24px rgba(20,47,34,.18);
+  font-family: 'DM Sans', sans-serif; color: #2C2825; position: relative;
+  animation: cmRise .22s ease;
+}
+@keyframes cmRise { from { transform: translateY(14px); opacity: 0; } to { transform: translateY(0); opacity: 1; } }
+.cm-close {
+  position: absolute; top: 14px; right: 14px;
+  width: 34px; height: 34px; border: none; background: transparent;
+  color: #9C948C; font-size: 1.4rem; cursor: pointer; border-radius: 50%;
+  display: flex; align-items: center; justify-content: center;
+  transition: background .15s, color .15s; z-index: 2;
+}
+.cm-close:hover { background: #F5F2ED; color: #142F22; }
+.cm-hero {
+  background: linear-gradient(135deg, #142F22 0%, #2D6A4F 100%);
+  border-radius: 16px 16px 0 0; padding: 2rem 2rem 1.5rem;
+}
+.cm-eyebrow {
+  font-size: .68rem; font-weight: 600; letter-spacing: .16em;
+  text-transform: uppercase; color: #B8915C; margin: 0 0 .5rem;
+}
+.cm-hero-name {
+  font-family: 'Cormorant Garamond', Georgia, serif;
+  font-style: italic; font-weight: 400; font-size: 2rem;
+  line-height: 1.1; color: #F5F2ED; margin: 0 0 .4rem; letter-spacing: -.02em;
+}
+.cm-hero-sub { font-size: .84rem; color: rgba(245,242,237,.65); margin: 0; line-height: 1.5; }
+.cm-locked-preview {
+  display: grid; grid-template-columns: repeat(3, 1fr);
+  gap: .5rem; padding: 1.1rem 1.5rem; border-bottom: 1px solid #EDE8E0; background: #FAFAF8;
+}
+.cm-locked-item {
+  background: #fff; border: 1px solid #E6E1DB; border-radius: 8px;
+  padding: .65rem .75rem; text-align: center; position: relative; overflow: hidden;
+}
+.cm-locked-label { font-size: .63rem; font-weight: 600; letter-spacing: .07em; text-transform: uppercase; color: #9C948C; display: block; margin-bottom: .2rem; }
+.cm-locked-value { font-size: .8rem; color: #C4BCB4; filter: blur(4px); user-select: none; display: block; }
+.cm-locked-item::after { content: '🔒'; position: absolute; top: 50%; left: 50%; transform: translate(-50%,-50%); font-size: .9rem; opacity: .3; }
+.cm-paths { padding: 1.25rem 1.5rem 1.25rem; }
+.cm-paths-label { font-size: .7rem; font-weight: 600; letter-spacing: .1em; text-transform: uppercase; color: #9C948C; margin: 0 0 .85rem; display: block; }
+.cm-path-btn {
+  display: flex; align-items: center; gap: 1rem; width: 100%;
+  padding: .95rem 1.1rem; background: #FAFAF8; border: 1.5px solid #E6E1DB;
+  border-radius: 10px; cursor: pointer; margin-bottom: .6rem; text-align: left;
+  transition: border-color .15s, background .15s, transform .12s; font-family: 'DM Sans', sans-serif;
+}
+.cm-path-btn:hover { border-color: #2D6A4F; background: #F0F7F3; transform: translateY(-1px); }
+.cm-path-btn:last-child { margin-bottom: 0; }
+.cm-path-icon { width: 38px; height: 38px; border-radius: 9px; display: flex; align-items: center; justify-content: center; font-size: 1.15rem; flex-shrink: 0; }
+.cm-path-icon.owner { background: #142F22; }
+.cm-path-icon.friend { background: #EEF7F2; }
+.cm-path-icon.notify { background: #FFF8EE; }
+.cm-path-text strong { display: block; font-size: .88rem; font-weight: 600; color: #142F22; margin-bottom: .15rem; }
+.cm-path-text span { font-size: .77rem; color: #5C5248; line-height: 1.4; }
+.cm-path-arrow { margin-left: auto; color: #9C948C; font-size: 1rem; flex-shrink: 0; }
+.cm-step { display: none; padding: 1.5rem; }
+.cm-step.cm-active { display: block; }
+.cm-step-header { margin-bottom: 1.1rem; }
+.cm-step-header h3 { font-family: 'Cormorant Garamond', serif; font-style: italic; font-weight: 400; font-size: 1.5rem; color: #142F22; margin: 0 0 .3rem; }
+.cm-step-header p { font-size: .87rem; color: #5C5248; margin: 0; line-height: 1.55; }
+.cm-field { margin-bottom: .95rem; }
+.cm-field label { display: block; font-size: .7rem; font-weight: 600; letter-spacing: .09em; text-transform: uppercase; color: #142F22; margin-bottom: .38rem; }
+.cm-field input {
+  width: 100%; box-sizing: border-box; padding: .68rem .9rem;
+  font-family: 'DM Sans', sans-serif; font-size: .92rem; color: #2C2825;
+  background: #F5F2ED; border: 1.5px solid #E6E1DB; border-radius: 8px;
+  transition: border-color .15s, box-shadow .15s, background .15s;
+}
+.cm-field input:focus { outline: none; border-color: #2D6A4F; background: #fff; box-shadow: 0 0 0 3px rgba(45,106,79,.13); }
+.cm-field-hint { font-size: .74rem; color: #9C948C; margin-top: .28rem; }
+.cm-submit-btn {
+  width: 100%; padding: .92rem 1.25rem; background: #142F22; color: #F5F2ED;
+  border: none; border-radius: 8px; font-family: 'DM Sans', sans-serif;
+  font-size: .82rem; font-weight: 700; letter-spacing: .05em; text-transform: uppercase;
+  cursor: pointer; margin-top: .15rem;
+  transition: background .15s, transform .15s, box-shadow .15s;
+  box-shadow: 0 4px 14px rgba(20,47,34,.28);
+}
+.cm-submit-btn:hover { background: #2D6A4F; transform: translateY(-1px); box-shadow: 0 8px 20px rgba(20,47,34,.3); }
+.cm-back { background: none; border: none; padding: 0; color: #9C948C; font-family: 'DM Sans', sans-serif; font-size: .82rem; cursor: pointer; text-decoration: underline; text-underline-offset: 3px; margin-top: .75rem; display: inline-block; }
+.cm-back:hover { color: #142F22; }
+.cm-share-grid { display: grid; grid-template-columns: repeat(4, 1fr); gap: .55rem; margin: .9rem 0 .7rem; }
+.cm-share-btn {
+  display: flex; flex-direction: column; align-items: center; gap: .3rem;
+  padding: .75rem .25rem; background: #fff; border: 1.5px solid #E6E1DB;
+  border-radius: 10px; cursor: pointer; text-decoration: none; color: #2C2825;
+  font-family: 'DM Sans', sans-serif; font-size: .65rem; font-weight: 600; letter-spacing: .04em;
+  transition: transform .15s, border-color .15s, box-shadow .15s;
+}
+.cm-share-btn:hover { transform: translateY(-2px); border-color: #2D6A4F; box-shadow: 0 6px 16px rgba(45,106,79,.15); }
+.cm-share-icon { width: 34px; height: 34px; border-radius: 50%; display: flex; align-items: center; justify-content: center; font-size: 1.05rem; }
+.cm-share-wa .cm-share-icon  { background: #25D366; color: #fff; }
+.cm-share-sms .cm-share-icon { background: #0A84FF; color: #fff; }
+.cm-share-em .cm-share-icon  { background: #2D6A4F; color: #fff; }
+.cm-share-cp .cm-share-icon  { background: #142F22; color: #fff; }
+.cm-message-box {
+  background: #EEF7F2; border: 1px solid #D4EAE0; border-radius: 8px;
+  padding: .85rem 1rem; font-size: .84rem; line-height: 1.55; color: #2C2825;
+  white-space: pre-wrap; word-break: break-word; max-height: 150px; overflow-y: auto;
+}
+.cm-success { text-align: center; padding: 2rem 1.5rem 2.5rem; }
+.cm-success-icon { width: 54px; height: 54px; border-radius: 50%; background: #EEF7F2; border: 2px solid #D4EAE0; display: flex; align-items: center; justify-content: center; font-size: 1.5rem; margin: 0 auto 1rem; }
+.cm-success h3 { font-family: 'Cormorant Garamond', serif; font-style: italic; font-size: 1.5rem; color: #142F22; margin: 0 0 .5rem; }
+.cm-success p { font-size: .87rem; color: #5C5248; line-height: 1.6; margin: 0; }
+.cm-toast {
+  position: fixed; bottom: 1.5rem; left: 50%; transform: translateX(-50%) translateY(10px);
+  background: #142F22; color: #F5F2ED; padding: .55rem 1.2rem; border-radius: 999px;
+  font-size: .82rem; font-weight: 500; opacity: 0; transition: opacity .2s, transform .2s;
+  pointer-events: none; z-index: 10000; white-space: nowrap;
+}
+.cm-toast.cm-show { opacity: 1; transform: translateX(-50%) translateY(0); }
+
 </style>
 <script type="application/ld+json">
 {
@@ -2902,88 +3028,135 @@ footer.site a:hover { text-decoration: underline; }
 </footer>
 
 <!-- ============================================================ -->
-<!-- Suggest-a-Stallion modal                                      -->
 <!-- ============================================================ -->
-<div class="bp-suggest-overlay" id="bpSuggestOverlay" role="dialog" aria-modal="true" aria-labelledby="bpSuggestTitle">
-  <div class="bp-suggest-modal">
-    <button class="bp-suggest-close" type="button" aria-label="Close" onclick="bpCloseSuggest()">×</button>
+<!-- CLAIM MODAL v2 — three-path journey                          -->
+<!-- ============================================================ -->
+<div class="cm-overlay" id="cmOverlay" role="dialog" aria-modal="true">
+  <div class="cm-modal">
+    <button class="cm-close" type="button" aria-label="Close" onclick="cmClose()">×</button>
 
-    <!-- STEP 1: form -->
-    <div class="bp-form-step" id="bpFormStep">
-      <div class="bp-suggest-header">
-        <p class="bp-suggest-eyebrow">Help us complete the picture</p>
-        <h2 id="bpSuggestTitle">Suggest a stallion</h2>
-        <p>Know a Connemara stallion that's missing? Tell us about him and we'll generate a ready-to-send invite you can share with the owner — by WhatsApp, message, email, or any way you prefer.</p>
+    <div class="cm-hero">
+      <p class="cm-eyebrow">On the BreedPulse register</p>
+      <div class="cm-hero-name" id="cmHeroName">—</div>
+      <p class="cm-hero-sub">This listing is incomplete — the owner hasn't claimed it yet.</p>
+    </div>
+
+    <div class="cm-locked-preview">
+      <div class="cm-locked-item">
+        <span class="cm-locked-label">Stud Fee</span>
+        <span class="cm-locked-value">€650</span>
       </div>
-
-      <div class="bp-suggest-body">
-        <div class="bp-field">
-          <label for="bpStallionName">Stallion name <span class="bp-req">*</span></label>
-          <input type="text" id="bpStallionName" placeholder="e.g. Currachmore Cashel" required>
-        </div>
-
-        <div class="bp-field">
-          <label for="bpOwnerContact">Owner's name &amp; contact <span class="bp-req">*</span></label>
-          <input type="text" id="bpOwnerContact" placeholder="e.g. Mary O'Connell · +353 87 123 4567" required>
-          <div class="bp-field-hint">Owner's name plus their phone, email or WhatsApp — whatever you have.</div>
-        </div>
-
-        <div class="bp-field">
-          <label for="bpYourName">Your name <span class="bp-req">*</span></label>
-          <input type="text" id="bpYourName" placeholder="So the owner knows who's getting in touch" required>
-        </div>
-
-        <div class="bp-field">
-          <label for="bpNote">Personal note (optional)</label>
-          <textarea id="bpNote" placeholder="A quick line you'd like to include — e.g. 'Saw your stallion at Clifden last year, he should be on this!'"></textarea>
-        </div>
-
-        <button type="button" class="bp-build-btn" onclick="bpBuildShare()">Generate Share Message →</button>
+      <div class="cm-locked-item">
+        <span class="cm-locked-label">Pedigree</span>
+        <span class="cm-locked-value">5 gen</span>
+      </div>
+      <div class="cm-locked-item">
+        <span class="cm-locked-label">Contact</span>
+        <span class="cm-locked-value">+353 87</span>
       </div>
     </div>
 
-    <!-- STEP 2: share -->
-    <div class="bp-share-step" id="bpShareStep">
-      <div class="bp-suggest-header">
-        <p class="bp-suggest-eyebrow">Ready to share</p>
-        <h2>Send the invite</h2>
-        <p>Here's your message — pick how you'd like to send it. Owner submission is free and only takes about 10 minutes.</p>
-      </div>
+    <div class="cm-paths" id="cmPaths">
+      <span class="cm-paths-label">What would you like to do?</span>
 
-      <div class="bp-suggest-body">
-        <div class="bp-message-preview" id="bpMessagePreview"></div>
-
-        <div class="bp-share-grid">
-          <a class="bp-share-btn" data-channel="whatsapp" id="bpShareWhatsapp" target="_blank" rel="noopener">
-            <span class="bp-share-icon">💬</span>
-            <span>WhatsApp</span>
-          </a>
-          <a class="bp-share-btn" data-channel="sms" id="bpShareSms">
-            <span class="bp-share-icon">📱</span>
-            <span>SMS</span>
-          </a>
-          <a class="bp-share-btn" data-channel="email" id="bpShareEmail">
-            <span class="bp-share-icon">✉️</span>
-            <span>Email</span>
-          </a>
-          <a class="bp-share-btn" data-channel="messenger" id="bpShareMessenger" target="_blank" rel="noopener">
-            <span class="bp-share-icon">📨</span>
-            <span>Messenger</span>
-          </a>
-          <button type="button" class="bp-share-btn" data-channel="copy" onclick="bpCopyMessage()">
-            <span class="bp-share-icon">📋</span>
-            <span>Copy</span>
-          </button>
+      <button class="cm-path-btn" type="button" onclick="cmShow('cmOwnerStep')">
+        <div class="cm-path-icon owner">🐴</div>
+        <div class="cm-path-text">
+          <strong>I'm the owner — claim this listing</strong>
+          <span>Free. 5 minutes. Unlocks stud fee, photos &amp; contact for mare owners.</span>
         </div>
+        <span class="cm-path-arrow">›</span>
+      </button>
 
-        <button type="button" class="bp-share-back" onclick="bpBackToForm()">← Edit details</button>
+      <button class="cm-path-btn" type="button" onclick="cmShow('cmShareStep')">
+        <div class="cm-path-icon friend">📨</div>
+        <div class="cm-path-text">
+          <strong>I know the owner — send them a nudge</strong>
+          <span>We'll generate a ready-to-send WhatsApp or email for you.</span>
+        </div>
+        <span class="cm-path-arrow">›</span>
+      </button>
+
+      <button class="cm-path-btn" type="button" onclick="cmShow('cmNotifyStep')">
+        <div class="cm-path-icon notify">🔔</div>
+        <div class="cm-path-text">
+          <strong>Notify me when this stallion is listed</strong>
+          <span>We'll email you when stud fee and contact details go live.</span>
+        </div>
+        <span class="cm-path-arrow">›</span>
+      </button>
+    </div>
+
+    <div class="cm-step" id="cmOwnerStep">
+      <div class="cm-step-header">
+        <h3>Claim your listing</h3>
+        <p>Leave your details and Lucinda from BreedPulse will be in touch within 24 hours to get your stallion fully listed — photos, stud fee, pedigree and all.</p>
+      </div>
+      <div class="cm-field">
+        <label>Your name <span style="color:#8c1919">*</span></label>
+        <input type="text" id="cmOwnerName" placeholder="e.g. Seán Murphy">
+      </div>
+      <div class="cm-field">
+        <label>Email address <span style="color:#8c1919">*</span></label>
+        <input type="email" id="cmOwnerEmail" placeholder="e.g. sean@example.com">
+      </div>
+      <div class="cm-field">
+        <label>Phone / WhatsApp</label>
+        <input type="tel" id="cmOwnerPhone" placeholder="e.g. +353 87 123 4567">
+        <div class="cm-field-hint">Optional but speeds things up.</div>
+      </div>
+      <button type="button" class="cm-submit-btn" onclick="cmSubmitOwner()">Send my details →</button>
+      <br><button type="button" class="cm-back" onclick="cmShowPaths()">← Back</button>
+    </div>
+
+    <div class="cm-step" id="cmShareStep">
+      <div class="cm-step-header">
+        <h3>Send the owner a nudge</h3>
+        <p>Here's a ready-made message — pick how you'd like to send it.</p>
+      </div>
+      <div class="cm-message-box" id="cmShareMessage"></div>
+      <div class="cm-share-grid">
+        <a class="cm-share-btn cm-share-wa" id="cmShareWa" target="_blank" rel="noopener">
+          <span class="cm-share-icon">💬</span><span>WhatsApp</span>
+        </a>
+        <a class="cm-share-btn cm-share-sms" id="cmShareSms">
+          <span class="cm-share-icon">📱</span><span>SMS</span>
+        </a>
+        <a class="cm-share-btn cm-share-em" id="cmShareEm">
+          <span class="cm-share-icon">✉️</span><span>Email</span>
+        </a>
+        <button type="button" class="cm-share-btn cm-share-cp" onclick="cmCopyShare()">
+          <span class="cm-share-icon">📋</span><span>Copy</span>
+        </button>
+      </div>
+      <button type="button" class="cm-back" onclick="cmShowPaths()">← Back</button>
+    </div>
+
+    <div class="cm-step" id="cmNotifyStep">
+      <div class="cm-step-header">
+        <h3>Get notified</h3>
+        <p>We'll email you as soon as the owner claims this listing and stud fee details go live.</p>
+      </div>
+      <div class="cm-field">
+        <label>Your email <span style="color:#8c1919">*</span></label>
+        <input type="email" id="cmNotifyEmail" placeholder="e.g. you@example.com">
+      </div>
+      <button type="button" class="cm-submit-btn" onclick="cmSubmitNotify()">Notify me →</button>
+      <br><button type="button" class="cm-back" onclick="cmShowPaths()">← Back</button>
+    </div>
+
+    <div class="cm-step" id="cmSuccessStep">
+      <div class="cm-success">
+        <div class="cm-success-icon">✓</div>
+        <h3 id="cmSuccessTitle">You're all set</h3>
+        <p id="cmSuccessMsg">We'll be in touch shortly.</p>
       </div>
     </div>
 
   </div>
 </div>
+<div class="cm-toast" id="cmToast">Copied ✓</div>
 
-<div class="bp-toast" id="bpToast">Copied to clipboard ✓</div>
 
 <script>
 /* ─────────────────────────────────────────────────────────────────────
@@ -3660,13 +3833,11 @@ function rowHTML(s, idx) {
     <article class="stallion is-pending" style="animation-delay: ${animDelay}s">
       <div class="status-badge pending" title="Unclaimed">◷</div>
       <div>
-        <div class="stallion-name">${name}</div>
+        <div class="stallion-name" style="cursor:pointer" onclick="cmOpen('${escape(s[0])}')">${name}</div>
         <div class="stallion-meta">${meta}</div>
       </div>
       <div class="actions">
-        <div class="action-prompt">Are you the owner?</div>
-        <a href="${claimUrl}" class="btn btn-primary btn-sm">Claim this listing</a>
-        <button type="button" class="btn btn-secondary btn-sm" data-share-stallion="${escape(s[0])}">Share with owner</button>
+        <button type="button" class="btn btn-primary btn-sm" onclick="cmOpen(this.dataset.s)" data-s="${escape(s[0])}">Claim or get notified →</button>
       </div>
     </article>`;
 }
@@ -3729,159 +3900,135 @@ list.addEventListener("click", e => {
 render();
 </script>
 
-<!-- ============================================================ -->
-<!-- Suggest-a-Stallion modal logic                                -->
-<!-- ============================================================ -->
 <script>
-  (function () {
-    const SUBMIT_URL = 'https://tally.so/r/VLVYKJ';
+(function () {
+  var _stallion = '';
+  var TALLY_URL = 'https://tally.so/r/VLVYKJ';
 
-    function $(id) { return document.getElementById(id); }
+  function el(id) { return document.getElementById(id); }
 
-    window.bpOpenSuggest = function (prefilledStallion) {
-      $('bpFormStep').classList.remove('bp-hide');
-      $('bpShareStep').classList.remove('bp-show');
-      $('bpSuggestOverlay').classList.add('bp-open');
-      document.body.style.overflow = 'hidden';
-      if (prefilledStallion) {
-        $('bpStallionName').value = prefilledStallion;
-        // If pre-filled, focus the next empty field instead
-        setTimeout(function () { $('bpOwnerContact').focus(); }, 80);
-      } else {
-        $('bpStallionName').value = '';
-        setTimeout(function () { $('bpStallionName').focus(); }, 80);
-      }
-    };
+  window.cmOpen = function (stallionName) {
+    _stallion = stallionName || '';
+    el('cmHeroName').textContent = _stallion || 'This stallion';
+    cmShowPaths();
+    _buildShareMsg();
+    el('cmOverlay').classList.add('cm-open');
+    document.body.style.overflow = 'hidden';
+  };
 
-    window.bpCloseSuggest = function () {
-      $('bpSuggestOverlay').classList.remove('bp-open');
-      document.body.style.overflow = '';
-    };
+  window.cmClose = function () {
+    el('cmOverlay').classList.remove('cm-open');
+    document.body.style.overflow = '';
+  };
 
-    window.bpBackToForm = function () {
-      $('bpShareStep').classList.remove('bp-show');
-      $('bpFormStep').classList.remove('bp-hide');
-    };
-
-    function buildMessage(stallion, owner, suggester, note) {
-      let msg =
-        'Hi — I came across BreedPulse, the new verified Connemara stallion directory ' +
-        '(built with Connemara Pony World, 9,200+ members), and I think ' + stallion +
-        ' should be on it.\n\n' +
-        'Listing is completely free, takes about 10 minutes, and once verified, ' +
-        'mare owners across Ireland, the UK, Europe and beyond can find your stallion ' +
-        'with HWSD status, studbook details, photos and direct contact.\n\n';
-      if (note && note.trim().length) {
-        msg += note.trim() + '\n\n';
-      }
-      msg += 'Submit here: ' + SUBMIT_URL + '\n\n';
-      msg += 'More info: https://breedpulse.com\n\n';
-      msg += '— ' + suggester;
-      return msg;
-    }
-
-    window.bpBuildShare = function () {
-      const stallion  = $('bpStallionName').value.trim();
-      const owner     = $('bpOwnerContact').value.trim();
-      const suggester = $('bpYourName').value.trim();
-      const note      = $('bpNote').value.trim();
-
-      if (!stallion || !owner || !suggester) {
-        alert('Please fill in stallion name, owner contact and your name.');
-        return;
-      }
-
-      const message = buildMessage(stallion, owner, suggester, note);
-      const subject = 'BreedPulse — invitation to list ' + stallion;
-
-      $('bpMessagePreview').textContent = message;
-
-      const enc = encodeURIComponent(message);
-      const encSubject = encodeURIComponent(subject);
-
-      $('bpShareWhatsapp').href  = 'https://wa.me/?text=' + enc;
-      $('bpShareSms').href       = 'sms:?&body=' + enc;
-      $('bpShareEmail').href     = 'mailto:?subject=' + encSubject + '&body=' + enc;
-
-      $('bpShareMessenger').href =
-        'https://www.facebook.com/dialog/send' +
-        '?app_id=842334998295338' +
-        '&link=' + encodeURIComponent('https://breedpulse.com') +
-        '&redirect_uri=' + encodeURIComponent('https://breedpulse.com');
-
-      window.__bpMessage = message;
-
-      $('bpFormStep').classList.add('bp-hide');
-      $('bpShareStep').classList.add('bp-show');
-    };
-
-    window.bpCopyMessage = function () {
-      const text = window.__bpMessage || $('bpMessagePreview').textContent;
-      const finish = function () {
-        const t = $('bpToast');
-        t.classList.add('bp-show');
-        setTimeout(function () { t.classList.remove('bp-show'); }, 2000);
-      };
-      if (navigator.clipboard && navigator.clipboard.writeText) {
-        navigator.clipboard.writeText(text).then(finish, function () {
-          legacyCopy(text); finish();
-        });
-      } else {
-        legacyCopy(text); finish();
-      }
-    };
-
-    function legacyCopy(text) {
-      const ta = document.createElement('textarea');
-      ta.value = text;
-      ta.style.position = 'fixed'; ta.style.opacity = '0';
-      document.body.appendChild(ta);
-      ta.select();
-      try { document.execCommand('copy'); } catch (e) {}
-      document.body.removeChild(ta);
-    }
-
-    document.addEventListener('click', function (e) {
-      if (e.target && e.target.id === 'bpSuggestOverlay') bpCloseSuggest();
+  window.cmShow = function (stepId) {
+    el('cmPaths').style.display = 'none';
+    ['cmOwnerStep','cmShareStep','cmNotifyStep','cmSuccessStep'].forEach(function(id) {
+      el(id).classList.remove('cm-active');
     });
-    document.addEventListener('keydown', function (e) {
-      if (e.key === 'Escape' && $('bpSuggestOverlay').classList.contains('bp-open')) {
-        bpCloseSuggest();
-      }
-    });
+    el(stepId).classList.add('cm-active');
+  };
 
-    document.addEventListener('click', function (e) {
-      var link = e.target.closest && e.target.closest('#bpShareMessenger');
-      if (!link) return;
-      var text = window.__bpMessage || $('bpMessagePreview').textContent;
-      if (!text) return;
-      if (navigator.clipboard && navigator.clipboard.writeText) {
-        navigator.clipboard.writeText(text).catch(function () {
-          legacyCopyMsgr(text);
-        });
-      } else {
-        legacyCopyMsgr(text);
-      }
-      var t = $('bpToast');
-      t.textContent = 'Message copied — paste into Messenger ✓';
-      t.classList.add('bp-show');
-      setTimeout(function () {
-        t.classList.remove('bp-show');
-        setTimeout(function () { t.textContent = 'Copied to clipboard ✓'; }, 300);
-      }, 2800);
+  window.cmShowPaths = function () {
+    el('cmPaths').style.display = '';
+    ['cmOwnerStep','cmShareStep','cmNotifyStep','cmSuccessStep'].forEach(function(id) {
+      el(id).classList.remove('cm-active');
     });
+  };
 
-    function legacyCopyMsgr(text) {
-      var ta = document.createElement('textarea');
-      ta.value = text;
-      ta.style.position = 'fixed'; ta.style.opacity = '0';
-      document.body.appendChild(ta);
-      ta.select();
-      try { document.execCommand('copy'); } catch (e) {}
-      document.body.removeChild(ta);
-    }
-  })();
+  function _buildShareMsg() {
+    var msg =
+      'Hi — I spotted ' + (_stallion || 'your stallion') + ' on BreedPulse, ' +
+      'the new verified Connemara stallion directory (in partnership with Connemara Pony World, 9,200+ members).
+
+' +
+      'His listing is there but incomplete — once you claim it, mare owners across Ireland, the UK, ' +
+      'Europe and beyond can find him with stud fee, photos, HWSD status and your contact details directly.
+
+' +
+      'Claiming is completely free and takes about 5 minutes:
+' +
+      TALLY_URL + '
+
+More info: https://breedpulse.com';
+
+    el('cmShareMessage').textContent = msg;
+    window.__cmShareMsg = msg;
+
+    var enc = encodeURIComponent(msg);
+    var subj = encodeURIComponent('BreedPulse — ' + (_stallion || 'your stallion') + ' is on the register');
+    el('cmShareWa').href  = 'https://wa.me/?text=' + enc;
+    el('cmShareSms').href = 'sms:?&body=' + enc;
+    el('cmShareEm').href  = 'mailto:?subject=' + subj + '&body=' + enc;
+  }
+
+  window.cmCopyShare = function () {
+    var text = window.__cmShareMsg || '';
+    var finish = function () {
+      var t = el('cmToast');
+      t.classList.add('cm-show');
+      setTimeout(function () { t.classList.remove('cm-show'); }, 2000);
+    };
+    if (navigator.clipboard && navigator.clipboard.writeText) {
+      navigator.clipboard.writeText(text).then(finish, function () { _legacyCopy(text); finish(); });
+    } else { _legacyCopy(text); finish(); }
+  };
+
+  function _legacyCopy(text) {
+    var ta = document.createElement('textarea');
+    ta.value = text; ta.style.position = 'fixed'; ta.style.opacity = '0';
+    document.body.appendChild(ta); ta.select();
+    try { document.execCommand('copy'); } catch(e) {}
+    document.body.removeChild(ta);
+  }
+
+  window.cmSubmitOwner = function () {
+    var name  = el('cmOwnerName').value.trim();
+    var email = el('cmOwnerEmail').value.trim();
+    var phone = el('cmOwnerPhone').value.trim();
+    if (!name || !email) { alert('Please fill in your name and email.'); return; }
+    var body =
+      'Stallion: ' + _stallion + '\n' +
+      'Owner name: ' + name + '\n' +
+      'Email: ' + email + '\n' +
+      (phone ? 'Phone: ' + phone + '\n' : '') +
+      '\nSent from BreedPulse all-stallions page.';
+    window.location.href =
+      'mailto:lucindakelly@gmail.com' +
+      '?subject=' + encodeURIComponent('BreedPulse claim: ' + _stallion) +
+      '&body=' + encodeURIComponent(body);
+    el('cmSuccessTitle').textContent = 'Request sent!';
+    el('cmSuccessMsg').textContent =
+      'Lucinda will be in touch within 24 hours to get ' + _stallion +
+      ' fully listed. Check your email — including junk just in case.';
+    cmShow('cmSuccessStep');
+  };
+
+  window.cmSubmitNotify = function () {
+    var email = el('cmNotifyEmail').value.trim();
+    if (!email) { alert('Please enter your email address.'); return; }
+    var body = 'Please notify me when ' + _stallion + ' is claimed and listed on BreedPulse.
+
+My email: ' + email;
+    window.location.href =
+      'mailto:lucindakelly@gmail.com' +
+      '?subject=' + encodeURIComponent('BreedPulse notify me: ' + _stallion) +
+      '&body=' + encodeURIComponent(body);
+    el('cmSuccessTitle').textContent = "We'll let you know";
+    el('cmSuccessMsg').textContent =
+      'As soon as ' + _stallion + ' is claimed and stud fee details go live, we'll email you at ' + email + '.';
+    cmShow('cmSuccessStep');
+  };
+
+  document.addEventListener('click', function (e) {
+    if (e.target && e.target.id === 'cmOverlay') cmClose();
+  });
+  document.addEventListener('keydown', function (e) {
+    if (e.key === 'Escape' && el('cmOverlay').classList.contains('cm-open')) cmClose();
+  });
+})();
 </script>
+
 
 
 
