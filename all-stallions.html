@@ -320,6 +320,13 @@ footer.site a:hover { text-decoration: underline; }
   .bp-share-btn { padding: .7rem .15rem; font-size: .62rem; }
   .bp-share-btn .bp-share-icon { width: 34px; height: 34px; font-size: 1rem; }
 }
+
+/* Pending owner CTA banner */
+.owner-cta { background: var(--paper); border: 1px solid var(--stone-warm); border-left: 3px solid var(--gold); border-radius: 2px; padding: 1.4rem 1.75rem; margin-bottom: 1.5rem; display: grid; grid-template-columns: 1fr auto; gap: 1.5rem; align-items: center; }
+@media (max-width: 640px) { .owner-cta { grid-template-columns: 1fr; } }
+.owner-cta-text h3 { font-family: 'Cormorant Garamond', serif; font-weight: 500; font-size: 1.2rem; color: var(--green-deep); margin-bottom: 0.35rem; }
+.owner-cta-text p { font-size: 0.9rem; line-height: 1.65; color: var(--peat-soft); margin: 0; }
+.owner-cta-text strong { color: var(--green-deep); font-weight: 600; }
 </style>
 <script type="application/ld+json">
 {
@@ -2874,6 +2881,13 @@ footer.site a:hover { text-decoration: underline; }
 
 <section class="list-wrap">
   <div class="list-status" id="listStatus">Loading register…</div>
+  <div class="owner-cta" id="ownerCtaBanner">
+    <div class="owner-cta-text">
+      <h3>Is your stallion on this register?</h3>
+      <p>Over <strong>370 stallions</strong> appear here unclaimed — including many actively covering mares this season. Mare owners searching BreedPulse can find your stallion, but can't see his stud fee, covering details, or how to contact you until you claim his listing. <strong>Claiming is free and takes five minutes.</strong></p>
+    </div>
+    <a href="https://tally.so/r/VLVYKJ" class="btn btn-primary">Claim your listing</a>
+  </div>
   <div id="stallionList">
     <div class="loader">Drawing the register together…</div>
   </div>
