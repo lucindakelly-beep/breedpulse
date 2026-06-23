@@ -3950,19 +3950,12 @@ render();
 
   function _buildShareMsg() {
     var msg =
-      'Hi — I spotted ' + (_stallion || 'your stallion') + ' on BreedPulse, ' +
-      'the new verified Connemara stallion directory (in partnership with Connemara Pony World, 9,200+ members).
-
-' +
-      'His listing is there but incomplete — once you claim it, mare owners across Ireland, the UK, ' +
-      'Europe and beyond can find him with stud fee, photos, HWSD status and your contact details directly.
-
-' +
-      'Claiming is completely free and takes about 5 minutes:
-' +
-      TALLY_URL + '
-
-More info: https://breedpulse.com';
+      'Hi - I spotted ' + (_stallion || 'your stallion') + ' on BreedPulse, ' +
+      'the new verified Connemara stallion directory (in partnership with Connemara Pony World, 9,200+ members).\n\n' +
+      'His listing is there but incomplete - once you claim it, mare owners across Ireland, the UK, ' +
+      'Europe and beyond can find him with stud fee, photos, HWSD status and your contact details directly.\n\n' +
+      'Claiming is completely free and takes about 5 minutes:\n' +
+      TALLY_URL + '\n\nMore info: https://breedpulse.com';
 
     el('cmShareMessage').textContent = msg;
     window.__cmShareMsg = msg;
@@ -4019,9 +4012,7 @@ More info: https://breedpulse.com';
   window.cmSubmitNotify = function () {
     var email = el('cmNotifyEmail').value.trim();
     if (!email) { alert('Please enter your email address.'); return; }
-    var body = 'Please notify me when ' + _stallion + ' is claimed and listed on BreedPulse.
-
-My email: ' + email;
+    var body = 'Please notify me when ' + _stallion + ' is claimed and listed on BreedPulse.\n\nMy email: ' + email;
     window.location.href =
       'mailto:lucindakelly@gmail.com' +
       '?subject=' + encodeURIComponent('BreedPulse notify me: ' + _stallion) +
