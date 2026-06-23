@@ -4006,17 +4006,7 @@ resetBtn.addEventListener("click", () => {
 /* ============================================================ */
 $("#suggest-btn").addEventListener("click", e => {
   e.preventDefault();
-  bpOpenSuggest();
-});
-
-/* Event delegation: any "Share with owner" button on a pending
-   stallion card opens the modal pre-filled with that stallion's name */
-list.addEventListener("click", e => {
-  const btn = e.target.closest("[data-share-stallion]");
-  if (!btn) return;
-  e.preventDefault();
-  const stallionName = btn.getAttribute("data-share-stallion");
-  bpOpenSuggest(stallionName);
+  window.cmOpen('');
 });
 
 /* Delegated handler for claim modal triggers */
