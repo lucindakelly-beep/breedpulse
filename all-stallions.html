@@ -3880,39 +3880,8 @@ resetBtn.addEventListener("click", () => {
 });
 
 /* ============================================================ */
-/* Suggest-a-Stallion: opens the modal (replaces old alert)     */
+/* CLAIM MODAL functions — defined here so one script block     */
 /* ============================================================ */
-$("#suggest-btn").addEventListener("click", e => {
-  e.preventDefault();
-  bpOpenSuggest();
-});
-
-/* Event delegation: any "Share with owner" button on a pending
-   stallion card opens the modal pre-filled with that stallion's name */
-list.addEventListener("click", e => {
-  const btn = e.target.closest("[data-share-stallion]");
-  if (!btn) return;
-  e.preventDefault();
-  const stallionName = btn.getAttribute("data-share-stallion");
-  bpOpenSuggest(stallionName);
-});
-
-/* Delegated handler for claim modal triggers */
-list.addEventListener('click', e => {
-  const trigger = e.target.closest('.cm-trigger');
-  if (!trigger) return;
-  e.preventDefault();
-  // Decode HTML entities from data-s attribute
-  const raw = trigger.getAttribute('data-s') || '';
-  const txt = document.createElement('textarea');
-  txt.innerHTML = raw;
-  window.cmOpen(txt.value);
-});
-
-render();
-</script>
-
-<script>
 (function () {
   var _stallion = '';
   var TALLY_URL = 'https://tally.so/r/VLVYKJ';
@@ -4030,7 +3999,42 @@ render();
     if (e.key === 'Escape' && el('cmOverlay').classList.contains('cm-open')) cmClose();
   });
 })();
+
+
+/* ============================================================ */
+/* Suggest-a-Stallion: opens the modal (replaces old alert)     */
+/* ============================================================ */
+$("#suggest-btn").addEventListener("click", e => {
+  e.preventDefault();
+  bpOpenSuggest();
+});
+
+/* Event delegation: any "Share with owner" button on a pending
+   stallion card opens the modal pre-filled with that stallion's name */
+list.addEventListener("click", e => {
+  const btn = e.target.closest("[data-share-stallion]");
+  if (!btn) return;
+  e.preventDefault();
+  const stallionName = btn.getAttribute("data-share-stallion");
+  bpOpenSuggest(stallionName);
+});
+
+/* Delegated handler for claim modal triggers */
+list.addEventListener('click', e => {
+  const trigger = e.target.closest('.cm-trigger');
+  if (!trigger) return;
+  e.preventDefault();
+  // Decode HTML entities from data-s attribute
+  const raw = trigger.getAttribute('data-s') || '';
+  const txt = document.createElement('textarea');
+  txt.innerHTML = raw;
+  window.cmOpen(txt.value);
+});
+
+render();
 </script>
+
+
 
 
 
