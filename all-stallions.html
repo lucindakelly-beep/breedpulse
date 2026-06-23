@@ -3833,11 +3833,11 @@ function rowHTML(s, idx) {
     <article class="stallion is-pending" style="animation-delay: ${animDelay}s">
       <div class="status-badge pending" title="Unclaimed">◷</div>
       <div>
-        <div class="stallion-name" style="cursor:pointer" onclick="cmOpen('${escape(s[0])}')">${name}</div>
+        <div class="stallion-name cm-trigger" style="cursor:pointer" data-s="${escape(s[0])}">${name}</div>
         <div class="stallion-meta">${meta}</div>
       </div>
       <div class="actions">
-        <button type="button" class="btn btn-primary btn-sm" onclick="cmOpen(this.dataset.s)" data-s="${escape(s[0])}">Claim or get notified →</button>
+        <button type="button" class="btn btn-primary btn-sm cm-trigger" data-s="${escape(s[0])}">Claim or get notified →</button>
       </div>
     </article>`;
 }
@@ -3895,6 +3895,18 @@ list.addEventListener("click", e => {
   e.preventDefault();
   const stallionName = btn.getAttribute("data-share-stallion");
   bpOpenSuggest(stallionName);
+});
+
+/* Delegated handler for claim modal triggers */
+list.addEventListener('click', e => {
+  const trigger = e.target.closest('.cm-trigger');
+  if (!trigger) return;
+  e.preventDefault();
+  // Decode HTML entities from data-s attribute
+  const raw = trigger.getAttribute('data-s') || '';
+  const txt = document.createElement('textarea');
+  txt.innerHTML = raw;
+  window.cmOpen(txt.value);
 });
 
 render();
